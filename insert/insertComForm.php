@@ -43,7 +43,7 @@ $(function(){
 				echo "<label>Moederbord</label>";	
 				echo "<input type='text' name='com_serial' placeholder='Moederbord' required>";
 				echo "<label>Aanschaf datum</label>";
-				echo "<input type='date' id='picker' class='picker' name='com_a_date' placeholder='Aanschaf datum' required>";
+				echo "<input type='date' id='picker' name='com_a_date' placeholder='Aanschaf datum' required>";
 				echo "<label>Aanschaf waarde</label>";
 				echo "<input type='text' class='money' id='money' name='com_a_prijs' placeholder='Aanschaf waarde' required>";
 				echo "<input type='submit' name='submit2' value='voeg toe'>";

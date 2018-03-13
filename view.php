@@ -1,4 +1,4 @@
-<html><head><link rel="icon" sizes="32x32" type="image/png" href="../favicon.ico"/><title>Inventadmin</title>
+<html><head><link rel="icon" sizes="32x32" type="image/png" href="favicon.ico"/><title>Inventadmin</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge;" /><?php
 	include "includes/connection.php";
 ?><style><?php
@@ -56,8 +56,9 @@ if ($value != 0)
 foreach($rows as $row){
     $monnewDate = date("d-m-Y", strtotime($row['Aanschaf_dat']));
     ?>
-    <title><?php echo $value; ?></title>
-    <table>
+    
+    <table style="display:inline-block;float:left;">
+	
         <tr><td>Monitorbarcode: </td><td><?php echo $row['Barcode'];?></td></tr>
         <tr><td>Merk: </td><td><?php echo $row['Merk'];?></td></tr>
         <tr><td>Type: </td><td><?php echo $row['Type'];?></td></tr>
@@ -65,7 +66,7 @@ foreach($rows as $row){
         <tr><td>Aanschaf datum: </td><td><?php echo $monnewDate; ?></td></tr>
         <tr><td>Aanschaf waarde: </td><td><?php echo "&euro;".number_format((float)$row['Aanschaf_waarde'], 2, '.', '')."";?></td></tr>
     </table>
-	<br>
+	
     <?php
 }else{
     echo "<i>Geen monitoren gevonden</i>";
@@ -85,7 +86,7 @@ foreach($rows as $row){
     $monnewDate = date("d-m-Y", strtotime($row['Aanschaf_dat']));
     ?>
     <title><?php echo $value; ?></title>
-    <table>
+    <table style="display:inline-block;">
         <tr><td>Programma: </td><td><?php echo $row['Soft_naam'];?></td></tr>
         <tr><td>Versie: </td><td><?php echo $row['Versie'];?></td></tr>
         <tr><td>Aanschaf datum: </td><td><?php echo $monnewDate; ?></td></tr>

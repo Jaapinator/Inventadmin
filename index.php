@@ -23,6 +23,7 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 		echo "<a href='insert/insertComForm.php'>Computer</a>";
 		echo "<a href='insert/insertMonForm.php'>Monitor</a>";
 		echo "<a href='insert/insertSoftForm.php'>Software</a>";
+		echo "<a href='insert/insertRandForm.php'>Randapparatuur</a>";
 		echo "</div>";
 		echo "</div>";
 		
@@ -61,9 +62,9 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 			echo "</td><td>";
 			echo $newDate;
 			echo "</td><td class='knoppen'>";
-			echo "<a class='but_view' href='view.php?view=$row[Com_ID]' ><i class='fas fa-eye fa-xs'></i> View</a>";
-			echo "<a class='but_edit' href='edit/editCom.php?edit=$row[Com_ID]' ><i class='far fa-edit fa-xs'></i> Edit</a>";
-			echo "<a class='but_del' href='delete/delCom.php?edit=$row[Com_ID]' onClick=\"return confirm('Weet je zeker dat je dit item wilt verwijderen?')\"><i class='far fa-trash-alt fa-xs'></i> Delete</a>";
+			echo "<a class='but_view' href='view.php?view=$row[Com_ID]' ><i class='fas fa-eye fa-s'></i> View</a>";
+			echo "<a class='but_edit' href='edit/editCom.php?edit=$row[Com_ID]' ><i class='far fa-edit fa-s'></i> Edit</a>";
+			echo "<a class='but_del' href='delete/delCom.php?edit=$row[Com_ID]' onClick=\"return confirm('Weet je zeker dat je dit item wilt verwijderen?')\"><i class='far fa-trash-alt fa-s'></i> Delete</a>";
 			echo "</td></tr>";
 		}
 	echo "</tbody></table>"; 
