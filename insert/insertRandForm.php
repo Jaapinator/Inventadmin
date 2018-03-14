@@ -33,7 +33,7 @@ $(function(){
 					
 					echo "<label>Computer barcode</label>";
 					echo '<select  name="com_id" required>'; 
-					echo '<option style="display:none" value="" ">Kies barcode van computer</option>';
+					echo '<option style="display:none" value="">Kies barcode van computer</option>';
 					while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
 					   echo '<option value="'.$row['Com_ID'].'">'.$row['Barcode'].'</option>';
 					}

@@ -131,8 +131,8 @@ echo "</tbody></table>";
 
 	echo "<div id='divtable4' class='table' >";
 	echo "<table id='table4' class='display compact' cellspacing='0' width='100%'>"; 
-		echo "<thead><tr><th>Computerbarcode</th><th>Locatie</th><th>Gebruikersnaam</th><th>E-mail</th><th></th></tr></thead><tbody>"; 	
-		$stmt = $conn->query('SELECT IA_Gebruiker.U_ID as usr, Barcode, Ruimte_naam, Gebruiker, Mailadres FROM IA_Computer, IA_Gebruiker, IA_Locatie WHERE IA_Locatie.Ruimte_ID=IA_Gebruiker.Ruimte_ID AND IA_Computer.Com_ID=IA_Gebruiker.Com_ID');
+		echo "<thead><tr><th>Computerbarcode</th><th>Locatie</th><th>Gebruikersnaam</th><th>E-mail</th><th>Telefoonnummer</th><th></th></tr></thead><tbody>"; 	
+		$stmt = $conn->query('SELECT IA_Gebruiker.U_ID as usr, Barcode, Ruimte_naam, Gebruiker, Mailadres, Telefoonnummer FROM IA_Computer, IA_Gebruiker, IA_Locatie, IA_Telefoon WHERE IA_Locatie.Ruimte_ID=IA_Gebruiker.Ruimte_ID AND IA_Computer.Com_ID=IA_Gebruiker.Com_ID AND IA_Gebruiker.U_ID=IA_Telefoon.U_ID');
 		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 			echo "<tr><td>";
 			echo $row['Barcode'];
@@ -142,6 +142,8 @@ echo "</tbody></table>";
 			echo strip_tags($row['Gebruiker']);
 			echo "</td><td>";
 			echo strip_tags($row['Mailadres']);
+			echo "</td><td>";
+			echo strip_tags($row['Telefoonnummer']);
 			echo "</td><td class='knoppen'>";
 			echo "<a class='but_edit' href='edit/editUser.php?edit=$row[usr]' ><i class='far fa-edit fa-xs'></i> Edit</a>";
 			
@@ -154,7 +156,7 @@ echo "</div>";
 	echo "<div id='divtable5' class='table' >";
 	echo "<table id='table5' class='display compact' cellspacing='0' width='100%'>"; 
 		echo "<thead><tr><th>Computerbarcode</th><th>Merk</th><th>Type</th><th>Aanschaf datum</th><th>Aanschaf waarde</th><th></th></tr></thead><tbody>"; 	
-		$stmt = $conn->query('SELECT *, IA_Randapparatuur.Com_ID as ran FROM IA_Randapparatuur, IA_Computer WHERE IA_Randapparatuur.Com_ID=IA_Computer.Com_ID');
+		$stmt = $conn->query('SELECT IA_Computer.Barcode, IA_Randapparatuur.Merk, IA_Randapparatuur.Type, IA_Randapparatuur.Aanschaf_waarde, IA_Randapparatuur.Aanschaf_dat, Rand_ID FROM IA_Randapparatuur, IA_Computer WHERE IA_Randapparatuur.Com_ID=IA_Computer.Com_ID');
 		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 			$newDate = date("d-m-Y", strtotime($row['Aanschaf_dat']));
 			echo "<tr><td>";
@@ -168,9 +170,9 @@ echo "</div>";
 			echo "</td><td>";
 			echo "&euro;"; echo number_format((float)$row['Aanschaf_waarde'], 2, '.', '');
 			echo "</td><td class='knoppen'>";
-			echo "<a class='but_edit' href='edit/editRand.php?edit=$row[ran]' ><i class='far fa-edit fa-xs'></i> Edit</a>";
+			echo "<a class='but_edit' href='edit/editRand.php?edit=$row[Rand_ID]' ><i class='far fa-edit fa-xs'></i> Edit</a>";
 			
-			echo "<a class='but_del' href='delete/delRand.php?edit=$row[ran]' onClick=\"return confirm('Weet je zeker dat je dit item wilt verwijderen?')\"><i class='far fa-trash-alt fa-xs'></i> Delete</a>";
+			echo "<a class='but_del' href='delete/delRand.php?edit=$row[Rand_ID]' onClick=\"return confirm('Weet je zeker dat je dit item wilt verwijderen?')\"><i class='far fa-trash-alt fa-xs'></i> Delete</a>";
 			echo "</td></tr>";
 		}
 echo "</tbody></table>";

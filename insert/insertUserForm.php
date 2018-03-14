@@ -14,7 +14,7 @@
 					$sql = $conn->query("SELECT Com_ID, Barcode FROM IA_Computer"); 
 					echo "<label>Computer barcode</label>";
 					echo '<select  name="com_id" required>'; 
-					echo '<option style="display:none" value="" ">Kies barcode van computer</option>';
+					echo '<option style="display:none" value="">Kies barcode van computer</option>';
 					while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
 					   echo '<option value="'.$row['Com_ID'].'">'.$row['Barcode'].'</option>';
 					}
@@ -23,7 +23,7 @@
 					$sql = $conn->query("SELECT Ruimte_ID, Ruimte_naam FROM IA_Locatie ORDER BY Ruimte_naam");
 					echo "<label>Ruimte naam</label>";
 					echo '<select  name="ruimte_id" required>'; 
-					echo '<option style="display:none" value="" ">Kies locatie</option>';
+					echo '<option style="display:none" value="">Kies locatie</option>';
 					while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
 					   echo '<option value="'.$row['Ruimte_ID'].'">'.$row['Ruimte_naam'].'</option>';
 					}

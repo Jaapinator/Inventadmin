@@ -12,19 +12,7 @@ if(isset($_POST['update']))
     $datum = trim($_POST['date']);    
     $waarde = trim($_POST['waarde']);    
 	
-/*	
-	echo $comid;
-	echo "<br>";
-	echo $softid;
-	echo "<br>";
-	echo $datum;
-	echo "<br>";
-	echo $waarde;
-	echo "<br>";
-	echo $id;
-	
-}
-*/
+
     if(empty($comid) || empty($softid) || empty($datum) || empty($waarde)) {    
             
         if(empty($comid)) {

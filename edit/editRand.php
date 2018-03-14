@@ -29,29 +29,26 @@ $(function(){
 <?php
 	$id = $_GET['edit'];
 	
-	$sql = "SELECT IA_Software.Soft_naam, IA_Computer.Barcode, IA_Software.Versie, IA_Software_RG.Aanschaf_dat, IA_Software_RG.Aanschaf_waarde, IA_Software_RG.Soft_ID, IA_Software_RG.Com_ID FROM IA_Computer, IA_Software, IA_Software_RG WHERE IA_Software_RG.Soft_ID=:id AND IA_Software.Soft_ID=IA_Software_RG.Soft_ID AND IA_Computer.Com_ID=IA_Software_RG.Com_ID";
+	$sql = "SELECT IA_Computer.Barcode, IA_Randapparatuur.Com_ID, Merk, Type, IA_Randapparatuur.Aanschaf_dat, IA_Randapparatuur.Aanschaf_waarde FROM IA_Randapparatuur, IA_Computer WHERE Rand_ID=:id AND IA_Computer.Com_ID=IA_Randapparatuur.Com_ID";
 	$query = $conn->prepare($sql);
 	$query->execute(array(':id' => $id));
 
 	while($row = $query->fetch(PDO::FETCH_ASSOC))
 	{
 	$barcode = $row['Barcode'];
-	$soft_id = $row['Soft_ID'];
 	$com_id = $row['Com_ID'];
-    $soft_naam = $row['Soft_naam'];
-    $versie = $row['Versie'];
+    $merk = $row['Merk'];
+    $type = $row['Type'];
     $datum = $row['Aanschaf_dat'];
     $waarde = $row['Aanschaf_waarde'];
 	
 	$newDate = date("Y-m-d", strtotime($datum));
 	}
-	
-	
 ?> 
 <body>
 	<div class="form">
-		<H4>Software</H4>
-		<form name="form1" method="post" action="updateSoft.php">
+		<H4>Randapparatuur</H4>
+		<form name="form1" method="post" action="updateRand.php">
 			<label>Computer barcode</label>
 			<?php $sql = $conn->query("SELECT Barcode, Com_ID FROM IA_Computer WHERE Barcode<>$barcode"); ?>
 			
@@ -61,15 +58,10 @@ $(function(){
 					   echo '<option value="'.$row['Com_ID'].'">'.$row['Barcode'].'</option>';
 					}?>
 					</select>
-			<label>Software & Versie</label>
-			<?php $sql = $conn->query("SELECT Soft_ID, Soft_naam, Versie FROM IA_Software "); ?>
-			
-					<select  name="soft_id" required>
-					<option value="<?php echo $soft_id; ?>" selected><?php echo $soft_naam;?> <?php echo $versie;?></option> <?php
-					while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
-					   echo '<option value="'.$row['Soft_ID'].'">'.$row['Soft_naam'].' '.$row['Versie'].'</option>';
-					} ?>
-					</select>
+			<label>Merk</label>
+			<input type="text" name="merk" value="<?php echo $merk;?>">
+			<label>Type</label>
+			<input type="text" name="type" value="<?php echo $type;?>">
 			<label>Aanschaf datum</label>
 			<input type="date" id="picker" name="date" value="<?php echo $newDate;?>">
 			<label>Aanschaf waarde</label>

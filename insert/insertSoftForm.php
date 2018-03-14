@@ -38,7 +38,7 @@ $(function(){
 				$sql = $conn->query("SELECT Com_ID, Barcode FROM IA_Computer"); 
 					echo "<label>Computer barcode</label>";
 					echo '<select  name="com_id" required>';
-					echo '<option style="display:none" value="" ">Kies barcode van computer</option>';
+					echo '<option style="display:none" value="">Kies barcode van computer</option>';
 					while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
 					   echo '<option value="'.$row['Com_ID'].'">'.$row['Barcode'].'</option>';
 					}
@@ -47,7 +47,7 @@ $(function(){
 				$sql = $conn->query("SELECT Soft_ID, Soft_naam, Versie FROM IA_Software"); 
 					echo "<label>Softwarenaam & versie</label>";
 					echo '<select  name="soft_id" required>';
-					echo '<option style="display:none" value="" ">Kies het programma</option>';
+					echo '<option style="display:none" value="">Kies het programma</option>';
 					while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
 					   echo '<option value="'.$row['Soft_ID'].'">'.$row['Soft_naam'].' '.$row['Versie'].'</option>';
 					}
