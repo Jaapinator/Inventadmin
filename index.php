@@ -36,6 +36,7 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 		echo "<option class='keuze' value='table2'>Monitor</option>";
 		echo "<option class='keuze' value='table3'>Software</option>";
 		echo "<option class='keuze' value='table4'>Gebruiker</option>";
+		echo "<option class='keuze' value='table5'>Randapparatuur</option>";
 		echo "</select>";
 		echo "</div>";
 		echo "</div>";
@@ -45,8 +46,7 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 		echo "<thead><tr><th>Barcode</th><th>Computernaam</th><th>Ip-adres</th><th>CPU</th><th>RAM</th><th>Moederbord</th><th>Aanschaf datum</th><th></th></tr></thead><tbody>"; 	
 		$stmt = $conn->query('SELECT * FROM IA_Computer');
 		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-			$originalDate = $row['Aanschaf_dat'];
-			$newDate = date("d-m-Y", strtotime($originalDate));
+			$newDate = date("d-m-Y", strtotime($row['Aanschaf_dat']));
 			echo "<tr><td>";
 			echo $row['Barcode'];
 			echo "</td><td>";
@@ -146,6 +146,31 @@ echo "</tbody></table>";
 			echo "<a class='but_edit' href='edit/editUser.php?edit=$row[usr]' ><i class='far fa-edit fa-xs'></i> Edit</a>";
 			
 			echo "<a class='but_del' href='delete/delUser.php?edit=$row[usr]' onClick=\"return confirm('Weet je zeker dat je dit item wilt verwijderen?')\"><i class='far fa-trash-alt fa-xs'></i> Delete</a>";
+			echo "</td></tr>";
+		}
+echo "</tbody></table>";
+echo "</div>";
+
+	echo "<div id='divtable5' class='table' >";
+	echo "<table id='table5' class='display compact' cellspacing='0' width='100%'>"; 
+		echo "<thead><tr><th>Computerbarcode</th><th>Merk</th><th>Type</th><th>Aanschaf datum</th><th>Aanschaf waarde</th><th></th></tr></thead><tbody>"; 	
+		$stmt = $conn->query('SELECT *, IA_Randapparatuur.Com_ID as ran FROM IA_Randapparatuur, IA_Computer WHERE IA_Randapparatuur.Com_ID=IA_Computer.Com_ID');
+		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$newDate = date("d-m-Y", strtotime($row['Aanschaf_dat']));
+			echo "<tr><td>";
+			echo $row['Barcode'];
+			echo "</td><td>";
+			echo strip_tags($row['Merk']);
+			echo "</td><td>";
+			echo strip_tags($row['Type']);
+			echo "</td><td>";
+			echo $newDate;
+			echo "</td><td>";
+			echo "&euro;"; echo number_format((float)$row['Aanschaf_waarde'], 2, '.', '');
+			echo "</td><td class='knoppen'>";
+			echo "<a class='but_edit' href='edit/editRand.php?edit=$row[ran]' ><i class='far fa-edit fa-xs'></i> Edit</a>";
+			
+			echo "<a class='but_del' href='delete/delRand.php?edit=$row[ran]' onClick=\"return confirm('Weet je zeker dat je dit item wilt verwijderen?')\"><i class='far fa-trash-alt fa-xs'></i> Delete</a>";
 			echo "</td></tr>";
 		}
 echo "</tbody></table>";

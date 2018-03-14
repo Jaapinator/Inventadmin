@@ -23,10 +23,7 @@
 		$com_a_dat = $row['Aanschaf_dat'];
 		$com_a_prijs = $row['Aanschaf_waarde']; 
 	}
-	
 	echo "<H2>". $com_naam ."</H2>";
-	
-	
 ?>
 <div class="com">
 <?php
@@ -56,9 +53,7 @@ if ($value != 0)
 foreach($rows as $row){
     $monnewDate = date("d-m-Y", strtotime($row['Aanschaf_dat']));
     ?>
-    
     <table style="display:inline-block;float:left;">
-	
         <tr><td>Monitorbarcode: </td><td><?php echo $row['Barcode'];?></td></tr>
         <tr><td>Merk: </td><td><?php echo $row['Merk'];?></td></tr>
         <tr><td>Type: </td><td><?php echo $row['Type'];?></td></tr>
@@ -66,7 +61,6 @@ foreach($rows as $row){
         <tr><td>Aanschaf datum: </td><td><?php echo $monnewDate; ?></td></tr>
         <tr><td>Aanschaf waarde: </td><td><?php echo "&euro;".number_format((float)$row['Aanschaf_waarde'], 2, '.', '')."";?></td></tr>
     </table>
-	
     <?php
 }else{
     echo "<i>Geen monitoren gevonden</i>";
@@ -85,14 +79,13 @@ if ($value != 0)
 foreach($rows as $row){
     $monnewDate = date("d-m-Y", strtotime($row['Aanschaf_dat']));
     ?>
-    <title><?php echo $value; ?></title>
-    <table style="display:inline-block;">
+    <table style="display:inline-block;float:left;">
         <tr><td>Programma: </td><td><?php echo $row['Soft_naam'];?></td></tr>
         <tr><td>Versie: </td><td><?php echo $row['Versie'];?></td></tr>
         <tr><td>Aanschaf datum: </td><td><?php echo $monnewDate; ?></td></tr>
         <tr><td>Aanschaf waarde: </td><td><?php echo "&euro;".number_format((float)$row['Aanschaf_waarde'], 2, '.', '')."";?></td></tr>
     </table>
-	<br>
+	
     <?php
 }else{
     echo "<i>Geen software gevonden</i>";
@@ -100,9 +93,56 @@ foreach($rows as $row){
 ?>
 </div>
 <div class="three">
-  <div class="four">Gebruiker</div>
-  <div class="five"></div>
-  Randapparatuur
+  <div class="user">
+  <?php
+  $sql = "SELECT * FROM IA_Gebruiker, IA_Locatie, IA_Telefoon WHERE Com_ID = :id AND IA_Gebruiker.U_ID=IA_Telefoon.U_ID";
+  $query = $conn->prepare($sql);
+  $query->execute(array(':id' => $id));
+  $rows = $query->fetchAll(PDO::FETCH_ASSOC);
+  
+$value = count($rows);
+if ($value !=0)
+foreach($rows as $row){
+	$gsmnewDate = date("d-m-Y", strtotime($row['Aanschaf_dat']));
+	?>
+	<table>
+	<tr><td>Naam: </td><td><?php echo $row['Gebruiker'];?></td></tr>
+	<tr><td>E-mail: </td><td><?php echo $row['Mailadres'];?></td></tr>
+	<tr><td>Locatie: </td><td><?php echo $row['Ruimte_naam'];?></td></tr>
+	<tr><td>Telefoonnummer: </td><td><?php echo $row['Telefoonnummer'];?></td></tr>
+	<tr><td>Merk: </td><td><?php echo $row['Merk'];?></td></tr>
+	<tr><td>Model: </td><td><?php echo $row['Model'];?></td></tr>
+	<tr><td>Aanschaf datum: </td><td><?php echo $gsmnewDate;?></td></tr>
+	<tr><td>Aanschaf waarde: </td><td><?php echo "&euro;".number_format((float)$row['Aanschaf_waarde'], 2, '.', '')."";?></td></tr>
+	</table>
+	<?php
+}else{
+	echo "<i>Geen gebruiker gevonden</i>";
+}
+  ?>
+  </div>
+  <div class="rand">  <?php
+  $sql = "SELECT * FROM IA_Randapparatuur WHERE Com_ID = :id";
+  $query = $conn->prepare($sql);
+  $query->execute(array(':id' => $id));
+  $rows = $query->fetchAll(PDO::FETCH_ASSOC);
+  
+$value = count($rows);
+if ($value !=0)
+foreach($rows as $row){
+	$randnewDate = date("d-m-Y", strtotime($row['Aanschaf_dat']));
+	?>
+	<table style="display:inline-block;float:left;">
+	<tr><td>Merk: </td><td><?php echo $row['Merk'];?></td></tr>
+	<tr><td>Type: </td><td><?php echo $row['Type'];?></td></tr>
+	<tr><td>Aanschaf datum: </td><td><?php echo $randnewDate;?></td></tr>
+	<tr><td>Aanschaf waarde: </td><td><?php echo "&euro;".number_format((float)$row['Aanschaf_waarde'], 2, '.', '')."";?></td></tr>
+	</table>
+	<?php
+}else{
+	echo "<i>Geen randapparatuur gevonden</i>";
+}
+  ?></div>
 </div>
 </body>
 </html>

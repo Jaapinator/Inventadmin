@@ -52,4 +52,4 @@ $(function(){
 
 	
 ?>
-</body><html>
+</body></html>

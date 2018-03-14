@@ -8,23 +8,16 @@ $rand_type = $_POST['rand_type'];
 $date = $_POST['datum'];
 $waarde = $_POST['prijs'];
 
-echo $rand_type;
-echo $comid;
-echo $rand_merk;
-echo $date;
-echo $waarde;
 
-
-/*
 try{
-	$stmt = $conn->prepare("INSERT INTO IA_Randapparatuur (Com_ID, Merk, Type, Aanschaf_datum, Aanschaf_waarde)
+	$stmt = $conn->prepare("INSERT INTO IA_Randapparatuur (Com_ID, Merk, Type, Aanschaf_dat, Aanschaf_waarde)
 							VALUES (?,?,?,?,?)");
 	$stmt->execute([$comid, $rand_merk, $rand_type, $date, $waarde]);
-	echo '<meta http-equiv="refresh" content="0;URL=http://webserver03/invertadmin/" />';
+	echo '<meta http-equiv="refresh" content="0;URL=http://webserver03/inventadmin/" />';
 }
 catch(PDOException $e){
 	echo $stmt . "<br>" . $e->getMEssage();
-	echo '<meta http-equiv="refresh" content="0;URL=http://webserver03/invertadmin/insert/insertRandForm.php" />';
+	echo '<meta http-equiv="refresh" content="0;URL=http://webserver03/inventadmin/insert/insertRandForm.php" />';
 }
 $conn = null;
 
