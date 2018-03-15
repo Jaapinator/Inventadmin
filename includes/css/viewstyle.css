@@ -84,18 +84,38 @@
 }
 
 .user{
-  width:50%;
+  width:33%;
   height:200px;
 background:;
   display:inline-block;
   float:left;
 }
 .rand{
-  width:50%;
+  width:33%;
   height:200px;
 background:;
   display:inline-block;
   float:left;
 }
-
-
+.comm{
+    width:33%;
+  height:200px;
+background:;
+  display:inline-block;
+  float:left;
+}
+textarea {
+  width: 55%;
+  height: 75%;
+  resize: none;
+}
+input[type=submit] {
+    width: 55%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}

@@ -24,6 +24,7 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 		echo "<a href='insert/insertMonForm.php'>Monitor</a>";
 		echo "<a href='insert/insertSoftForm.php'>Software</a>";
 		echo "<a href='insert/insertRandForm.php'>Randapparatuur</a>";
+		echo "<a href='insert/insertGsmForm.php'>Telefoon</a>";
 		echo "</div>";
 		echo "</div>";
 		
@@ -37,6 +38,7 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 		echo "<option class='keuze' value='table3'>Software</option>";
 		echo "<option class='keuze' value='table4'>Gebruiker</option>";
 		echo "<option class='keuze' value='table5'>Randapparatuur</option>";
+		echo "<option class='keuze' value='table6'>Telefoon</option>";
 		echo "</select>";
 		echo "</div>";
 		echo "</div>";
@@ -173,6 +175,33 @@ echo "</div>";
 			echo "<a class='but_edit' href='edit/editRand.php?edit=$row[Rand_ID]' ><i class='far fa-edit fa-xs'></i> Edit</a>";
 			
 			echo "<a class='but_del' href='delete/delRand.php?edit=$row[Rand_ID]' onClick=\"return confirm('Weet je zeker dat je dit item wilt verwijderen?')\"><i class='far fa-trash-alt fa-xs'></i> Delete</a>";
+			echo "</td></tr>";
+		}
+echo "</tbody></table>";
+echo "</div>";
+
+	echo "<div id='divtable6' class='table' >";
+	echo "<table id='table6' class='display compact' cellspacing='0' width='100%'>"; 
+		echo "<thead><tr><th>Gebruiker</th><th>Telefoonnummer</th><th>Merk</th><th>Model</th><th>Aanschaf datum</th><th>Aanschaf waarde</th><th></th></tr></thead><tbody>"; 	
+		$stmt = $conn->query('SELECT Gebruiker, Telefoonnummer, Merk, Model, Aanschaf_dat, Aanschaf_waarde FROM IA_Gebruiker, IA_Telefoon WHERE IA_Gebruiker.U_ID=IA_Telefoon.U_ID');
+		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$newDate = date("d-m-Y", strtotime($row['Aanschaf_dat']));
+			echo "<tr><td>";
+			echo strip_tags($row['Gebruiker']);
+			echo "</td><td>";
+			echo strip_tags($row['Telefoonnummer']);
+			echo "</td><td>";
+			echo strip_tags($row['Merk']);
+			echo "</td><td>";
+			echo strip_tags($row['Type']);
+			echo "</td><td>";
+			echo $newDate;
+			echo "</td><td>";
+			echo "&euro;"; echo number_format((float)$row['Aanschaf_waarde'], 2, '.', '');
+			echo "</td><td class='knoppen'>";
+			echo "<a class='but_edit' href='edit/editGsm.php?edit=$row[Gsm_ID]' ><i class='far fa-edit fa-xs'></i> Edit</a>";
+			
+			echo "<a class='but_del' href='delete/delGsm.php?edit=$row[Gsm_ID]' onClick=\"return confirm('Weet je zeker dat je dit item wilt verwijderen?')\"><i class='far fa-trash-alt fa-xs'></i> Delete</a>";
 			echo "</td></tr>";
 		}
 echo "</tbody></table>";

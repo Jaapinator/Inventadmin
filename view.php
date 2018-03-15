@@ -22,6 +22,7 @@
 		$com_moed = $row['Serialnum'];
 		$com_a_dat = $row['Aanschaf_dat'];
 		$com_a_prijs = $row['Aanschaf_waarde']; 
+		$comm = $row['Opmerkingen'];
 	}
 	echo "<H2>". $com_naam ."</H2>";
 ?>
@@ -143,6 +144,14 @@ foreach($rows as $row){
 	echo "<i>Geen randapparatuur gevonden</i>";
 }
   ?></div>
+  <div class="comm">
+    <label>Voeg opmerkingen toe</label><br>
+	<form id="comment" action="edit/updateOpmerk.php" method="post">
+	<textarea name="comment"><?php echo $comm;?></textarea><br>
+	<input type="hidden" name="view" value="<?php echo $id;?>"/>
+	<input type="submit" value="Edit" name="submit" />
+	</form>
+  </div>
 </div>
 </body>
 </html>
