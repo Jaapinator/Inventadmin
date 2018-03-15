@@ -10,33 +10,93 @@ $(function() {
 	$('#table1').DataTable( {
 	  "searching": true,
 	  "lengthMenu": [[18, -1], [18, "All"]],
-	  "columnDefs": [{  "bSortable": false, "aTargets": [-1] }, { "bSearchable":false, "aTargets": [-1] }]
+	  "columnDefs": [{  "bSortable": false, "aTargets": [-1] }, { "bSearchable":false, "aTargets": [-1] }],
+	  "stateSave": true,
+	  "stateSaveCallback": function (settings, data) {
+			$.ajax( {
+			  "url": "/state_save",
+			  "data": data,
+			  "dataType": "json",
+			  "type": "POST",
+			  "success": function () {}
+			} );
+		}
 	
 	} );
 	$('#table2').DataTable( {
 	  "searching": true,
 	  "lengthMenu": [[18, -1], [18, "All"]],
-	  "columnDefs": [{  "bSortable": false, "aTargets": [-1] }, { "bSearchable":false, "aTargets": [-1] }]
+	  "columnDefs": [{  "bSortable": false, "aTargets": [-1] }, { "bSearchable":false, "aTargets": [-1] }],
+	  "stateSave": true,
+	  "stateSaveCallback": function (settings, data) {
+			$.ajax( {
+			  "url": "/state_save",
+			  "data": data,
+			  "dataType": "json",
+			  "type": "POST",
+			  "success": function () {}
+			} );
+		}
 	} );
 	$('#table3').DataTable( {
 	  "searching": true,
 	  "lengthMenu": [[18, -1], [18, "All"]],
-	  "columnDefs": [{  "bSortable": false, "aTargets": [-1] }, { "bSearchable":false, "aTargets": [-1] }]
+	  "columnDefs": [{  "bSortable": false, "aTargets": [-1] }, { "bSearchable":false, "aTargets": [-1] }],
+	  "stateSave": true,
+	  "stateSaveCallback": function (settings, data) {
+			$.ajax( {
+			  "url": "/state_save",
+			  "data": data,
+			  "dataType": "json",
+			  "type": "POST",
+			  "success": function () {}
+			} );
+		}
 	} );
 	$('#table4').DataTable( {
 	  "searching": true,
 	  "lengthMenu": [[18, -1], [18, "All"]],
-	  "columnDefs": [{  "bSortable": false, "aTargets": [-1] }, { "bSearchable":false, "aTargets": [-1] }]
+	  "columnDefs": [{  "bSortable": false, "aTargets": [-1] }, { "bSearchable":false, "aTargets": [-1] }],
+	  "stateSave": true,
+	  "stateSaveCallback": function (settings, data) {
+			$.ajax( {
+			  "url": "/state_save",
+			  "data": data,
+			  "dataType": "json",
+			  "type": "POST",
+			  "success": function () {}
+			} );
+		}
 	} );
 	$('#table5').DataTable( {
 	  "searching": true,
 	  "lengthMenu": [[18, -1], [18, "All"]],
-	  "columnDefs": [{  "bSortable": false, "aTargets": [-1] }, { "bSearchable":false, "aTargets": [-1] }]
+	  "columnDefs": [{  "bSortable": false, "aTargets": [-1] }, { "bSearchable":false, "aTargets": [-1] }],
+	  "stateSave": true,
+	  "stateSaveCallback": function (settings, data) {
+			$.ajax( {
+			  "url": "/state_save",
+			  "data": data,
+			  "dataType": "json",
+			  "type": "POST",
+			  "success": function () {}
+			} );
+		}
 	} );
 	$('#table6').DataTable( {
 	  "searching": true,
 	  "lengthMenu": [[18, -1], [18, "All"]],
-	  "columnDefs": [{  "bSortable": false, "aTargets": [-1] }, { "bSearchable":false, "aTargets": [-1] }]
+	  "columnDefs": [{  "bSortable": false, "aTargets": [-1] }, { "bSearchable":false, "aTargets": [-1] }],
+	  "stateSave": true,
+	  "stateSaveCallback": function (settings, data) {
+			$.ajax( {
+			  "url": "/state_save",
+			  "data": data,
+			  "dataType": "json",
+			  "type": "POST",
+			  "success": function () {}
+			} );
+		}
 	} );
 	console.log($("#drop"))
 	$("#hide"+ $("#drop")[0].value).show(); 
