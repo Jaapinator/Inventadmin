@@ -1,4 +1,4 @@
-$(function() {
+$(function () {
 
 	$('#table1').wrap('<div id="hidetable1" class="hide" style="display:none"/>');
 	$('#table2').wrap('<div id="hidetable2" class="hide"  style="display:none"/>');
@@ -6,22 +6,22 @@ $(function() {
 	$('#table4').wrap('<div id="hidetable4"  class="hide" style="display:none"/>');
 	$('#table5').wrap('<div id="hidetable5"  class="hide" style="display:none"/>');
 	$('#table6').wrap('<div id="hidetable6"  class="hide" style="display:none"/>');
-
+	
+	
 	$('#table1').DataTable( {
 	  "searching": true,
 	  "lengthMenu": [[18, -1], [18, "All"]],
-	  "columnDefs": [{  "bSortable": false, "aTargets": [-1] }, { "bSearchable":false, "aTargets": [-1] }],
+	  "columnDefs": [{  "bSortable": false, "aTargets": [-1] }, { "bSearchable":false, "aTargets": [-1] }, { type: 'date-uk', targets: 0 }],
 	  "stateSave": true,
-	  "stateSaveCallback": function (settings, data) {
+	  /*"stateSaveCallback": function (settings, data) {
 			$.ajax( {
-			  "url": "/state_save",
+			  "url": "http://webserver03/inventadmin/index.php",
 			  "data": data,
 			  "dataType": "json",
 			  "type": "POST",
-			  "success": function () {}
+			  "success": function(){}
 			} );
-		}
-	
+		}*/
 	} );
 	$('#table2').DataTable( {
 	  "searching": true,
@@ -30,11 +30,10 @@ $(function() {
 	  "stateSave": true,
 	  "stateSaveCallback": function (settings, data) {
 			$.ajax( {
-			  "url": "/state_save",
+			  "url": "http://webserver03/inventadmin/index.php",
 			  "data": data,
 			  "dataType": "json",
-			  "type": "POST",
-			  "success": function () {}
+			  "type": "POST"
 			} );
 		}
 	} );
@@ -45,11 +44,10 @@ $(function() {
 	  "stateSave": true,
 	  "stateSaveCallback": function (settings, data) {
 			$.ajax( {
-			  "url": "/state_save",
+			  "url": "http://webserver03/inventadmin/index.php",
 			  "data": data,
 			  "dataType": "json",
-			  "type": "POST",
-			  "success": function () {}
+			  "type": "POST"
 			} );
 		}
 	} );
@@ -60,11 +58,10 @@ $(function() {
 	  "stateSave": true,
 	  "stateSaveCallback": function (settings, data) {
 			$.ajax( {
-			  "url": "/state_save",
+			  "url": "http://webserver03/inventadmin/index.php",
 			  "data": data,
 			  "dataType": "json",
-			  "type": "POST",
-			  "success": function () {}
+			  "type": "POST"
 			} );
 		}
 	} );
@@ -75,11 +72,10 @@ $(function() {
 	  "stateSave": true,
 	  "stateSaveCallback": function (settings, data) {
 			$.ajax( {
-			  "url": "/state_save",
+			  "url": "http://webserver03/inventadmin/index.php",
 			  "data": data,
 			  "dataType": "json",
-			  "type": "POST",
-			  "success": function () {}
+			  "type": "POST"
 			} );
 		}
 	} );
@@ -90,11 +86,10 @@ $(function() {
 	  "stateSave": true,
 	  "stateSaveCallback": function (settings, data) {
 			$.ajax( {
-			  "url": "/state_save",
+			  "url": "http://webserver03/inventadmin/index.php",
 			  "data": data,
 			  "dataType": "json",
-			  "type": "POST",
-			  "success": function () {}
+			  "type": "POST"
 			} );
 		}
 	} );

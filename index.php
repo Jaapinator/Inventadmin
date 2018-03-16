@@ -9,8 +9,10 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 		  <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
 		  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		 <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script> 
+		 <script src="//cdn.datatables.net/plug-ins/1.10.16/sorting/date-uk.js"></script>
 		  <script> <?php include "includes/js/my_js.js"; ?> </script>	
 		 <script><?php include "includes/js/menuswitch.js"; ?>	</script>
+		 <script><?php include "includes/js/datesort.js"; ?> </script>
 </head><body><?php
 
 	
@@ -61,8 +63,8 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 			echo strip_tags($row['Memory']);
 			echo "</td><td>";
 			echo strip_tags($row['Serialnum']);
-			echo "</td><td>";
-			echo $newDate;
+			echo "</td><td >";
+			echo $row['Aanschaf_dat'];
 			echo "</td><td class='knoppen'>";
 			echo "<a class='but_view' href='view.php?view=$row[Com_ID]' ><i class='fas fa-eye fa-s'></i> View</a>";
 			echo "<a class='but_edit' href='edit/editCom.php?edit=$row[Com_ID]' ><i class='far fa-edit fa-s'></i> Edit</a>";
