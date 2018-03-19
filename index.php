@@ -13,7 +13,8 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 		  <script> <?php include "includes/js/my_js.js"; ?> </script>	
 		 <script><?php include "includes/js/menuswitch.js"; ?>	</script>
 		 <script><?php include "includes/js/datesort.js"; ?> </script>
-</head><body><?php
+</head>
+<body><input type="file" accept="image/*;capture=camera"><?php
 
 	
 		echo "<div class='navbar'>";
@@ -48,7 +49,7 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 	echo "<div id='divtable1' class='table' >";
 	echo "<table id='table1' class='display compact' cellspacing='0' width='100%'>"; 
 		echo "<thead><tr><th>Barcode</th><th>Computernaam</th><th>Ip-adres</th><th>CPU</th><th>RAM</th><th>Moederbord</th><th>Aanschaf datum</th><th></th></tr></thead><tbody>"; 	
-		$stmt = $conn->query('SELECT * FROM IA_Computer');
+		$stmt = $conn->query('SELECT * FROM IA_Computer ORDER BY Barcode');
 		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 			$newDate = date("d-m-Y", strtotime($row['Aanschaf_dat']));
 			echo "<tr><td>";

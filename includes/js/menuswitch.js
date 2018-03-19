@@ -13,10 +13,10 @@ $(function () {
 	  "lengthMenu": [[18, -1], [18, "All"]],
 	  "columnDefs": [{  "bSortable": false, "aTargets": [-1] }, { "bSearchable":false, "aTargets": [-1] }, { type: 'date-uk', targets: 0 }],
 	  "stateSave": true,
-	  /*"stateSaveCallback": function (settings, data) {
+	 /* "stateSaveCallback": function (settings, data) {
 			$.ajax( {
 			  "url": "http://webserver03/inventadmin/index.php",
-			  "data": data,
+			  "data": {state: JSON.stringify(data)},
 			  "dataType": "json",
 			  "type": "POST",
 			  "success": function(){}
@@ -27,71 +27,31 @@ $(function () {
 	  "searching": true,
 	  "lengthMenu": [[18, -1], [18, "All"]],
 	  "columnDefs": [{  "bSortable": false, "aTargets": [-1] }, { "bSearchable":false, "aTargets": [-1] }],
-	  "stateSave": true,
-	  "stateSaveCallback": function (settings, data) {
-			$.ajax( {
-			  "url": "http://webserver03/inventadmin/index.php",
-			  "data": data,
-			  "dataType": "json",
-			  "type": "POST"
-			} );
-		}
+	  "stateSave": true
 	} );
 	$('#table3').DataTable( {
 	  "searching": true,
 	  "lengthMenu": [[18, -1], [18, "All"]],
 	  "columnDefs": [{  "bSortable": false, "aTargets": [-1] }, { "bSearchable":false, "aTargets": [-1] }],
-	  "stateSave": true,
-	  "stateSaveCallback": function (settings, data) {
-			$.ajax( {
-			  "url": "http://webserver03/inventadmin/index.php",
-			  "data": data,
-			  "dataType": "json",
-			  "type": "POST"
-			} );
-		}
+	  "stateSave": true
 	} );
 	$('#table4').DataTable( {
 	  "searching": true,
 	  "lengthMenu": [[18, -1], [18, "All"]],
 	  "columnDefs": [{  "bSortable": false, "aTargets": [-1] }, { "bSearchable":false, "aTargets": [-1] }],
-	  "stateSave": true,
-	  "stateSaveCallback": function (settings, data) {
-			$.ajax( {
-			  "url": "http://webserver03/inventadmin/index.php",
-			  "data": data,
-			  "dataType": "json",
-			  "type": "POST"
-			} );
-		}
+	  "stateSave": true
 	} );
 	$('#table5').DataTable( {
 	  "searching": true,
 	  "lengthMenu": [[18, -1], [18, "All"]],
 	  "columnDefs": [{  "bSortable": false, "aTargets": [-1] }, { "bSearchable":false, "aTargets": [-1] }],
-	  "stateSave": true,
-	  "stateSaveCallback": function (settings, data) {
-			$.ajax( {
-			  "url": "http://webserver03/inventadmin/index.php",
-			  "data": data,
-			  "dataType": "json",
-			  "type": "POST"
-			} );
-		}
+	  "stateSave": true
 	} );
 	$('#table6').DataTable( {
 	  "searching": true,
 	  "lengthMenu": [[18, -1], [18, "All"]],
 	  "columnDefs": [{  "bSortable": false, "aTargets": [-1] }, { "bSearchable":false, "aTargets": [-1] }],
-	  "stateSave": true,
-	  "stateSaveCallback": function (settings, data) {
-			$.ajax( {
-			  "url": "http://webserver03/inventadmin/index.php",
-			  "data": data,
-			  "dataType": "json",
-			  "type": "POST"
-			} );
-		}
+	  "stateSave": true
 	} );
 	console.log($("#drop"))
 	$("#hide"+ $("#drop")[0].value).show(); 
@@ -99,7 +59,5 @@ $(function () {
 			var end = this.value;
 			$('.hide').hide();
 		   $("#hide"+end).show(); 
-		});
-	  
-	 
+		}); 
 	});
