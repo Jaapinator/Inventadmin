@@ -15,6 +15,10 @@ $com_serial = $_POST['com_serial'];
 $com_a_date = $_POST['com_a_date'];
 $com_a_prijs = $_POST['com_a_prijs'];
 
+$stmt = $conn->prepare("SELECT * FROM IA_Computer WHERE Ip_adres= $com_ip");
+$stmt->execute();
+$result = $stmt->fetch(PDO::FETCH_ASSOC);
+if(!$result){
 try{
 	$stmt = $conn->prepare("INSERT INTO IA_Computer (Barcode, Com_naam, Ip_adres, Com_merk, CPU_naam, Memory, Serialnum, Aanschaf_dat, Aanschaf_waarde)
 							VALUES (?,?,?,?,?,?,?,?,?)");
@@ -25,6 +29,10 @@ catch(PDOException $e){
 	echo $stmt . "<br>" . $e->getMessage();
 	echo '<meta http-equiv="refresh" content="0;URL=http://webserver03/inventadmin/insert/insertComForm.php" />';
 
+}
+}
+else{
+	echo "<script> alert('Ip-adres bestaat al');</script>";
 }
 $conn = null;
 ?>

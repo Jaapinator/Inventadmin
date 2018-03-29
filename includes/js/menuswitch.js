@@ -12,16 +12,7 @@ $(function () {
 	  "searching": true,
 	  "lengthMenu": [[18, -1], [18, "All"]],
 	  "columnDefs": [{  "bSortable": false, "aTargets": [-1] }, { "bSearchable":false, "aTargets": [-1] }, { type: 'date-uk', targets: 0 }],
-	  "stateSave": true,
-	 /* "stateSaveCallback": function (settings, data) {
-			$.ajax( {
-			  "url": "http://webserver03/inventadmin/index.php",
-			  "data": {state: JSON.stringify(data)},
-			  "dataType": "json",
-			  "type": "POST",
-			  "success": function(){}
-			} );
-		}*/
+	  "stateSave": true
 	} );
 	$('#table2').DataTable( {
 	  "searching": true,
