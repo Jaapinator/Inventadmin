@@ -15,10 +15,12 @@ $com_serial = $_POST['com_serial'];
 $com_a_date = $_POST['com_a_date'];
 $com_a_prijs = $_POST['com_a_prijs'];
 
-$stmt = $conn->prepare("SELECT * FROM IA_Computer WHERE Ip_adres= $com_ip");
-$stmt->execute();
-$result = $stmt->fetch(PDO::FETCH_ASSOC);
-if(!$result){
+$result = $conn->prepare("SELECT count(*) FROM IA_Computer WHERE Ip_adres=:ip"); 
+$result->bindParam(':ip', $com_ip, PDO::PARAM_STR);
+$result->execute();
+$rowCount = $result->fetchColumn(0);
+
+if($rowCount == 0){
 try{
 	$stmt = $conn->prepare("INSERT INTO IA_Computer (Barcode, Com_naam, Ip_adres, Com_merk, CPU_naam, Memory, Serialnum, Aanschaf_dat, Aanschaf_waarde)
 							VALUES (?,?,?,?,?,?,?,?,?)");
@@ -33,6 +35,7 @@ catch(PDOException $e){
 }
 else{
 	echo "<script> alert('Ip-adres bestaat al');</script>";
+	echo '<meta http-equiv="refresh" content="0;URL=http://webserver03/inventadmin/insert/insertComForm.php" />';
 }
 $conn = null;
 ?>

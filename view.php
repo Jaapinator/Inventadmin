@@ -39,7 +39,7 @@
 <tr><td>Ram geheugen: </td><td><?php echo $com_mem;?></td></tr>
 <tr><td>Moederbord: </td><td><?php echo $com_moed;?></td></tr>
 <tr><td>Aanschaf datum: </td><td><?php echo $comnewDate;?></td></tr>
-<tr><td>Aanschaf waarde: </td><td><?php echo "&euro;".number_format((float)$com_a_prijs, 2, '.', '')."";?></td></tr>
+<tr><td>Aanschaf waarde: </td><td><?php echo "&euro; ".number_format((float)$com_a_prijs, 2, '.', '')."";?></td></tr>
 </table>
 </div>
 <div class="mon">
@@ -60,7 +60,7 @@ foreach($rows as $row){
         <tr><td>Type: </td><td><?php echo $row['Type'];?></td></tr>
         <tr><td>Inch: </td><td><?php echo $row['Inch'];?></td></tr>
         <tr><td>Aanschaf datum: </td><td><?php echo $monnewDate; ?></td></tr>
-        <tr><td>Aanschaf waarde: </td><td><?php echo "&euro;".number_format((float)$row['Aanschaf_waarde'], 2, '.', '')."";?></td></tr>
+        <tr><td>Aanschaf waarde: </td><td><?php echo "&euro; ".number_format((float)$row['Aanschaf_waarde'], 2, '.', '')."";?></td></tr>
     </table>
     <?php
 }else{
@@ -84,7 +84,7 @@ foreach($rows as $row){
         <tr><td>Programma: </td><td><?php echo $row['Soft_naam'];?></td></tr>
         <tr><td>Versie: </td><td><?php echo $row['Versie'];?></td></tr>
         <tr><td>Aanschaf datum: </td><td><?php echo $monnewDate; ?></td></tr>
-        <tr><td>Aanschaf waarde: </td><td><?php echo "&euro;".number_format((float)$row['Aanschaf_waarde'], 2, '.', '')."";?></td></tr>
+        <tr><td>Aanschaf waarde: </td><td><?php echo "&euro; ".number_format((float)$row['Aanschaf_waarde'], 2, '.', '')."";?></td></tr>
     </table>
 	
     <?php
@@ -96,7 +96,7 @@ foreach($rows as $row){
 <div class="three">
   <div class="user">
   <?php
-  $sql = "SELECT * FROM IA_Gebruiker, IA_Locatie, IA_Telefoon WHERE Com_ID = :id AND IA_Gebruiker.U_ID=IA_Telefoon.U_ID";
+  $sql = "SELECT * FROM IA_Gebruiker, IA_Locatie, IA_Telefoon, IA_Locatie_RG WHERE Com_ID = :id AND IA_Gebruiker.U_ID=IA_Telefoon.U_ID AND IA_Locatie_RG.U_ID=IA_Gebruiker.U_ID";
   $query = $conn->prepare($sql);
   $query->execute(array(':id' => $id));
   $rows = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -114,7 +114,7 @@ foreach($rows as $row){
 	<tr><td>Merk: </td><td><?php echo $row['Merk'];?></td></tr>
 	<tr><td>Model: </td><td><?php echo $row['Model'];?></td></tr>
 	<tr><td>Aanschaf datum: </td><td><?php echo $gsmnewDate;?></td></tr>
-	<tr><td>Aanschaf waarde: </td><td><?php echo "&euro;".number_format((float)$row['Aanschaf_waarde'], 2, '.', '')."";?></td></tr>
+	<tr><td>Aanschaf waarde: </td><td><?php echo "&euro; ".number_format((float)$row['Aanschaf_waarde'], 2, '.', '')."";?></td></tr>
 	</table>
 	<?php
 }else{
@@ -137,7 +137,7 @@ foreach($rows as $row){
 	<tr><td>Merk: </td><td><?php echo $row['Merk'];?></td></tr>
 	<tr><td>Type: </td><td><?php echo $row['Type'];?></td></tr>
 	<tr><td>Aanschaf datum: </td><td><?php echo $randnewDate;?></td></tr>
-	<tr><td>Aanschaf waarde: </td><td><?php echo "&euro;".number_format((float)$row['Aanschaf_waarde'], 2, '.', '')."";?></td></tr>
+	<tr><td>Aanschaf waarde: </td><td><?php echo "&euro; ".number_format((float)$row['Aanschaf_waarde'], 2, '.', '')."";?></td></tr>
 	</table>
 	<?php
 }else{

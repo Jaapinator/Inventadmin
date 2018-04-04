@@ -19,18 +19,7 @@
 					   echo '<option value="'.$row['Com_ID'].'">'.$row['Barcode'].'</option>';
 					}
 					echo '</select>';
-					echo '<a href="insertComForm.php">Computer bestaat nog niet? Voeg hem hier toe</a><br><br>'; 
-					$sql = $conn->query("SELECT Ruimte_ID, Ruimte_naam FROM IA_Locatie ORDER BY Ruimte_naam");
-					echo "<label>Ruimte naam</label>";
-					echo '<select  name="ruimte_id" required>'; 
-					echo '<option style="display:none" value="">Kies locatie</option>';
-					while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
-					   echo '<option value="'.$row['Ruimte_ID'].'">'.$row['Ruimte_naam'].'</option>';
-					}
-					echo '</select>';
-					echo '<a href="insertLocForm.php">Locatie bestaat nog niet? Voeg hem hier toe</a><br><br>';
-
-				
+					echo '<a href="insertComForm.php">Computer bestaat nog niet? Voeg hem hier toe</a><br><br>'; 				
 				echo "<label>Naam</label>";
 				echo "<input type='text' name='gebruiker' placeholder='Gebruiker' required>";	
 				echo "<label>E-mail</label>";
