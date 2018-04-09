@@ -10,7 +10,7 @@ $ruimte_naam = trim($_POST['ruimte_naam']);
 try{
 	$stmt = $conn->prepare("INSERT INTO IA_Locatie (Ruimte_naam) VALUES (?)");
 	$stmt->execute([$ruimte_naam]);
-	echo '<meta http-equiv="refresh" content="0;URL=http://webserver03/inventadmin/" />';
+	echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
 }catch(PDOException $e){
 	echo $e->getMessage();
 }

@@ -5,7 +5,7 @@
 </head>
 <body>
 	<div class="navbar">
-	<a href="http://webserver03/index/login.php">Portal</a>
+	<a href="https://portal.basrt.eu/index/login.php">Portal</a>
 	<a href="../index.php">Overzicht</a>
 	</div>
 	<div class="form">

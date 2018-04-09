@@ -50,7 +50,7 @@ if(empty($com_id) || empty($merk) || empty($type) || empty($date) || empty($waar
 	$query->execute();
 	
 	$conn = null;
-	echo '<meta http-equiv="refresh" content="0;URL=http://webserver03/inventadmin/" />';
+	echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
 
 }
 }

@@ -29,7 +29,7 @@ $(function(){
 </script><?php
 
 	echo "<div class='navbar'>";
-	echo "<a href='http://webserver03/index/login.php'>Portal</a>";
+	echo "<a href='https://portal.basrt.eu/index/login.php'>Portal</a>";
 	echo "<a href='../index.php'>Overzicht</a>";
 	echo "</div>";
 			echo "<div class='form'>";

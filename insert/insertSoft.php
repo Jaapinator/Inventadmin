@@ -13,11 +13,11 @@ try {
 	$stmt = $conn->prepare("INSERT INTO IA_Software_RG (Soft_ID, Com_ID, Aanschaf_dat, Aanschaf_waarde)
 							VALUES (?,?,?,?)");
 	$stmt->execute([$soft_id, $com_id, $soft_a_date, $soft_a_prijs]);	
-	echo '<meta http-equiv="refresh" content="0;URL=http://webserver03/inventadmin/" />';
+	echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
 }catch(PDOException $e){
 	//echo $stmt . "<br>" . $e->getMessage();
 	echo "<script>alert('Vul de velden goed in!');</script>";
-	echo '<meta http-equiv="refresh" content="0;URL=http://webserver03/inventadmin/insert/insertSoftForm.php" />';
+	echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/insert/insertSoftForm.php" />';
 }
 $conn = null;
 ?>

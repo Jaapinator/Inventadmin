@@ -23,12 +23,12 @@ if (isset($_POST['com_id'])) {
         $stmt = $conn->prepare($sql);
         foreach ($mon_barcode as $i => $barcode) {
             $stmt->execute([$com_id, $barcode, $mon_merk[$i], $mon_type[$i], $mon_inch[$i], $mon_a_date[$i], $mon_a_prijs[$i]]);
-			echo '<meta http-equiv="refresh" content="0;URL=http://webserver03/inventadmin/" />';
+			echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
         }
     } catch (\PDOException $e) {
     //    echo $sql . "<br>" . $e->getMessage();
 	echo "<script>alert('Vul de velden goed in!');</script>";
-	echo '<meta http-equiv="refresh" content="0;URL=http://webserver03/inventadmin/insert/insertMonForm.php" />';
+	echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/insert/insertMonForm.php" />';
     }
 }
 $conn = null;

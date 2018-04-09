@@ -13,10 +13,10 @@ try{
 	$stmt = $conn->prepare("INSERT INTO IA_Gebruiker (Com_ID, Gebruiker, Mailadres)
 							VALUES (?,?,?)");
 	$stmt->execute([$com_id, $gebruiker, $mail]);	
-	echo '<meta http-equiv="refresh" content="0;URL=http://webserver03/inventadmin/" />';
+	echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
 }catch(PDOException $e){
 	?><script>alert("Er is al iemand verbonden aan deze computer!");</script><?php
-	echo '<meta http-equiv="refresh" content="0;URL=http://webserver03/inventadmin/" />';
+	echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
 }
 $conn = null;
 ?>

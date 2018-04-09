@@ -25,17 +25,17 @@ try{
 	$stmt = $conn->prepare("INSERT INTO IA_Computer (Barcode, Com_naam, Ip_adres, Com_merk, CPU_naam, Memory, Serialnum, Aanschaf_dat, Aanschaf_waarde)
 							VALUES (?,?,?,?,?,?,?,?,?)");
 	$stmt->execute([$com_barcode, $com_naam, $com_ip, $com_merk, $com_cpu, $com_ram, $com_serial, $com_a_date, $com_a_prijs]);
-	echo '<meta http-equiv="refresh" content="0;URL=http://webserver03/inventadmin/" />';
+	echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
 }
 catch(PDOException $e){
 	echo $stmt . "<br>" . $e->getMessage();
-	echo '<meta http-equiv="refresh" content="0;URL=http://webserver03/inventadmin/insert/insertComForm.php" />';
+	echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/insert/insertComForm.php" />';
 
 }
 }
 else{
 	echo "<script> alert('Ip-adres bestaat al');</script>";
-	echo '<meta http-equiv="refresh" content="0;URL=http://webserver03/inventadmin/insert/insertComForm.php" />';
+	echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/insert/insertComForm.php" />';
 }
 $conn = null;
 ?>

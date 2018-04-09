@@ -45,7 +45,7 @@ if(isset($_POST['update']))
 		
 		$conn = null;
 		
-		echo '<meta http-equiv="refresh" content="0;URL=http://webserver03/inventadmin/" />';
+		echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
 		} 
 }
 ?>
