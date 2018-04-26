@@ -1,5 +1,6 @@
 <html><head><link rel="icon" sizes="32x32" type="image/png" href="favicon.ico"/><title>Inventadmin</title>
-<meta http-equiv="X-UA-Compatible" content="IE=edge;" /><style><?php
+<meta http-equiv="X-UA-Compatible" content="IE=edge;" /><meta name="format-detection" content="telephone=no">
+<style><?php
 error_reporting(E_ALL); ini_set('display_errors', 1);
 	include "includes/css/stylehome.css";
 ?></style><?php
@@ -27,6 +28,8 @@ header('Location: indexmobile.php');
 		<a href='insert/insertSoftForm.php'>Software</a>
 		<a href='insert/insertRandForm.php'>Randapparatuur</a>
 		<a href='insert/insertGsmForm.php'>Telefoon</a>
+		<a href='insert/insertTabForm.php'>Tablet</a>
+		<a href='insert/insertLapForm.php'>Laptop</a>
 		</div>
 		</div>
 		
@@ -77,7 +80,7 @@ header('Location: indexmobile.php');
 	<div id='divtable2' class='table' >
 	<table id='table2' class='display compact' cellspacing='0' width='100%'>
 		<thead><tr><th>Computerbarcode</th><th>Monitorbarcode</th><th>Merk</th><th>Type</th><th>Inch</th><th>Aanschaf datum</th><th>Aanschaf Waarde</th><th></th></tr></thead><tbody>	
-	<?php $stmt = $conn->query('SELECT DISTINCT IA_Computer.Barcode AS Bar, Mon_ID, IA_Monitor.Barcode, IA_Monitor.Merk, IA_Monitor.Type, IA_Monitor.Inch, IA_Monitor.Aanschaf_dat, IA_Monitor.Aanschaf_waarde FROM IA_Monitor,IA_Computer WHERE IA_Computer.Com_ID=IA_Monitor.Com_ID');
+	<?php $stmt = $conn->query('SELECT DISTINCT IA_Computer.Barcode AS Bar, IA_Computer.Com_ID AS comid, Mon_ID, IA_Monitor.Barcode, IA_Monitor.Merk, IA_Monitor.Type, IA_Monitor.Inch, IA_Monitor.Aanschaf_dat, IA_Monitor.Aanschaf_waarde FROM IA_Monitor,IA_Computer WHERE IA_Computer.Com_ID=IA_Monitor.Com_ID');
 		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 			$waarde = $row['Aanschaf_waarde'];
 			$originalDate = $row['Aanschaf_dat'];
@@ -97,9 +100,9 @@ header('Location: indexmobile.php');
 			echo "</td><td>";
 			echo "&euro;"; echo number_format((float)$waarde, 2, '.', ''); ?>
 			</td><td class='knoppen'> <?php
-			echo "<a class='but_edit' href='edit/editMon.php?edit=$row[Mon_ID]' ><i class='far fa-edit fa-xs'></i> Edit</a>";
-			
-			echo "<a class='but_del' href='delete/delMon.php?edit=$row[Mon_ID]' onClick=\"return confirm('Weet je zeker dat je dit item wilt verwijderen?')\"><i class='far fa-trash-alt fa-xs'></i> Delete</a>";
+			echo "<a class='but_view' href='view.php?view=$row[comid]' ><i class='fas fa-eye fa-s'></i> View</a>";
+			echo "<a class='but_edit' href='edit/editMon.php?edit=$row[Mon_ID]' ><i class='far fa-edit fa-s'></i> Edit</a>";			
+			echo "<a class='but_del' href='delete/delMon.php?edit=$row[Mon_ID]' onClick=\"return confirm('Weet je zeker dat je dit item wilt verwijderen?')\"><i class='far fa-trash-alt fa-s'></i> Delete</a>";
 			echo "</td></tr>";
 		} ?>
 </tbody></table>
@@ -108,7 +111,7 @@ header('Location: indexmobile.php');
 	<div id='divtable3' class='table' >
 	<table id='table3' class='display compact' cellspacing='0' width='100%'> 
 		<thead><tr><th>Computerbarcode</th><th>Softnaam</th><th>Versie</th><th>Aanschaf datum</th><th>Aanschaf Waarde</th><th></th></tr></thead><tbody>	
-	<?php $stmt = $conn->query('SELECT *, IA_Software_RG.Soft_ID as rid FROM IA_Software, IA_Computer, IA_Software_RG WHERE IA_Computer.Com_ID=IA_Software_RG.Com_ID AND IA_Software.Soft_ID=IA_Software_RG.Soft_ID');
+	<?php $stmt = $conn->query('SELECT *, IA_Software_RG.Soft_ID as rid, IA_Computer.Com_ID AS comid FROM IA_Software, IA_Computer, IA_Software_RG WHERE IA_Computer.Com_ID=IA_Software_RG.Com_ID AND IA_Software.Soft_ID=IA_Software_RG.Soft_ID');
 		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 			$waarde = $row['Aanschaf_waarde'];
 			$originalDate = $row['Aanschaf_dat'];
@@ -124,8 +127,8 @@ header('Location: indexmobile.php');
 			echo "</td><td>";
 			echo "&euro;"; echo number_format((float)$waarde, 2, '.', ''); ?>
 			</td><td class='knoppen'> <?php
+			echo "<a class='but_view' href='view.php?view=$row[comid]' ><i class='fas fa-eye fa-s'></i> View</a>";
 			echo "<a class='but_edit' href='edit/editSoft.php?edit=$row[rid]' ><i class='far fa-edit fa-xs'></i> Edit</a>";
-			
 			echo "<a class='but_del' href='delete/delSoft.php?edit=$row[rid]' onClick=\"return confirm('Weet je zeker dat je dit item wilt verwijderen?')\"><i class='far fa-trash-alt fa-xs'></i> Delete</a>";
 			echo "</td></tr>";
 		} ?>
@@ -136,7 +139,7 @@ header('Location: indexmobile.php');
 	<div id='divtable4' class='table' >
 	<table id='table4' class='display compact' cellspacing='0' width='100%'>
 		<thead><tr><th>Computerbarcode</th><th>Ip-adres</th><th>Locatie</th><th>Gebruikersnaam</th><th>E-mail</th><th></th></tr></thead><tbody>
-		<?php $stmt = $conn->query('SELECT IA_Gebruiker.U_ID as usr, Barcode, Ruimte_naam, Gebruiker, Mailadres, Ip_adres FROM IA_Computer, IA_Gebruiker, IA_Locatie, IA_Locatie_RG WHERE IA_Locatie.Ruimte_ID=IA_Locatie_RG.Ruimte_ID AND IA_Computer.Com_ID=IA_Locatie_RG.Com_ID AND IA_Gebruiker.U_ID=IA_Locatie_RG.U_ID');
+		<?php $stmt = $conn->query('SELECT IA_Gebruiker.U_ID as usr, IA_Computer.Com_ID AS comid, Barcode, Ruimte_naam, Gebruiker, Mailadres, Ip_adres FROM IA_Computer, IA_Gebruiker, IA_Locatie, IA_Locatie_RG WHERE IA_Locatie.Ruimte_ID=IA_Locatie_RG.Ruimte_ID AND IA_Computer.Com_ID=IA_Locatie_RG.Com_ID AND IA_Gebruiker.U_ID=IA_Locatie_RG.U_ID');
 		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 			echo "<tr><td>";
 			echo $row['Barcode'];
@@ -149,9 +152,9 @@ header('Location: indexmobile.php');
 			echo "</td><td>";
 			echo strip_tags($row['Mailadres']); ?>
 			</td><td class='knoppen'> <?php
-			echo "<a class='but_edit' href='edit/editUser.php?edit=$row[usr]' ><i class='far fa-edit fa-xs'></i> Edit</a>";
-			
-			echo "<a class='but_del' href='delete/delUser.php?edit=$row[usr]' onClick=\"return confirm('Weet je zeker dat je dit item wilt verwijderen?')\"><i class='far fa-trash-alt fa-xs'></i> Delete</a>";
+			echo "<a class='but_view' href='view.php?view=$row[comid]' ><i class='fas fa-eye fa-s'></i> View</a>";
+			echo "<a class='but_edit' href='edit/editUser.php?edit=$row[usr]' ><i class='far fa-edit fa-s'></i> Edit</a>";
+			echo "<a class='but_del' href='delete/delUser.php?edit=$row[usr]' onClick=\"return confirm('Weet je zeker dat je dit item wilt verwijderen?')\"><i class='far fa-trash-alt fa-s'></i> Delete</a>";
 			echo "</td></tr>";
 		} ?>
 </tbody></table>
@@ -213,4 +216,3 @@ header('Location: indexmobile.php');
 $dt = new DateTime();
 echo $dt->format('d-m-Y');
 ?> - Inventadmin </footer>
-

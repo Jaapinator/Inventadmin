@@ -26,25 +26,27 @@ $(function(){
 	echo "</div>";
 	?>
 	<div class='form'>
-	<H4>Telefoon</H4>
-	<form method="post" action="insertGsmForm.php" enctype="multipart/form-data" id="gsm_form">
+	<H4>Tablet</H4>
+	<form method="post" action="insertTabForm.php" enctype="multipart/form-data" id="tab_form">
 	<?php
 	$sql = $conn->query("SELECT U_ID, Gebruiker FROM IA_Gebruiker ORDER BY Gebruiker"); 
 					
 					echo "<label>Gebruiker</label>";
 					echo '<select  name="user" required>'; 
-					echo '<option style="display:none" value="">Kies gebruiker van de telefoon</option>';
+					echo '<option style="display:none" value="">Kies gebruiker van de tablet</option>';
 					while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
 					   echo '<option value="'.$row['U_ID'].'">'.$row['Gebruiker'].'</option>';
 					}
 					echo '</select>';
 					?>
-	<label>Telefoonnummer</label>
-	<input type="text" name="nummer" placeholder="Telefoonnummer" required>
 	<label>Merk</label>
 	<input type="text" name="merk" placeholder="Merk" required>
 	<label>Model</label>
 	<input type="text" name="model" placeholder="Model" required>
+	<label>Inch</label>
+	<input type="text" name="inch" placeholder="Inch" required>
+	<label>Opslagcapaciteit</label>
+	<input type="text" name="opslag" placeholder="Opslagcapaciteit" required>
 	<label>Aanschaf datum</label>
 	<input type="date" id="picker" name="datum" required>
 	<label>Aanschaf waarde</label>
@@ -62,18 +64,19 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 
 if (isset($_POST['submit'])){
 	$userid = $_POST['user'];
-	$nummer = $_POST['nummer'];
+	$inch = $_POST['inch'];
 	$merk = $_POST['merk'];
 	$model = $_POST['model'];
+	$opslag = $_POST['opslag'];
 	$date = $_POST['datum'];
 	$waarde = $_POST['prijs'];
 	
-	if($_FILES['file']['error'] == 4 ){
-		$stmt = $conn->prepare("INSERT INTO IA_Telefoon (U_ID, Telefoonnummer, Merk, Model, Aanschaf_dat, Aanschaf_waarde, Picture_gsm)
-											VALUES (?,?,?,?,?,?,?)");
-		$stmt->execute([$userid, $nummer, $merk, $model, $date, $waarde, NULL]);
+	if($_FILES['file']['error'] == 4){
+		$stmt = $conn->prepare("INSERT INTO IA_Tablet (U_ID, Merk, Model, Inch, Opslagcapaciteit, Aanschaf_dat, Aanschaf_waarde, Picture_tab)
+												VALUES (?,?,?,?,?,?,?,?)");
+		$stmt->execute([$userid, $merk, $model, $inch, $opslag, $date, $waarde, NULL]);
 		echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
-	}else{		
+	}else{
 		$file = $_FILES['file'];
 		
 		$fileName = $_FILES['file']['name'];
@@ -91,18 +94,18 @@ if (isset($_POST['submit'])){
 			if($fileError === 0){
 				if($fileSize < 1000000){
 					$fileNameNew = uniqid('', true).".".$fileActualExt;
-					$fileDestination = '//WEBSERVER03/Portal$/inventadmin/includes/images/telefoon/'.$fileNameNew;
+					$fileDestination = '//WEBSERVER03/Portal$/inventadmin/includes/images/tablet/'.$fileNameNew;
 					move_uploaded_file($fileTmpName, $fileDestination);
 					try{
-						$dir = 'includes/images/telefoon/';
+						$dir = 'includes/images/tablet/';
 						$img = $dir.$fileNameNew;
-						$stmt = $conn->prepare("INSERT INTO IA_Telefoon (U_ID, Telefoonnummer, Merk, Model, Aanschaf_dat, Aanschaf_waarde, Picture_gsm)
-												VALUES (?,?,?,?,?,?,?)");
-						$stmt->execute([$userid, $nummer, $merk, $model, $date, $waarde, $img]);
+						$stmt = $conn->prepare("INSERT INTO IA_Tablet (U_ID, Merk, Model, Inch, Opslagcapaciteit, Aanschaf_dat, Aanschaf_waarde, Picture_tab)
+												VALUES (?,?,?,?,?,?,?,?)");
+						$stmt->execute([$userid, $merk, $model, $inch, $opslag, $date, $waarde, $img]);
 						echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
 					}
 					catch(PDOException $e){
-						echo $stmt . "<br>" . $e->getMEssage();
+						echo $stmt . "<br>" . $e->getMessage();
 					}
 				}else{
 					echo "Your file is too big!";
