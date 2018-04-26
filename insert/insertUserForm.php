@@ -10,16 +10,7 @@
 	echo "</div>";
 			echo "<div class='form'>";
 			echo "<H4> Voeg gebruiker toe</H4>";
-				echo "<form method='post' action='insertUser.php'>";
-					$sql = $conn->query("SELECT Com_ID, Barcode FROM IA_Computer"); 
-					echo "<label>Computer barcode</label>";
-					echo '<select  name="com_id" required>'; 
-					echo '<option style="display:none" value="">Kies barcode van computer</option>';
-					while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
-					   echo '<option value="'.$row['Com_ID'].'">'.$row['Barcode'].'</option>';
-					}
-					echo '</select>';
-					echo '<a href="insertComForm.php">Computer bestaat nog niet? Voeg hem hier toe</a><br><br>'; 				
+				echo "<form method='post' action='insertUser.php'>";			
 				echo "<label>Naam</label>";
 				echo "<input type='text' name='gebruiker' placeholder='Gebruiker' required>";	
 				echo "<label>E-mail</label>";

@@ -46,6 +46,8 @@ $(function(){
 				echo "<input type='date' id='picker' name='com_a_date' placeholder='Aanschaf datum' required>";
 				echo "<label>Aanschaf waarde</label>";
 				echo "<input type='text' class='money' id='money' name='com_a_prijs' placeholder='Aanschaf waarde' required>";
+				echo "<label>Opmerkingen</label><br>";
+				echo "<textarea name='comment' placeholder='Opmerkingen'></textarea><br>";
 				echo "<input type='submit' name='submit2' value='voeg toe'>";
 				echo "</form>";
 			echo "</div>";

@@ -8,17 +8,21 @@ $merk = $_POST['merk'];
 $model = $_POST['model'];
 $date = $_POST['datum'];
 $waarde = $_POST['prijs'];
+$picture = $_POST['uploadFile'];
 
+$folder = "uploads/";
+$uploadfolder = "\\WEBSERVER03\PORTAL$\inventadmin\uploads";
+$tmp_name = $_FILES["uploadFile"]["tmp_name"][0];
+$img = $folder.$picture;
 
 try{
-	$stmt = $conn->prepare("INSERT INTO IA_Telefoon (U_ID, Telefoonnummer, Merk, Model, Aanschaf_dat, Aanschaf_waarde)
-							VALUES (?,?,?,?,?,?)");
-	$stmt->execute([$userid, $nummer, $merk, $model, $date, $waarde]);
-	echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
+	var_dump(move_uploaded_file($tmp_name, "$uploadfolder/$tmp_name"));
+	$stmt = $conn->prepare("INSERT INTO IA_Telefoon (U_ID, Telefoonnummer, Merk, Model, Aanschaf_dat, Aanschaf_waarde, Picture_gsm)
+							VALUES (?,?,?,?,?,?,?)");
+	$stmt->execute([$userid, $nummer, $merk, $model, $date, $waarde, $img]);
 }
 catch(PDOException $e){
 	echo $stmt . "<br>" . $e->getMEssage();
-	echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/insert/insertRandForm.php" />';
 }
 $conn = null;
 

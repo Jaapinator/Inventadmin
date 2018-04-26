@@ -14,6 +14,7 @@ $com_ram = $_POST['com_ram'];
 $com_serial = $_POST['com_serial'];
 $com_a_date = $_POST['com_a_date'];
 $com_a_prijs = $_POST['com_a_prijs'];
+$comment = $_POST['comment'];
 
 $result = $conn->prepare("SELECT count(*) FROM IA_Computer WHERE Ip_adres=:ip"); 
 $result->bindParam(':ip', $com_ip, PDO::PARAM_STR);
@@ -22,9 +23,9 @@ $rowCount = $result->fetchColumn(0);
 
 if($rowCount == 0){
 try{
-	$stmt = $conn->prepare("INSERT INTO IA_Computer (Barcode, Com_naam, Ip_adres, Com_merk, CPU_naam, Memory, Serialnum, Aanschaf_dat, Aanschaf_waarde)
-							VALUES (?,?,?,?,?,?,?,?,?)");
-	$stmt->execute([$com_barcode, $com_naam, $com_ip, $com_merk, $com_cpu, $com_ram, $com_serial, $com_a_date, $com_a_prijs]);
+	$stmt = $conn->prepare("INSERT INTO IA_Computer (Barcode, Com_naam, Ip_adres, Com_merk, CPU_naam, Memory, Serialnum, Aanschaf_dat, Aanschaf_waarde, Opmerkingen)
+							VALUES (?,?,?,?,?,?,?,?,?,?)");
+	$stmt->execute([$com_barcode, $com_naam, $com_ip, $com_merk, $com_cpu, $com_ram, $com_serial, $com_a_date, $com_a_prijs, $comment]);
 	echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
 }
 catch(PDOException $e){

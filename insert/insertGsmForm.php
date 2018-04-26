@@ -26,7 +26,7 @@ $(function(){
 	echo "</div>";
 	?>
 	<div class='form'>
-	<H4>Randapparatuur</H4>
+	<H4>Telefoon</H4>
 	<form method="post" action="insertGsm.php" id="gsm_form">
 	<?php
 	$sql = $conn->query("SELECT U_ID, Gebruiker FROM IA_Gebruiker"); 
@@ -49,6 +49,9 @@ $(function(){
 	<input type="date" id="picker" name="datum" required>
 	<label>Aanschaf waarde</label>
 	<input type="text" name="prijs" placeholder="Aanschaf waarde" required>
+	<label>Foto telefoon</label>
+	<br>
+	<input type="file" name="uploadFile">
 	<input type="submit" name="submit" value="Voeg toe">
 	</form>
 	</div>

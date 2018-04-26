@@ -26,7 +26,7 @@
 	}
 	echo "<H2>". $com_naam ."</H2>";
 ?>
-<div class="com">
+
 <?php
 	$comnewDate = date("d-m-Y", strtotime($com_a_dat));
 ?>
@@ -41,8 +41,7 @@
 <tr><td>Aanschaf datum: </td><td><?php echo $comnewDate;?></td></tr>
 <tr><td>Aanschaf waarde: </td><td><?php echo "&euro; ".number_format((float)$com_a_prijs, 2, '.', '')."";?></td></tr>
 </table>
-</div>
-<div class="mon">
+<br>
 <?php
 $sql = "SELECT * FROM IA_Monitor WHERE Com_ID = :id";
 $query = $conn->prepare($sql);
@@ -61,14 +60,13 @@ foreach($rows as $row){
         <tr><td>Inch: </td><td><?php echo $row['Inch'];?></td></tr>
         <tr><td>Aanschaf datum: </td><td><?php echo $monnewDate; ?></td></tr>
         <tr><td>Aanschaf waarde: </td><td><?php echo "&euro; ".number_format((float)$row['Aanschaf_waarde'], 2, '.', '')."";?></td></tr>
-    </table>
-    <?php
+	</table>	
+<?php
 }else{
     echo "<i>Geen monitoren gevonden</i>";
 }
 ?>
-</div>
-<div class="soft">
+<br>
 <?php
 $sql = "SELECT * FROM IA_Software, IA_Software_RG WHERE Com_ID = :id AND IA_Software.Soft_ID=IA_Software_RG.Soft_ID";
 $query = $conn->prepare($sql);
@@ -92,37 +90,29 @@ foreach($rows as $row){
     echo "<i>Geen software gevonden</i>";
 }
 ?>
-</div>
-<div class="three">
-  <div class="user">
+<br>
   <?php
-  $sql = "SELECT * FROM IA_Gebruiker, IA_Locatie, IA_Telefoon, IA_Locatie_RG WHERE Com_ID = :id AND IA_Gebruiker.U_ID=IA_Telefoon.U_ID AND IA_Locatie_RG.U_ID=IA_Gebruiker.U_ID";
+  $sql = "SELECT * FROM IA_Gebruiker, IA_Locatie, IA_Locatie_RG WHERE Com_ID = :id AND IA_Locatie_RG.U_ID=IA_Gebruiker.U_ID AND IA_Locatie.Ruimte_ID=IA_Locatie_RG.Ruimte_ID";
   $query = $conn->prepare($sql);
   $query->execute(array(':id' => $id));
   $rows = $query->fetchAll(PDO::FETCH_ASSOC);
   
 $value = count($rows);
-if ($value !=0)
+if ($value !=0){
 foreach($rows as $row){
-	$gsmnewDate = date("d-m-Y", strtotime($row['Aanschaf_dat']));
 	?>
 	<table>
 	<tr><td>Naam: </td><td><?php echo $row['Gebruiker'];?></td></tr>
 	<tr><td>E-mail: </td><td><?php echo $row['Mailadres'];?></td></tr>
 	<tr><td>Locatie: </td><td><?php echo $row['Ruimte_naam'];?></td></tr>
-	<tr><td>Telefoonnummer: </td><td><?php echo $row['Telefoonnummer'];?></td></tr>
-	<tr><td>Merk: </td><td><?php echo $row['Merk'];?></td></tr>
-	<tr><td>Model: </td><td><?php echo $row['Model'];?></td></tr>
-	<tr><td>Aanschaf datum: </td><td><?php echo $gsmnewDate;?></td></tr>
-	<tr><td>Aanschaf waarde: </td><td><?php echo "&euro; ".number_format((float)$row['Aanschaf_waarde'], 2, '.', '')."";?></td></tr>
 	</table>
 	<?php
-}else{
+}}else{
 	echo "<i>Geen gebruiker gevonden</i>";
 }
-  ?>
-  </div>
-  <div class="rand">  <?php
+?>
+<br>
+<?php
   $sql = "SELECT * FROM IA_Randapparatuur WHERE Com_ID = :id";
   $query = $conn->prepare($sql);
   $query->execute(array(':id' => $id));
@@ -143,7 +133,7 @@ foreach($rows as $row){
 }else{
 	echo "<i>Geen randapparatuur gevonden</i>";
 }
-  ?></div>
+  ?><br>
   <div class="comm">
     <label>Voeg opmerkingen toe</label><br>
 	<form id="comment" action="edit/updateOpmerk.php" method="post">
@@ -152,6 +142,5 @@ foreach($rows as $row){
 	<input type="submit" value="Edit" name="submit" />
 	</form>
   </div>
-</div>
 </body>
 </html>

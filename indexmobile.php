@@ -155,19 +155,19 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 
 	<div id='divtable4' class='table' >
 	<table id='table4' class='display compact' cellspacing='0' width='100%'>
-		<thead><tr><th>Computerbarcode</th><th>Locatie</th><th>Gebruikersnaam</th><th>E-mail</th><th>Telefoonnummer</th><th></th></tr></thead><tbody>
-		<?php $stmt = $conn->query('SELECT IA_Gebruiker.U_ID as usr, Barcode, Ruimte_naam, Gebruiker, Mailadres, Telefoonnummer FROM IA_Computer, IA_Gebruiker, IA_Locatie, IA_Telefoon, IA_Locatie_RG WHERE IA_Locatie.Ruimte_ID=IA_Locatie_RG.Ruimte_ID AND IA_Computer.Com_ID=IA_Locatie_RG.Com_ID AND IA_Gebruiker.U_ID=IA_Telefoon.U_ID AND IA_Gebruiker.U_ID=IA_Locatie_RG.U_ID');
+		<thead><tr><th>Computerbarcode</th><th>Ip-adres</th><th>Locatie</th><th>Gebruikersnaam</th><th>E-mail</th><th></th></tr></thead><tbody>
+		<?php $stmt = $conn->query('SELECT IA_Gebruiker.U_ID as usr, Barcode, Ruimte_naam, Gebruiker, Mailadres, Ip_adres FROM IA_Computer, IA_Gebruiker, IA_Locatie, IA_Locatie_RG WHERE IA_Locatie.Ruimte_ID=IA_Locatie_RG.Ruimte_ID AND IA_Computer.Com_ID=IA_Locatie_RG.Com_ID AND IA_Gebruiker.U_ID=IA_Locatie_RG.U_ID');
 		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 			echo "<tr><td>";
 			echo $row['Barcode'];
+			echo "</td><td>";
+			echo strip_tags($row['Ip_adres']);
 			echo "</td><td>";
 			echo strip_tags($row['Ruimte_naam']);
 			echo "</td><td>";
 			echo strip_tags($row['Gebruiker']);
 			echo "</td><td>";
-			echo strip_tags($row['Mailadres']);
-			echo "</td><td>";
-			echo strip_tags($row['Telefoonnummer']); ?>
+			echo strip_tags($row['Mailadres']); ?>
 			</td><td class='knoppen'> <?php
 			echo "<a class='but_edit' href='edit/editUser.php?edit=$row[usr]' ><i class='far fa-edit fa-xs'></i> Edit</a>";
 			

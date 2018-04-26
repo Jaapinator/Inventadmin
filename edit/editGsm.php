@@ -60,7 +60,7 @@ $(function(){
 					}
 					echo '</select>';?>
 		<label>Telefoonnummer</label>
-			<input type="text" name="nummer"  value="<?php echo $barcode;?>">
+			<input type="text" name="nummer"  value="<?php echo $nummer;?>">
 		<label>Merk</label>
 			<input type="text" name="merk" value="<?php echo $merk;?>">
 		<label>Model</label>

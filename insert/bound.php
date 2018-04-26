@@ -27,9 +27,10 @@
 					echo '<select  name="ruimteid" required>'; 
 					echo '<option style="display:none" value="">Kies ruimtenaam</option>';
 					while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
-					   echo '<option value="'.$row['Ruimte_ID'].'">'.$row['IA_Locatie'].'</option>';
+					   echo '<option value="'.$row['Ruimte_ID'].'">'.$row['Ruimte_naam'].'</option>';
 					}
 					echo '</select>';
+					echo '<a href="insertLocForm.php">Locatie bestaat nog niet? Voeg hem hier toe</a><br><br>'; 
 	$sql = $conn->query("SELECT U_ID, Gebruiker FROM IA_Gebruiker"); 
 					
 					echo "<label>Gebruiker <i>niet verplicht</i></label>";

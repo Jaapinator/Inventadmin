@@ -38,7 +38,6 @@ var App = {
             }
         },
         applySettingsVisibility: function(setting, capability) {
-            // depending on type of capability
             if (typeof capability === 'boolean') {
                 var node = document.querySelector('input[name="settings_' + setting + '"]');
                 if (node) {
