@@ -4,6 +4,7 @@
 ?><style><?php
 	include "../includes/css/style.css";
 ?></style><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="../includes/js/modernizr-custom.js"></script>
 <script>
 $(function(){
     var dtToday = new Date();
