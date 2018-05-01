@@ -13,6 +13,7 @@ header('Location: indexmobile.php');
 		  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		 <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>  
 		 <script src="//cdn.datatables.net/plug-ins/1.10.16/sorting/date-uk.js"></script>
+		 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js"></script>
 		  <script> <?php include "includes/js/my_js.js"; ?> </script>	
 		 <script><?php include "includes/js/menuswitch.js"; ?>	</script>
 		 </head>
@@ -45,9 +46,12 @@ header('Location: indexmobile.php');
 		<option class='keuze' value='table4'>Gebruiker</option>
 		<option class='keuze' value='table5'>Randapparatuur</option>
 		<option class='keuze' value='table6'>Telefoon</option>
+		<option class='keuze' value='table7'>Tablet</option>
+		<option class='keuze' value='table8'>Laptop</option>
 		</select>
 		</div>
 		</div>
+		
 	<div id='divtable1' class='table' >
 	<table id='table1' class='display compact' cellspacing='0' width='100%'> 
 		<thead><tr><th>Barcode</th><th>Computernaam</th><th>Ip-adres</th><th>CPU</th><th>RAM</th><th>Moederbord</th><th>Aanschaf datum</th><th></th></tr></thead><tbody>
@@ -188,10 +192,9 @@ header('Location: indexmobile.php');
 	<div id='divtable6' class='table' >
 	<table id='table6' class='display compact' cellspacing='0' width='100%'>
 		<thead><tr><th>Gebruiker</th><th>Telefoonnummer</th><th>Merk</th><th>Model</th><th>Aanschaf datum</th><th>Aanschaf waarde</th><th></th></tr></thead><tbody> 	
-	<?php	$stmt = $conn->query('SELECT Gsm_ID, Gebruiker, Telefoonnummer, Merk, Model, Aanschaf_dat, Aanschaf_waarde, Picture_gsm FROM IA_Gebruiker, IA_Telefoon WHERE IA_Gebruiker.U_ID=IA_Telefoon.U_ID');
+	<?php	$stmt = $conn->query('SELECT Gsm_ID, Gebruiker, Telefoonnummer, Merk, Model, Aanschaf_dat, Aanschaf_waarde FROM IA_Gebruiker, IA_Telefoon WHERE IA_Gebruiker.U_ID=IA_Telefoon.U_ID');
 		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 			$newDate = date("d-m-Y", strtotime($row['Aanschaf_dat']));
-			$afbeelding = $row['Picture_gsm'];
 			echo "<tr><td>";
 			echo strip_tags($row['Gebruiker']);
 			echo "</td><td>";
@@ -208,6 +211,63 @@ header('Location: indexmobile.php');
 			echo "<a class='but_edit' href='edit/editGsm.php?edit=$row[Gsm_ID]' ><i class='far fa-edit fa-xs'></i> Edit</a>";
 			
 			echo "<a class='but_del' href='delete/delGsm.php?edit=$row[Gsm_ID]' onClick=\"return confirm('Weet je zeker dat je dit item wilt verwijderen?')\"><i class='far fa-trash-alt fa-xs'></i> Delete</a>";
+			echo "</td></tr>";
+		} ?>
+</tbody></table>
+</div>
+
+<div id='divtable7' class='table' >
+	<table id='table7' class='display compact' cellspacing='0' width='100%'>
+		<thead><tr><th>Gebruiker</th><th>Merk</th><th>Model</th><th>Inch</th><th>Opslagcapaciteit</th><th>Aanschaf datum</th><th>Aanschaf waarde</th><th></th></tr></thead><tbody> 	
+	<?php	$stmt = $conn->query('SELECT * FROM IA_Gebruiker, IA_Tablet WHERE IA_Gebruiker.U_ID=IA_Tablet.U_ID');
+		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$newDate = date("d-m-Y", strtotime($row['Aanschaf_dat']));
+			echo "<tr><td>";
+			echo strip_tags($row['Gebruiker']);
+			echo "</td><td>";
+			echo strip_tags($row['Merk']);
+			echo "</td><td>";
+			echo strip_tags($row['Model']);
+			echo "</td><td>";
+			echo strip_tags($row['Inch']);
+			echo "</td><td>";
+			echo strip_tags($row['Opslagcapaciteit']);
+			echo "</td><td>";
+			echo $newDate;
+			echo "</td><td>";
+			echo "&euro;"; echo number_format((float)$row['Aanschaf_waarde'], 2, '.', ''); ?>
+			</td><td class='knoppen'> <?php
+			echo "<a class='but_edit' href='edit/editTab.php?edit=$row[Tab_ID]' ><i class='far fa-edit fa-xs'></i> Edit</a>";
+			
+			echo "<a class='but_del' href='delete/delTab.php?edit=$row[Tab_ID]' onClick=\"return confirm('Weet je zeker dat je dit item wilt verwijderen?')\"><i class='far fa-trash-alt fa-xs'></i> Delete</a>";
+			echo "</td></tr>";
+		} ?>
+</tbody></table>
+</div>
+<div id='divtable8' class='table' >
+	<table id='table8' class='display compact' cellspacing='0' width='100%'>
+		<thead><tr><th>Gebruiker</th><th>Merk</th><th>CPU</th><th>Memory</th><th>Inch</th><th>Aanschaf datum</th><th>Aanschaf waarde</th><th></th></tr></thead><tbody> 	
+	<?php	$stmt = $conn->query('SELECT * FROM IA_Gebruiker, IA_Laptop WHERE IA_Gebruiker.U_ID=IA_Laptop.U_ID');
+		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$newDate = date("d-m-Y", strtotime($row['Aanschaf_dat']));
+			echo "<tr><td>";
+			echo strip_tags($row['Gebruiker']);
+			echo "</td><td>";
+			echo strip_tags($row['Merk']);
+			echo "</td><td>";
+			echo strip_tags($row['CPU']);
+			echo "</td><td>";
+			echo strip_tags($row['Memory']);
+			echo "</td><td>";
+			echo strip_tags($row['Inch']);
+			echo "</td><td>";
+			echo $newDate;
+			echo "</td><td>";
+			echo "&euro;"; echo number_format((float)$row['Aanschaf_waarde'], 2, '.', ''); ?>
+			</td><td class='knoppen'> <?php
+			echo "<a class='but_edit' href='edit/editLap.php?edit=$row[Lap_ID]' ><i class='far fa-edit fa-xs'></i> Edit</a>";
+			
+			echo "<a class='but_del' href='delete/delLap.php?edit=$row[Lap_ID]' onClick=\"return confirm('Weet je zeker dat je dit item wilt verwijderen?')\"><i class='far fa-trash-alt fa-xs'></i> Delete</a>";
 			echo "</td></tr>";
 		} ?>
 </tbody></table>

@@ -83,6 +83,7 @@ select.keuze{
     -moz-appearance: none;
     text-indent: 1px;
     text-overflow: '';
+	direction:rtl;
 }
 option.keuze{
 	font-size: 16px; 
@@ -94,7 +95,7 @@ option.keuze{
 	z-index: 1;
 }
 option:hover .keuze{
-background-color: red;
+	background-color: red;
 }
 
 a.but_edit{

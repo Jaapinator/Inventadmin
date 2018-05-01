@@ -1,5 +1,6 @@
 <html><head><link rel="icon" sizes="32x32" type="image/png" href="../favicon.ico"/><title>Inventadmin</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge;" /><?php
+error_reporting(E_ALL); ini_set('display_errors', 1);
 	include "../includes/connection.php";
 ?><style><?php
 	include "../includes/css/style.css";
@@ -26,39 +27,60 @@ $(function(){
     var maxDate = year + '-' + month + '-' + day;
     $('#picker').attr('max', maxDate);
 });
-</script><?php
+</script>
+</head>
+<body>
+<div class='navbar'>
+	<a href='https://portal.basrt.eu/index/login.php'>Portal</a>
+	<a href='../index.php'>Overzicht</a>
+</div>
+<div class='form'>
+	<H4> Voeg een nieuw programma toe</H4>
+	<form id='soft_form' action='insertSoftForm.php' method='post'>
+	<?php	$sql = $conn->query("SELECT Com_ID, Barcode FROM IA_Computer"); ?>
+	<label>Computer barcode</label>
+		<select  name="com_id" required>
+			<option style="display:none" value="">Kies barcode van computer</option>
+		<?php	while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
+					echo '<option value="'.$row['Com_ID'].'">'.$row['Barcode'].'</option>';
+				} ?>
+		</select>
+		<a href="insertComForm.php">Computer bestaat nog niet? Voeg hem hier toe</a><br><br>
+	<?php	$sql = $conn->query("SELECT Soft_ID, Soft_naam, Versie FROM IA_Software"); ?>
+	<label>Softwarenaam & versie</label>
+		<select  name="soft_id" required>
+			<option style="display:none" value="">Kies het programma</option>
+		<?php	while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
+					echo '<option value="'.$row['Soft_ID'].'">'.$row['Soft_naam'].' '.$row['Versie'].'</option>';
+				} ?>
+		</select>
+		<a href="insertNewSoftForm.php">Software bestaat nog niet? Voeg hem hier toe</a><br><br>
+	<label>Aanschaf datum</label>
+		<input type='date' id='picker' name='soft_a_date' placeholder='Aanschaf datum' required>
+	<label>Aanschaf waarde</label>
+		<input type='text' name='soft_a_prijs' id='money' placeholder='Aanschaf waarde' required>
+		<input type='submit' name='submit4' value='voeg toe'>
+	</form>
+</div>
+</body>
+</html>
+<?php
+if(isset($_POST['submit4'])){
+	$soft_id = trim($_POST['soft_id']);
+	$com_id = trim($_POST['com_id']);
+	$soft_a_date = trim($_POST['soft_a_date']);
+	$soft_a_prijs = trim($_POST['soft_a_prijs']);
 
-	echo "<div class='navbar'>";
-	echo "<a href='https://portal.basrt.eu/index/login.php'>Portal</a>";
-	echo "<a href='../index.php'>Overzicht</a>";
-	echo "</div>";
-			echo "<div class='form'>";
-			echo "<H4> Voeg een nieuw programma toe</H4>";
-				echo "<form id='soft_form' action='insertSoft.php' method='post'>";
-				$sql = $conn->query("SELECT Com_ID, Barcode FROM IA_Computer"); 
-					echo "<label>Computer barcode</label>";
-					echo '<select  name="com_id" required>';
-					echo '<option style="display:none" value="">Kies barcode van computer</option>';
-					while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
-					   echo '<option value="'.$row['Com_ID'].'">'.$row['Barcode'].'</option>';
-					}
-					echo '</select>';
-					echo '<a href="insertComForm.php">Computer bestaat nog niet? Voeg hem hier toe</a><br><br>';
-				$sql = $conn->query("SELECT Soft_ID, Soft_naam, Versie FROM IA_Software"); 
-					echo "<label>Softwarenaam & versie</label>";
-					echo '<select  name="soft_id" required>';
-					echo '<option style="display:none" value="">Kies het programma</option>';
-					while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
-					   echo '<option value="'.$row['Soft_ID'].'">'.$row['Soft_naam'].' '.$row['Versie'].'</option>';
-					}
-					echo '</select>';
-					echo '<a href="insertNewSoftForm.php">Software bestaat nog niet? Voeg hem hier toe</a><br><br>';
-				echo "<label>Aanschaf datum</label>";
-				echo "<input type='date' id='picker' name='soft_a_date' placeholder='Aanschaf datum' required>";
-				echo "<label>Aanschaf waarde</label>";
-				echo "<input type='text' name='soft_a_prijs' id='money' placeholder='Aanschaf waarde' required>";
-				echo "<input type='submit' name='submit4' value='voeg toe'>";
-				echo "</form>";
-			echo "</div>";
-			
+try {
+	$stmt = $conn->prepare("INSERT INTO IA_Software_RG (Soft_ID, Com_ID, Aanschaf_dat, Aanschaf_waarde)
+							VALUES (?,?,?,?)");
+	$stmt->execute([$soft_id, $com_id, $soft_a_date, $soft_a_prijs]);	
+	echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
+}catch(PDOException $e){
+	//echo $stmt . "<br>" . $e->getMessage();
+	echo "<script>alert('Vul de velden goed in!');</script>";
+	echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/insert/insertSoftForm.php" />';
+}
+}
+$conn = null;
 ?>
