@@ -30,17 +30,19 @@ $(function(){
 <?php
 	$id = $_GET['edit'];
 	
-	$sql = "SELECT * FROM IA_Telefoon, IA_Gebruiker WHERE Gsm_ID=:id AND IA_Gebruiker.U_ID=IA_Telefoon.U_ID";
+	$sql = "SELECT * FROM IA_Laptop, IA_Gebruiker WHERE Lap_ID=:id AND IA_Gebruiker.U_ID=IA_Laptop.U_ID";
 	$query = $conn->prepare($sql);
 	$query->execute(array(':id' => $id));
 
 	while($row = $query->fetch(PDO::FETCH_ASSOC))
 	{
-    $nummer = $row['Telefoonnummer'];
     $merk = $row['Merk'];
-    $model = $row['Model'];
+    $cpu = $row['CPU'];
+    $memory = $row['Memory'];
+    $inch = $row['Inch'];
     $datum = $row['Aanschaf_dat'];
     $waarde = $row['Aanschaf_waarde'];
+    $opmerk = $row['Opmerkingen'];
 	$user_id = $row['U_ID'];
 	$gebruiker = $row['Gebruiker'];
 	
@@ -51,28 +53,34 @@ $(function(){
 ?> 
 <body>
 	<div class="form">
-		<H4>Telefoon</H4>
+		<H4>Laptop</H4>
 		<label>Gebruiker</label>
-			<form name="form1" method="post" action="editGsm.php?edit=<?php $id; ?>" enctype="multipart/form-data">
+			<form name="form1" method="post" action="editLap.php?edit=<?php $id; ?>" enctype="multipart/form-data">
 			<?php $sql = $conn->query("SELECT U_ID, Gebruiker FROM IA_Gebruiker"); ?>
 			
-					<select  name="userid" required> 
-					<option value="<?php echo $user_id; ?>" selected><?php echo $gebruiker ?></option>
-			<?php	while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
-					   echo '<option value="'.$row['U_ID'].'">'.$row['Gebruiker'].'</option>';
-					} ?>
-					</select>
-		<label>Telefoonnummer</label>
-			<input type="text" name="nummer"  value="<?php echo $nummer;?>">
+				<select  name="userid" required>
+				<option value="<?php echo $user_id; ?>" selected><?php echo $gebruiker ?></option>
+		<?php 	while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
+				   echo '<option value="'.$row['U_ID'].'">'.$row['Gebruiker'].'</option>';
+				} ?>
+				</select>
 		<label>Merk</label>
 			<input type="text" name="merk" value="<?php echo $merk;?>">
-		<label>Model</label>
-			<input type="text" name="model"  value="<?php echo $model;?>">
+		<label>CPU</label>
+			<input type="text" name="cpu"  value="<?php echo $cpu;?>">
+		<label>Memory</label>
+			<input type="text" name="memory"  value="<?php echo $memory;?>">
+		<label>Inch</label>
+			<input type="text" name="inch"  value="<?php echo $inch;?>">
 		<label>Aanschaf datum</label>
 			<input type="date" id="picker" name="date" value="<?php echo $newDate;?>">
 		<label>Aanschaf waarde</label>
 			<input type="text" name="waarde" value="<?php echo $waarde;?>">
-		<label>Foto telefoon</label>
+		<label>Opmerkingen</label>
+		<br>
+			<input type="text" name="opmerk" value="<?php echo $opmerk;?>">
+		<br>
+		<label>Foto Tablet</label>
 		<br>
 			<input type="file" name="file">
 			<input type="hidden" name="id" value="<?php echo $_GET['edit'];?>">
@@ -86,34 +94,39 @@ if(isset($_POST['update']))
 {    
     $id = $_POST['id'];
     $userid = trim($_POST['userid']);
-    $nummer = trim($_POST['nummer']);
     $merk = trim($_POST['merk']);
-    $model = trim($_POST['model']);    
+    $cpu = trim($_POST['cpu']);
+    $memory = trim($_POST['memory']);    
+    $inch = trim($_POST['inch']);    
     $datum = trim($_POST['date']);    
     $waarde = trim($_POST['waarde']);    
+    $opmerk = trim($_POST['opmerk']);      
 	
-	$sql = "SELECT * FROM IA_Telefoon WHERE Gsm_ID=:id";
+	$sql = "SELECT * FROM IA_Laptop WHERE Lap_ID=:id";
 	$query = $conn->prepare($sql);
 	$query->execute(array(':id' => $id));
 	
 	while($row = $query->fetch(PDO::FETCH_ASSOC))
 	{
-    $deleteimg = $row['Picture_gsm'];
+    $deleteimg = $row['Picture_lap'];
 	}
 	
-    if(empty($userid) || empty($nummer) || empty($merk) || empty($model) || empty($datum) || empty($waarde)) {    
+    if(empty($userid) || empty($merk) || empty($cpu) || empty($memory) || empty($inch) || empty($datum) || empty($waarde)) {    
             
         if(empty($userid)) {
             echo "<font color='red'>Gebruiker niet gekozen.</font><br/>";
         }
-        if(empty($nummer)) {
-            echo "<font color='red'>Telefoonnummer niet ingevuld.</font><br/>";
-        }
         if(empty($merk)) {
             echo "<font color='red'>Merk niet ingevuld.</font><br/>";
+        }
+        if(empty($cpu)) {
+            echo "<font color='red'>CPU niet ingevuld.</font><br/>";
         }      
-		if(empty($model)) {
-            echo "<font color='red'>Model niet ingevuld.</font><br/>";
+		if(empty($memory)) {
+            echo "<font color='red'>Memory niet ingevuld.</font><br/>";
+        } 
+		if(empty($inch)) {
+            echo "<font color='red'>Inch niet ingevuld.</font><br/>";
         } 
 		if(empty($datum)) {
             echo "<font color='red'>Aanschaf datum niet ingevuld.</font><br/>";
@@ -123,23 +136,27 @@ if(isset($_POST['update']))
         } 
     } else {  
 		if($_FILES['file']['error'] == 4 ){
-			$sql = "UPDATE IA_Telefoon
+			$sql = "UPDATE IA_Laptop
 						SET U_ID = :userid,
-							Telefoonnummer = :nummer,
 							Merk = :merk, 
-							Model = :model, 
+							CPU = :cpu, 
+							Memory = :memory, 
+							Inch = :inch, 
 							Aanschaf_dat = :datum, 
 							Aanschaf_waarde = :waarde,
-							Picture_gsm = NULL
-					  WHERE Gsm_ID = :id";
+							Opmerkingen = :opmerk,
+							Picture_lap = NULL
+					  WHERE Lap_ID = :id";
 					 
 			$query = $conn->prepare($sql);
 			$query->bindparam(":userid", $userid);
-			$query->bindparam(':nummer', $nummer);
 			$query->bindparam(':merk', $merk);
-			$query->bindparam(':model', $model);
+			$query->bindparam(':cpu', $cpu);
+			$query->bindparam(':memory', $memory);
+			$query->bindparam(':inch', $inch);
 			$query->bindparam(':datum', $datum);
 			$query->bindparam(':waarde', $waarde);
+			$query->bindparam(':opmerk', $opmerk);
 			$query->bindparam(':id', $id);
 			$query->execute();
 			
@@ -166,28 +183,32 @@ if(isset($_POST['update']))
 				if($fileError === 0){
 					if($fileSize < 1000000){
 						$fileNameNew = uniqid('', true).".".$fileActualExt;
-						$fileDestination = '//WEBSERVER03/Portal$/inventadmin/includes/images/telefoon/'.$fileNameNew;
+						$fileDestination = '//WEBSERVER03/Portal$/inventadmin/includes/images/laptop/'.$fileNameNew;
 						move_uploaded_file($fileTmpName, $fileDestination);
 						try{
-							$dir = 'includes/images/telefoon/';
+							$dir = 'includes/images/laptop/';
 							$img = $dir.$fileNameNew;
-							$sql = "UPDATE 	IA_Telefoon
+							$sql = "UPDATE IA_Laptop
 										SET U_ID = :userid,
-											Telefoonnummer = :nummer,
 											Merk = :merk, 
-											Model = :model, 
+											CPU = :cpu, 
+											Memory = :memory, 
+											Inch = :inch, 
 											Aanschaf_dat = :datum, 
 											Aanschaf_waarde = :waarde,
-											Picture_gsm = :pic
-									  WHERE Gsm_ID = :id";
+											Opmerkingen = :opmerk,
+											Picture_lap = :pic
+									  WHERE Lap_ID = :id";
 									 
 							$query = $conn->prepare($sql);
 							$query->bindparam(":userid", $userid);
-							$query->bindparam(':nummer', $nummer);
 							$query->bindparam(':merk', $merk);
-							$query->bindparam(':model', $model);
+							$query->bindparam(':cpu', $cpu);
+							$query->bindparam(':memory', $memory);
+							$query->bindparam(':inch', $inch);
 							$query->bindparam(':datum', $datum);
 							$query->bindparam(':waarde', $waarde);
+							$query->bindparam(':opmerk', $opmerk);
 							$query->bindparam(':pic', $img);
 							$query->bindparam(':id', $id);
 							$query->execute();

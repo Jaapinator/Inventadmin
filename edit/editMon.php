@@ -30,18 +30,21 @@ $(function(){
 <?php
 	$id = $_GET['edit'];
 	
-	$sql = "SELECT * FROM IA_Monitor WHERE Mon_ID=:id";
+	$sql = "SELECT IA_Monitor.Barcode as monbar, IA_Computer.Barcode as combar, IA_Computer.Com_ID, Merk, Type, Inch, IA_Monitor.Aanschaf_dat, IA_Monitor.Aanschaf_waarde FROM IA_Monitor, IA_Computer WHERE Mon_ID=:id AND IA_Computer.Com_ID=IA_Monitor.Com_ID";
 	$query = $conn->prepare($sql);
 	$query->execute(array(':id' => $id));
 
 	while($row = $query->fetch(PDO::FETCH_ASSOC))
 	{
-    $barcode = $row['Barcode'];
+    $barcode = $row['monbar'];
     $merk = $row['Merk'];
     $type = $row['Type'];
     $inch = $row['Inch'];
     $datum = $row['Aanschaf_dat'];
     $waarde = $row['Aanschaf_waarde'];
+	$combarcode = $row['combar'];
+	$comid = $row['Com_ID'];
+	
 	
 	$newDate = date("Y-m-d", strtotime($datum));
 	}
@@ -53,13 +56,14 @@ $(function(){
 		<H4>Monitor</H4>
 		<label>Computer barcode</label>
 			<form name="form1" method="post" action="editMon.php?edit=<?php $id; ?>">
-			<?php $sql = $conn->query("SELECT Com_ID, Barcode FROM IA_Computer"); 
+			<?php $sql = $conn->query("SELECT Com_ID, Barcode FROM IA_Computer"); ?>
 			
-					echo '<select  name="com_id" required>'; 
-					while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
+					<select  name="com_id" required>
+					<option value="<?php echo $comid; ?>" selected><?php echo $combarcode ?></option>
+			<?php	while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
 					   echo '<option value="'.$row['Com_ID'].'">'.$row['Barcode'].'</option>';
-					}
-					echo '</select>';?>
+					} ?>
+					</select>
 		<label>Monitor barcode</label>
 			<input type="text" name="barcode"  value="<?php echo $barcode;?>">
 		<label>Merk</label>
