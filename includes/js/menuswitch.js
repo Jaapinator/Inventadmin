@@ -13,7 +13,7 @@ $(function () {
 	$('#table1').DataTable( {
 	  "searching": true,
 	  "lengthMenu": [[18, -1], [18, "All"]],
-	  "columnDefs": [{  "bSortable": false, "aTargets": [-1] }, { "bSearchable":false, "aTargets": [-1] }, { type: 'date-uk', targets: 0 }],
+	  "columnDefs": [{  "bSortable": false, "aTargets": [-1] }, { "bSearchable":false, "aTargets": [-1] }],
 	  "stateSave": true
 	} );
 	$('#table2').DataTable( {

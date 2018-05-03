@@ -36,7 +36,7 @@ $(function(){
 	<form method='post' action='insertMonForm.php'>
 		<?php $sql = $conn->query("SELECT Com_ID, Barcode FROM IA_Computer"); ?>
 		<label>Computer barcode</label>
-			<select  name="com_id" required>'; 
+			<select  name="com_id">'; 
 				<option style="display:none" value="">Kies barcode van computer</option>
 			<?php	while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
 					   echo '<option value="'.$row['Com_ID'].'">'.$row['Barcode'].'</option>';
@@ -71,19 +71,34 @@ if(isset($_POST['submit2'])){
     $mon_inch = $_POST['mon_inch'];
     $mon_a_date = $_POST['mon_a_date'];
     $mon_a_prijs = $_POST['mon_a_prijs'];
-
-    $sql = "INSERT INTO IA_Monitor (Com_ID, Barcode, Merk, Type, Inch, Aanschaf_dat, Aanschaf_waarde) VALUES (?,?,?,?,?,?,?)";
-    try {
-        $stmt = $conn->prepare($sql);
-        foreach ($mon_barcode as $i => $barcode) {
-            $stmt->execute([$com_id, $barcode, $mon_merk[$i], $mon_type[$i], $mon_inch[$i], $mon_a_date[$i], $mon_a_prijs[$i]]);
-			echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
-        }
-    } catch (\PDOException $e) {
-    //    echo $sql . "<br>" . $e->getMessage();
-	echo "<script>alert('Vul de velden goed in!');</script>";
-	echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/insert/insertMonForm.php" />';
-    }
+	
+	if($com_id == 0){
+		$sql = "INSERT INTO IA_Monitor (Com_ID, Barcode, Merk, Type, Inch, Aanschaf_dat, Aanschaf_waarde) VALUES (?,?,?,?,?,?,?)";
+		try {
+			$stmt = $conn->prepare($sql);
+			foreach ($mon_barcode as $i => $barcode) {
+				$stmt->execute([NULL, $barcode, $mon_merk[$i], $mon_type[$i], $mon_inch[$i], $mon_a_date[$i], $mon_a_prijs[$i]]);
+				echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
+			}
+		} catch (\PDOException $e) {
+		//    echo $sql . "<br>" . $e->getMessage();
+		echo "<script>alert('Vul de velden goed in!');</script>";
+		echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/insert/insertMonForm.php" />';
+		}
+	}else{
+		$sql = "INSERT INTO IA_Monitor (Com_ID, Barcode, Merk, Type, Inch, Aanschaf_dat, Aanschaf_waarde) VALUES (?,?,?,?,?,?,?)";
+		try {
+			$stmt = $conn->prepare($sql);
+			foreach ($mon_barcode as $i => $barcode) {
+				$stmt->execute([$com_id, $barcode, $mon_merk[$i], $mon_type[$i], $mon_inch[$i], $mon_a_date[$i], $mon_a_prijs[$i]]);
+				echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
+			}
+		} catch (\PDOException $e) {
+		//    echo $sql . "<br>" . $e->getMessage();
+		echo "<script>alert('Vul de velden goed in!');</script>";
+		echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/insert/insertMonForm.php" />';
+		}
+	}
 $conn = null;
 }
 ?>

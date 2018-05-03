@@ -29,14 +29,13 @@ $(function(){
 
 <?php
 	$id = $_GET['edit'];
-	
-	$sql = "SELECT IA_Monitor.Barcode as monbar, IA_Computer.Barcode as combar, IA_Computer.Com_ID, Merk, Type, Inch, IA_Monitor.Aanschaf_dat, IA_Monitor.Aanschaf_waarde FROM IA_Monitor, IA_Computer WHERE Mon_ID=:id AND IA_Computer.Com_ID=IA_Monitor.Com_ID";
+	$sql = "SELECT *, (SELECT Barcode FROM IA_Computer WHERE IA_Computer.Com_ID=IA_Monitor.Com_ID) as combar FROM IA_Monitor WHERE Mon_ID=:id";
 	$query = $conn->prepare($sql);
 	$query->execute(array(':id' => $id));
 
 	while($row = $query->fetch(PDO::FETCH_ASSOC))
 	{
-    $barcode = $row['monbar'];
+    $barcode = $row['Barcode'];
     $merk = $row['Merk'];
     $type = $row['Type'];
     $inch = $row['Inch'];
@@ -44,11 +43,8 @@ $(function(){
     $waarde = $row['Aanschaf_waarde'];
 	$combarcode = $row['combar'];
 	$comid = $row['Com_ID'];
-	
-	
 	$newDate = date("Y-m-d", strtotime($datum));
 	}
-	
 	
 ?> 
 <body>
@@ -60,6 +56,7 @@ $(function(){
 			
 					<select  name="com_id" required>
 					<option value="<?php echo $comid; ?>" selected><?php echo $combarcode ?></option>
+					<option value=""> Geen computer</option>
 			<?php	while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
 					   echo '<option value="'.$row['Com_ID'].'">'.$row['Barcode'].'</option>';
 					} ?>
@@ -94,11 +91,8 @@ if(isset($_POST['update']))
     $datum = trim($_POST['date']);    
     $waarde = trim($_POST['waarde']);    
 	
-    if(empty($com_id) || empty($barcode) || empty($merk) || empty($type) || empty($inch) || empty($datum) || empty($waarde)) {    
-            
-        if(empty($com_id)) {
-            echo "<font color='red'>Computerbarcode niet ingevuld.</font><br/>";
-        }
+    if(empty($barcode) || empty($merk) || empty($type) || empty($inch) || empty($datum) || empty($waarde)) {    
+        
         if(empty($barcode)) {
             echo "<font color='red'>Monitorbarcode niet ingevuld.</font><br/>";
         }
@@ -118,6 +112,29 @@ if(isset($_POST['update']))
             echo "<font color='red'>Aanschaf waarde niet ingevuld.</font><br/>";
         } 
     } else {    
+		if($com_id == 0){
+		$sql = "UPDATE IA_Monitor
+					SET Com_ID = NULL,
+						Barcode = :barcode, 
+						Merk = :merk, 
+						Type = :type, 
+						Inch = :inch,
+						Aanschaf_dat = :datum, 
+						Aanschaf_waarde = :waarde 
+				  WHERE Mon_ID = :id";
+				 
+		$query = $conn->prepare($sql);
+		$query->bindparam(':barcode', $barcode);
+		$query->bindparam(':merk', $merk);
+		$query->bindparam(':type', $type);
+		$query->bindparam(':inch', $inch);
+		$query->bindparam(':datum', $datum);
+		$query->bindparam(':waarde', $waarde);
+		$query->bindparam(':id', $id);
+		$query->execute();
+		
+		echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
+		}else{
         //updating the table
         $sql = "UPDATE IA_Monitor
 					SET Com_ID = :com_id,
@@ -140,9 +157,9 @@ if(isset($_POST['update']))
 		$query->bindparam(':id', $id);
 		$query->execute();
 		
-		$conn = null;
-		
 		echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
+		}
+		$conn = null;
 		} 
 }
 ?>

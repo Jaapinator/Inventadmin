@@ -84,13 +84,13 @@ header('Location: indexmobile.php');
 	<div id='divtable2' class='table' >
 	<table id='table2' class='display compact' cellspacing='0' width='100%'>
 		<thead><tr><th>Computerbarcode</th><th>Monitorbarcode</th><th>Merk</th><th>Type</th><th>Inch</th><th>Aanschaf datum</th><th>Aanschaf Waarde</th><th></th></tr></thead><tbody>	
-	<?php $stmt = $conn->query('SELECT DISTINCT IA_Computer.Barcode AS Bar, IA_Computer.Com_ID AS comid, Mon_ID, IA_Monitor.Barcode, IA_Monitor.Merk, IA_Monitor.Type, IA_Monitor.Inch, IA_Monitor.Aanschaf_dat, IA_Monitor.Aanschaf_waarde FROM IA_Monitor,IA_Computer WHERE IA_Computer.Com_ID=IA_Monitor.Com_ID');
+	<?php $stmt = $conn->query('SELECT *, (SELECT Barcode FROM IA_Computer WHERE IA_Computer.Com_ID=IA_Monitor.Com_ID) as bar FROM IA_Monitor');
 		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 			$waarde = $row['Aanschaf_waarde'];
 			$originalDate = $row['Aanschaf_dat'];
 			$newDate = date("d-m-Y", strtotime($originalDate));
 			echo "<tr><td>";
-			echo $row['Bar'];
+			if($row['Com_ID'] == NULL) { echo "Geen computer"; } else { echo $row['bar']; }
 			echo "</td><td>";
 			echo $row['Barcode'];
 			echo "</td><td>";
@@ -104,7 +104,7 @@ header('Location: indexmobile.php');
 			echo "</td><td>";
 			echo "&euro;"; echo number_format((float)$waarde, 2, '.', ''); ?>
 			</td><td class='knoppen'> <?php
-			echo "<a class='but_view' href='view.php?view=$row[comid]' ><i class='fas fa-eye fa-s'></i> View</a>";
+			if($row['Com_ID'] == NULL) {  } else { echo "<a class='but_view' href='view.php?view=$row[Com_ID]' ><i class='fas fa-eye fa-s'></i> View</a>"; }
 			echo "<a class='but_edit' href='edit/editMon.php?edit=$row[Mon_ID]' ><i class='far fa-edit fa-s'></i> Edit</a>";			
 			echo "<a class='but_del' href='delete/delMon.php?edit=$row[Mon_ID]' onClick=\"return confirm('Weet je zeker dat je dit item wilt verwijderen?')\"><i class='far fa-trash-alt fa-s'></i> Delete</a>";
 			echo "</td></tr>";
