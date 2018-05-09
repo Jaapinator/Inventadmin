@@ -2,10 +2,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge;" /><?php
 error_reporting(E_ALL); ini_set('display_errors', 1);
 	include "../includes/connection.php";
-?><style><?php
-	include "../includes/css/style.css";
-?></style>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	include "../includes/scripts.php";?>
 <script>
 $(function(){
     var dtToday = new Date();
@@ -22,10 +19,16 @@ $(function(){
     $('#picker').attr('max', maxDate);
 });
 </script>
-<div class='navbar'>
-	<a href='https://portal.basrt.eu/index/login.php'>Portal</a>
-	<a href='../index.php'>Overzicht</a>
-</div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+	<a class="navbar-brand" href="https://portal.basrt.eu/">Inventadmin</a>
+	<div class="collapse navbar-collapse" id="navbarNavDropdown">
+		<ul class="navbar-nav">
+			<li class="nav-item">
+				<a class="nav-link" href='../index.php'>Overzicht</a>
+			</li>
+		</ul>
+	</div>
+</nav>
 
 <?php
 	$id = $_GET['edit'];
@@ -39,6 +42,9 @@ $(function(){
     $nummer = $row['Telefoonnummer'];
     $merk = $row['Merk'];
     $model = $row['Model'];
+    $serial = $row['Serialnummer'];
+    $imeireq = $row['IMEI_nummer_required'];
+    $imeiopt = $row['IMEI_nummer_optionel'];
     $datum = $row['Aanschaf_dat'];
     $waarde = $row['Aanschaf_waarde'];
 	$user_id = $row['U_ID'];
@@ -68,6 +74,12 @@ $(function(){
 			<input type="text" name="merk" value="<?php echo $merk;?>">
 		<label>Model</label>
 			<input type="text" name="model"  value="<?php echo $model;?>">
+		<label>Serialnummer</label>
+			<input type="text" name="serial"  value="<?php echo $serial;?>">
+		<label>IMEI-nummer</label>
+			<input type="text" name="imeireq"  value="<?php echo $imeireq;?>">
+		<label>IMEI-nummer <i>(Niet verplicht!)</i></label>
+			<input type="text" name="imeiopt"  value="<?php echo $imeiopt;?>">
 		<label>Aanschaf datum</label>
 			<input type="date" id="picker" name="date" value="<?php echo $newDate;?>">
 		<label>Aanschaf waarde</label>
@@ -89,6 +101,9 @@ if(isset($_POST['update']))
     $nummer = trim($_POST['nummer']);
     $merk = trim($_POST['merk']);
     $model = trim($_POST['model']);    
+    $serial = trim($_POST['serial']);    
+    $imeireq = trim($_POST['imeireq']);    
+    $imeiopt = trim($_POST['imeiopt']);    
     $datum = trim($_POST['date']);    
     $waarde = trim($_POST['waarde']);    
 	
@@ -101,7 +116,7 @@ if(isset($_POST['update']))
     $deleteimg = $row['Picture_gsm'];
 	}
 	
-    if(empty($userid) || empty($nummer) || empty($merk) || empty($model) || empty($datum) || empty($waarde)) {    
+    if(empty($userid) || empty($nummer) || empty($merk) || empty($model) || empty($serial) || empty($imeireq) || empty($datum) || empty($waarde)) {    
             
         if(empty($userid)) {
             echo "<font color='red'>Gebruiker niet gekozen.</font><br/>";
@@ -114,6 +129,12 @@ if(isset($_POST['update']))
         }      
 		if(empty($model)) {
             echo "<font color='red'>Model niet ingevuld.</font><br/>";
+        }       
+		if(empty($serial)) {
+            echo "<font color='red'>Serialnummer niet ingevuld.</font><br/>";
+        }       
+		if(empty($imeireq)) {
+            echo "<font color='red'>IMEI-nummer niet ingevuld.</font><br/>";
         } 
 		if(empty($datum)) {
             echo "<font color='red'>Aanschaf datum niet ingevuld.</font><br/>";
@@ -128,6 +149,9 @@ if(isset($_POST['update']))
 							Telefoonnummer = :nummer,
 							Merk = :merk, 
 							Model = :model, 
+							Serialnummer = :serial, 
+							IMEI_nummer_required = :imeireq, 
+							IMEI_nummer_optionel = :imeiopt, 
 							Aanschaf_dat = :datum, 
 							Aanschaf_waarde = :waarde,
 							Picture_gsm = NULL
@@ -138,6 +162,9 @@ if(isset($_POST['update']))
 			$query->bindparam(':nummer', $nummer);
 			$query->bindparam(':merk', $merk);
 			$query->bindparam(':model', $model);
+			$query->bindparam(':serial', $serial);
+			$query->bindparam(':imeireq', $imeireq);
+			$query->bindparam(':imeiopt', $imeiopt);
 			$query->bindparam(':datum', $datum);
 			$query->bindparam(':waarde', $waarde);
 			$query->bindparam(':id', $id);
@@ -176,6 +203,9 @@ if(isset($_POST['update']))
 											Telefoonnummer = :nummer,
 											Merk = :merk, 
 											Model = :model, 
+											Serialnummer = :serial, 
+											IMEI_nummer_required = :imeireq, 
+											IMEI_nummer_optionel = :imeiopt,
 											Aanschaf_dat = :datum, 
 											Aanschaf_waarde = :waarde,
 											Picture_gsm = :pic
@@ -186,6 +216,9 @@ if(isset($_POST['update']))
 							$query->bindparam(':nummer', $nummer);
 							$query->bindparam(':merk', $merk);
 							$query->bindparam(':model', $model);
+							$query->bindparam(':serial', $serial);
+							$query->bindparam(':imeireq', $imeireq);
+							$query->bindparam(':imeiopt', $imeiopt);
 							$query->bindparam(':datum', $datum);
 							$query->bindparam(':waarde', $waarde);
 							$query->bindparam(':pic', $img);

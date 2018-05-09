@@ -2,10 +2,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge;" /><?php
 error_reporting(E_ALL); ini_set('display_errors', 1);
 	include "../includes/connection.php";
-?><style><?php
-	include "../includes/css/style.css";
-?></style>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	include "../includes/scripts.php";?>
 <script>
 $(function(){
     var dtToday = new Date();
@@ -22,10 +19,16 @@ $(function(){
     $('#picker').attr('max', maxDate);
 });
 </script>
-<div class='navbar'>
-	<a href='https://portal.basrt.eu/index/login.php'>Portal</a>
-	<a href='../index.php'>Overzicht</a>
-</div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+	<a class="navbar-brand" href="https://portal.basrt.eu/">Inventadmin</a>
+	<div class="collapse navbar-collapse" id="navbarNavDropdown">
+		<ul class="navbar-nav">
+			<li class="nav-item">
+				<a class="nav-link" href='../index.php'>Overzicht</a>
+			</li>
+		</ul>
+	</div>
+</nav>
 
 <?php
 	$id = $_GET['edit'];
@@ -54,7 +57,7 @@ $(function(){
 			<form name="form1" method="post" action="editMon.php?edit=<?php $id; ?>">
 			<?php $sql = $conn->query("SELECT Com_ID, Barcode FROM IA_Computer"); ?>
 			
-					<select  name="com_id" required>
+					<select  name="com_id">
 					<option value="<?php echo $comid; ?>" selected><?php echo $combarcode ?></option>
 					<option value=""> Geen computer</option>
 			<?php	while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {

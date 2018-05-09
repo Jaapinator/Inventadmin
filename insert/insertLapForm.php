@@ -1,9 +1,9 @@
 <html><head><link rel="icon" sizes="32x32" type="image/png" href="../favicon.ico"/><title>Inventadmin</title>
-<meta http-equiv="X-UA-Compatible" content="IE=edge;" /><style><?php
-	include "../includes/css/style.css";
-?></style><?php
+<meta http-equiv="X-UA-Compatible" content="IE=edge;" />
+<?php
 	include "../includes/connection.php";
-?><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	include "../includes/scripts.php";
+?>
 <script>
 $(function(){
     var dtToday = new Date();
@@ -19,12 +19,17 @@ $(function(){
     var maxDate = year + '-' + month + '-' + day;
     $('#picker').attr('max', maxDate);
 });
-</script></head><body><?php
-	echo "<div class='navbar'>";
-	echo "<a href='https://portal.basrt.eu/index/login.php'>Portal</a>";
-	echo "<a href='../index.php'>Overzicht</a>";
-	echo "</div>";
-	?>
+</script></head><body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+	<a class="navbar-brand" href="https://portal.basrt.eu/">Inventadmin</a>
+	<div class="collapse navbar-collapse" id="navbarNavDropdown">
+		<ul class="navbar-nav">
+			<li class="nav-item">
+				<a class="nav-link" href='../index.php'>Overzicht</a>
+			</li>
+		</ul>
+	</div>
+</nav>
 	<div class='form'>
 	<H4>Laptop</H4>
 	<form method="post" action="insertLapForm.php" enctype="multipart/form-data" id="Lap_form">
@@ -39,6 +44,8 @@ $(function(){
 					}
 					echo '</select>';
 					?>
+	<label>Barcode</label>
+	<input type="text" name="barcode" placeholder="Barcode" required>
 	<label>Merk</label>
 	<input type="text" name="merk" placeholder="Merk" required>
 	<label>CPU</label>
@@ -67,6 +74,7 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 if (isset($_POST['submit'])){
 	$userid = $_POST['user'];
 	$inch = $_POST['inch'];
+	$barcode = $_POST['barcode'];
 	$merk = $_POST['merk'];
 	$cpu = $_POST['cpu'];
 	$ram = $_POST['memory'];
@@ -75,9 +83,9 @@ if (isset($_POST['submit'])){
 	$opmerkingen = $_POST['comment'];
 	
 	if($_FILES['file']['error'] == 4){
-		$stmt = $conn->prepare("INSERT INTO IA_Laptop (U_ID, Merk, CPU, Memory, Inch, Aanschaf_dat, Aanschaf_waarde, Opmerkingen, Picture_lap)
-												VALUES (?,?,?,?,?,?,?,?,?)");
-		$stmt->execute([$userid, $merk, $cpu, $ram, $inch, $date, $waarde, $opmerkingen, NULL]);
+		$stmt = $conn->prepare("INSERT INTO IA_Laptop (U_ID, Barcode, Merk, CPU, Memory, Inch, Aanschaf_dat, Aanschaf_waarde, Opmerkingen, Picture_lap)
+												VALUES (?,?,?,?,?,?,?,?,?,?)");
+		$stmt->execute([$userid, $barcode, $merk, $cpu, $ram, $inch, $date, $waarde, $opmerkingen, NULL]);
 		echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
 	}else{
 		$file = $_FILES['file'];
@@ -102,9 +110,9 @@ if (isset($_POST['submit'])){
 					try{
 						$dir = 'includes/images/laptop/';
 						$img = $dir.$fileNameNew;
-						$stmt = $conn->prepare("INSERT INTO IA_Laptop (U_ID, Merk, CPU, Memory, Inch, Aanschaf_dat, Aanschaf_waarde, Opmerkingen, Picture_lap)
-												VALUES (?,?,?,?,?,?,?,?,?)");
-						$stmt->execute([$userid, $merk, $cpu, $ram, $inch, $date, $waarde, $opmerkingen, $img]);
+						$stmt = $conn->prepare("INSERT INTO IA_Laptop (U_ID, Barcode, Merk, CPU, Memory, Inch, Aanschaf_dat, Aanschaf_waarde, Opmerkingen, Picture_lap)
+												VALUES (?,?,?,?,?,?,?,?,?,?)");
+						$stmt->execute([$userid, $barcode, $merk, $cpu, $ram, $inch, $date, $waarde, $opmerkingen, $img]);
 						echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
 					}
 					catch(PDOException $e){

@@ -86,7 +86,7 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 			echo "</td><td>";
 			echo strip_tags($row['Memory']);
 			echo "</td><td>";
-			echo strip_tags($row['Serialnum']);
+			echo strip_tags($row['Moederbord']);
 			echo "</td><td >";
 			echo $row['Aanschaf_dat']; ?>
 			</td><td class='knoppen'><?php

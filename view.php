@@ -1,13 +1,19 @@
 <html><head><link rel="icon" sizes="32x32" type="image/png" href="favicon.ico"/><title>Inventadmin</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge;" /><?php
 	include "includes/connection.php";
-?><style><?php
-	include "includes/css/viewstyle.css";
-?></style></head><body><?php
-	echo "<div class='navbar'>";
-	echo "<a href='https://portal.basrt.eu/index/login.php'>Portal</a>";
-	echo "<a href='index.php'>Overzicht</a>";
-	echo "</div>";
+	include "includes/scripts.php";
+?></head><body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+	<a class="navbar-brand" href="https://portal.basrt.eu/">Inventadmin</a>
+	<div class="collapse navbar-collapse" id="navbarNavDropdown">
+		<ul class="navbar-nav">
+			<li class="nav-item">
+				<a class="nav-link" href='index.php'>Overzicht</a>
+			</li>
+		</ul>
+	</div>
+</nav>
+	<?php
 	$id = $_GET['view'];
 	$sql = "SELECT * FROM IA_Computer WHERE Com_ID = :id";
 	$query = $conn->prepare($sql);
@@ -19,7 +25,8 @@
 		$com_merk = $row['Com_merk'];
 		$com_cpu = $row['CPU_naam'];
 		$com_mem = $row['Memory'];
-		$com_moed = $row['Serialnum'];
+		$com_moed = $row['Moederbord'];
+		$com_serial = $row['Serialnummer'];
 		$com_a_dat = $row['Aanschaf_dat'];
 		$com_a_prijs = $row['Aanschaf_waarde']; 
 		$comm = $row['Opmerkingen'];
@@ -38,6 +45,7 @@
 <tr><td>Processor: </td><td><?php echo $com_cpu;?></td></tr>
 <tr><td>Ram geheugen: </td><td><?php echo $com_mem;?></td></tr>
 <tr><td>Moederbord: </td><td><?php echo $com_moed;?></td></tr>
+<tr><td>Serialnummer: </td><td><?php echo $com_serial;?></td></tr>
 <tr><td>Aanschaf datum: </td><td><?php echo $comnewDate;?></td></tr>
 <tr><td>Aanschaf waarde: </td><td><?php echo "&euro; ".number_format((float)$com_a_prijs, 2, '.', '')."";?></td></tr>
 </table>

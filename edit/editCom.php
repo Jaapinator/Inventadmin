@@ -2,9 +2,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge;" /><?php
 error_reporting(E_ALL); ini_set('display_errors', 1);
 	include "../includes/connection.php";
-?><style><?php
-	include "../includes/css/style.css";
-?></style><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	include "../includes/scripts.php";?>
 <script>
 $(function(){
     var dtToday = new Date();
@@ -21,10 +19,16 @@ $(function(){
     $('#picker').attr('max', maxDate);
 });
 </script>
-<div class='navbar'>
-	<a href='https://portal.basrt.eu/index/login.php'>Portal</a>
-	<a href='../index.php'>Overzicht</a>
-</div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+	<a class="navbar-brand" href="https://portal.basrt.eu/">Inventadmin</a>
+	<div class="collapse navbar-collapse" id="navbarNavDropdown">
+		<ul class="navbar-nav">
+			<li class="nav-item">
+				<a class="nav-link" href='../index.php'>Overzicht</a>
+			</li>
+		</ul>
+	</div>
+</nav>
 
 <?php
 	$id = $_GET['edit'];
@@ -41,7 +45,8 @@ $(function(){
     $merk = $row['Com_merk'];
     $cpu = $row['CPU_naam'];
     $mem = $row['Memory'];
-    $serial = $row['Serialnum'];
+    $moed = $row['Moederbord'];
+    $serial = $row['Serialnummer'];
     $datum = $row['Aanschaf_dat'];
     $waarde = $row['Aanschaf_waarde'];
 	
@@ -67,6 +72,8 @@ $(function(){
 		<label>RAM-Memory</label>	
 			<input type="text" name="mem" value="<?php echo $mem;?>">
 		<label>Moederbord</label>
+			<input type="text" name="moed" value="<?php echo $moed;?>">
+		<label>Serialnummer</label>
 			<input type="text" name="serial" value="<?php echo $serial;?>">
 		<label>Aanschaf datum</label>
 			<input type="date" id="picker" name="date" value="<?php echo $newDate;?>">
@@ -89,11 +96,12 @@ if(isset($_POST['update']))
     $ip = trim($_POST['ip']);    
     $cpu = trim($_POST['cpu']);    
     $mem = trim($_POST['mem']);    
+    $moed = trim($_POST['moed']);    
     $serial = trim($_POST['serial']);    
     $datum = trim($_POST['date']);    
     $waarde = trim($_POST['waarde']);    
 	
-    if(empty($barcode) || empty($merk) || empty($naam) || empty($ip) || empty($cpu) || empty($mem) || empty($serial) || empty($datum) || empty($waarde)) {    
+    if(empty($barcode) || empty($merk) || empty($naam) || empty($ip) || empty($cpu) || empty($mem) || empty($moed) || empty($serial) || empty($datum) || empty($waarde)) {    
             
         if(empty($barcode)) {
             echo "<font color='red'>Barcode niet ingevuld.</font><br/>";
@@ -113,8 +121,11 @@ if(isset($_POST['update']))
 		if(empty($mem)) {
             echo "<font color='red'>Ram niet ingevuld.</font><br/>";
         } 
+		if(empty($moed)) {
+            echo "<font color='red'>Moederbord niet ingevuld.</font><br/>";
+        } 
 		if(empty($serial)) {
-            echo "<font color='red'>Serienummer niet ingevuld.</font><br/>";
+            echo "<font color='red'>Serialnummer niet ingevuld.</font><br/>";
         } 
 		if(empty($datum)) {
             echo "<font color='red'>Aanschaf datum niet ingevuld.</font><br/>";
@@ -131,7 +142,8 @@ if(isset($_POST['update']))
 						Com_merk = :merk, 
 						CPU_naam = :cpu, 
 						Memory = :mem,  
-						Serialnum = :serial, 
+						Moederbord = :moed, 
+						Serialnummer = :serial, 
 						Aanschaf_dat = :datum, 
 						Aanschaf_waarde = :waarde 
 				  WHERE Com_ID = :id";
@@ -143,6 +155,7 @@ if(isset($_POST['update']))
 		$query->bindparam(':merk', $merk);
 		$query->bindparam(':cpu', $cpu);
 		$query->bindparam(':mem', $mem);
+		$query->bindparam(':moed', $moed);
 		$query->bindparam(':serial', $serial);
 		$query->bindparam(':datum', $datum);
 		$query->bindparam(':waarde', $waarde);

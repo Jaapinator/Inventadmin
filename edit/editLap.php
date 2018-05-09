@@ -2,10 +2,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge;" /><?php
 error_reporting(E_ALL); ini_set('display_errors', 1);
 	include "../includes/connection.php";
-?><style><?php
-	include "../includes/css/style.css";
-?></style>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	include "../includes/scripts.php";?>
 <script>
 $(function(){
     var dtToday = new Date();
@@ -22,10 +19,16 @@ $(function(){
     $('#picker').attr('max', maxDate);
 });
 </script>
-<div class='navbar'>
-	<a href='https://portal.basrt.eu/index/login.php'>Portal</a>
-	<a href='../index.php'>Overzicht</a>
-</div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+	<a class="navbar-brand" href="https://portal.basrt.eu/">Inventadmin</a>
+	<div class="collapse navbar-collapse" id="navbarNavDropdown">
+		<ul class="navbar-nav">
+			<li class="nav-item">
+				<a class="nav-link" href='../index.php'>Overzicht</a>
+			</li>
+		</ul>
+	</div>
+</nav>
 
 <?php
 	$id = $_GET['edit'];
@@ -37,6 +40,7 @@ $(function(){
 	while($row = $query->fetch(PDO::FETCH_ASSOC))
 	{
     $merk = $row['Merk'];
+    $barcode = $row['Barcode'];
     $cpu = $row['CPU'];
     $memory = $row['Memory'];
     $inch = $row['Inch'];
@@ -64,6 +68,8 @@ $(function(){
 				   echo '<option value="'.$row['U_ID'].'">'.$row['Gebruiker'].'</option>';
 				} ?>
 				</select>
+		<label>Barcode</label>
+			<input type="text" name="barcode" value="<?php echo $barcode;?>">
 		<label>Merk</label>
 			<input type="text" name="merk" value="<?php echo $merk;?>">
 		<label>CPU</label>
@@ -94,6 +100,7 @@ if(isset($_POST['update']))
 {    
     $id = $_POST['id'];
     $userid = trim($_POST['userid']);
+    $barcode = trim($_POST['barcode']);
     $merk = trim($_POST['merk']);
     $cpu = trim($_POST['cpu']);
     $memory = trim($_POST['memory']);    
@@ -111,10 +118,13 @@ if(isset($_POST['update']))
     $deleteimg = $row['Picture_lap'];
 	}
 	
-    if(empty($userid) || empty($merk) || empty($cpu) || empty($memory) || empty($inch) || empty($datum) || empty($waarde)) {    
+    if(empty($userid) || empty($barcode) || empty($merk) || empty($cpu) || empty($memory) || empty($inch) || empty($datum) || empty($waarde)) {    
             
         if(empty($userid)) {
             echo "<font color='red'>Gebruiker niet gekozen.</font><br/>";
+        }
+        if(empty($barcode)) {
+            echo "<font color='red'>Barcode niet ingevuld.</font><br/>";
         }
         if(empty($merk)) {
             echo "<font color='red'>Merk niet ingevuld.</font><br/>";
@@ -138,6 +148,7 @@ if(isset($_POST['update']))
 		if($_FILES['file']['error'] == 4 ){
 			$sql = "UPDATE IA_Laptop
 						SET U_ID = :userid,
+							Barcode = :barcode, 
 							Merk = :merk, 
 							CPU = :cpu, 
 							Memory = :memory, 
@@ -150,6 +161,7 @@ if(isset($_POST['update']))
 					 
 			$query = $conn->prepare($sql);
 			$query->bindparam(":userid", $userid);
+			$query->bindparam(':barcode', $barcode);
 			$query->bindparam(':merk', $merk);
 			$query->bindparam(':cpu', $cpu);
 			$query->bindparam(':memory', $memory);
@@ -190,6 +202,7 @@ if(isset($_POST['update']))
 							$img = $dir.$fileNameNew;
 							$sql = "UPDATE IA_Laptop
 										SET U_ID = :userid,
+											Barcode = :barcode, 
 											Merk = :merk, 
 											CPU = :cpu, 
 											Memory = :memory, 
@@ -202,6 +215,7 @@ if(isset($_POST['update']))
 									 
 							$query = $conn->prepare($sql);
 							$query->bindparam(":userid", $userid);
+							$query->bindparam(':barcode', $barcode);
 							$query->bindparam(':merk', $merk);
 							$query->bindparam(':cpu', $cpu);
 							$query->bindparam(':memory', $memory);

@@ -2,18 +2,22 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge;" /><?php
 error_reporting(E_ALL); ini_set('display_errors', 1);
 	include "../includes/connection.php";
-?><style><?php
-	include "../includes/css/style.css";
-?></style>
-<div class='navbar'>
-	<a href='https://portal.basrt.eu/index/login.php'>Portal</a>
-	<a href='../index.php'>Overzicht</a>
-</div>
+	include "../includes/scripts.php";?>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+	<a class="navbar-brand" href="https://portal.basrt.eu/">Inventadmin</a>
+	<div class="collapse navbar-collapse" id="navbarNavDropdown">
+		<ul class="navbar-nav">
+			<li class="nav-item">
+				<a class="nav-link" href='../index.php'>Overzicht</a>
+			</li>
+		</ul>
+	</div>
+</nav>
 
 <?php
 	$id = $_GET['edit'];
 	
-	$sql = "SELECT IA_Gebruiker.Com_ID, IA_Gebruiker.Ruimte_ID, IA_Gebruiker.Gebruiker, IA_Gebruiker.Mailadres, IA_Computer.Barcode, Ruimte_naam FROM IA_Gebruiker, IA_Computer, IA_Locatie WHERE U_ID=:id AND IA_Computer.Com_ID=IA_Gebruiker.Com_ID AND IA_Gebruiker.Ruimte_ID=IA_Locatie.Ruimte_ID";
+	$sql = "SELECT IA_Locatie_RG.Com_ID, IA_Locatie_RG.Ruimte_ID, IA_Gebruiker.Gebruiker, IA_Gebruiker.Mailadres, IA_Computer.Barcode, Ruimte_naam FROM IA_Gebruiker, IA_Computer, IA_Locatie, IA_Locatie_RG WHERE IA_Gebruiker.U_ID=:id AND IA_Computer.Com_ID=IA_Locatie_RG.Com_ID AND IA_Locatie_RG.Ruimte_ID=IA_Locatie.Ruimte_ID AND IA_Gebruiker.U_ID=IA_Locatie_RG.U_ID";
 	$query = $conn->prepare($sql);
 	$query->execute(array(':id' => $id));
 
