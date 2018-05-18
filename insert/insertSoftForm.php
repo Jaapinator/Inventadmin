@@ -26,6 +26,11 @@ $(function(){
     $('#picker').attr('max', maxDate);
 });
 </script>
+<style>
+input, select{
+	max-width: 275px;
+}
+</style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
@@ -38,33 +43,52 @@ $(function(){
 		</ul>
 	</div>
 </nav>
-<div class='form'>
+<div class="container">
+<div class="main-login main-center">
 	<H4> Voeg een nieuw programma toe</H4>
+	<hr>
 	<form id='soft_form' action='insertSoftForm.php' method='post'>
-	<?php	$sql = $conn->query("SELECT Com_ID, Barcode FROM IA_Computer"); ?>
-	<label>Computer barcode</label>
-		<select  name="com_id" required>
-			<option style="display:none" value="">Kies barcode van computer</option>
-		<?php	while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
-					echo '<option value="'.$row['Com_ID'].'">'.$row['Barcode'].'</option>';
-				} ?>
-		</select>
-		<a href="insertComForm.php">Computer bestaat nog niet? Voeg hem hier toe</a><br><br>
-	<?php	$sql = $conn->query("SELECT Soft_ID, Soft_naam, Versie FROM IA_Software"); ?>
-	<label>Softwarenaam & versie</label>
-		<select  name="soft_id" required>
-			<option style="display:none" value="">Kies het programma</option>
-		<?php	while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
-					echo '<option value="'.$row['Soft_ID'].'">'.$row['Soft_naam'].' '.$row['Versie'].'</option>';
-				} ?>
-		</select>
-		<a href="insertNewSoftForm.php">Software bestaat nog niet? Voeg hem hier toe</a><br><br>
-	<label>Aanschaf datum</label>
-		<input type='date' id='picker' name='soft_a_date' placeholder='Aanschaf datum' required>
-	<label>Aanschaf waarde</label>
-		<input type='text' name='soft_a_prijs' id='money' placeholder='Aanschaf waarde' required>
-		<input type='submit' name='submit4' value='voeg toe'>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="com_id">Computer barcode:</label>
+		<div class="col-sm-10">
+			<?php	$sql = $conn->query("SELECT Com_ID, Barcode FROM IA_Computer"); ?>
+			<select  name="com_id" required>
+				<option style="display:none" value="">Kies barcode van computer</option>
+			<?php	while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
+						echo '<option value="'.$row['Com_ID'].'">'.$row['Barcode'].'</option>';
+					} ?>
+			</select>
+		</div>
+	</div>
+	<a href="insertComForm.php">Computer bestaat nog niet? Voeg hem hier toe</a><br><br>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="soft_id">Softwarenaam & versie:</label>
+		<div class="col-sm-10">
+			<?php	$sql = $conn->query("SELECT Soft_ID, Soft_naam, Versie FROM IA_Software"); ?>
+			<select  name="soft_id" required>
+				<option style="display:none" value="">Kies het programma</option>
+			<?php	while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
+						echo '<option value="'.$row['Soft_ID'].'">'.$row['Soft_naam'].' '.$row['Versie'].'</option>';
+					} ?>
+			</select>
+		</div>
+	</div>
+	<a href="insertNewSoftForm.php">Software bestaat nog niet? Voeg hem hier toe</a><br><br>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="soft_a_date">Aanschaf datum:</label>
+		<div class="col-sm-10">
+			<input type='date' id='picker' name='soft_a_date' placeholder='Aanschaf datum' class='form-control' required>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="soft_a_prijs">Aanschaf datum:</label>
+		<div class="col-sm-10">
+			<input type='text' name='soft_a_prijs' id='money' placeholder='Aanschaf waarde' class='form-control' required>
+		</div>
+	</div>
+		<input type='submit' name='submit4' value='Voeg toe' class='btn btn-success'>
 	</form>
+</div>
 </div>
 </body>
 </html>

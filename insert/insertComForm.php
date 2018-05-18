@@ -20,6 +20,11 @@ $(function(){
     $('#picker').attr('max', maxDate);
 });
 </script>
+<style>
+input, select, textarea{
+	max-width: 275px;
+}
+</style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
@@ -32,9 +37,10 @@ $(function(){
 		</ul>
 	</div>
 </nav>
-
-
+<div class="container">
+<div class="main-login main-center">
 <H4> Voeg Computer toe</H4>
+<hr>
 <form id='com_form' action='insertComForm.php' method='post' class="form-group">
 	<div class="form-group">
 		<label class="control-label col-sm-2" for="com_barcode">Computer barcode:</label>
@@ -104,7 +110,8 @@ $(function(){
 	</div>
 		<input type='submit' name='submit2' class='btn btn-success' value='voeg toe'>
 </form>
-
+</div>
+</div>
 </body>
 </html>
 <?php

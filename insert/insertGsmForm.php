@@ -19,7 +19,13 @@ $(function(){
     var maxDate = year + '-' + month + '-' + day;
     $('#picker').attr('max', maxDate);
 });
-</script></head><body>
+</script>
+<style>
+input, select{
+	max-width: 275px;
+}
+</style>
+</head><body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
 	<a class="navbar-brand" href="https://portal.basrt.eu/">Inventadmin</a>
 	<div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -30,13 +36,16 @@ $(function(){
 		</ul>
 	</div>
 </nav>
-	<div class='form'>
+<div class="container">
+	<div class="main-login main-center">
 	<H4>Telefoon</H4>
+	<hr>
 	<form method="post" action="insertGsmForm.php" enctype="multipart/form-data" id="gsm_form">
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="user">Gebruiker:</label>
+			<div class="col-sm-10">
 	<?php
 	$sql = $conn->query("SELECT U_ID, Gebruiker FROM IA_Gebruiker ORDER BY Gebruiker"); 
-					
-					echo "<label>Gebruiker</label>";
 					echo '<select  name="user" required>'; 
 					echo '<option style="display:none" value="">Kies gebruiker van de telefoon</option>';
 					while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
@@ -44,28 +53,66 @@ $(function(){
 					}
 					echo '</select>';
 					?>
-	<label>Telefoonnummer</label>
-	<input type="text" name="nummer" placeholder="Telefoonnummer" required>
-	<label>Merk</label>
-	<input type="text" name="merk" placeholder="Merk" required>
-	<label>Model</label>
-	<input type="text" name="model" placeholder="Model" required>
-	<label>Serialnummer</label>
-	<input type="text" name="serial" placeholder="Serialnummer" required>
-	<label>IMEI-nummer</label>
-	<input type="text" name="imei-req" placeholder="IMEI-nummer" required>
-	<label>IMEI-nummer <i>(Niet verplicht!)</i></label>
-	<input type="text" name="imei-opt" placeholder="IMEI-nummer" >
-	<label>Aanschaf datum</label>
-	<input type="date" id="picker" name="datum" required>
-	<label>Aanschaf waarde</label>
-	<input type="text" name="prijs" placeholder="Aanschaf waarde" required>
-	<label>Foto telefoon</label>
-	<br>
-	<input type="file" name="file">
-	<input type="submit" name="submit" value="Voeg toe">
+			</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="nummer">Telefoonnummer:</label>
+		<div class="col-sm-10">
+			<input type='text' name='nummer'  placeholder='Telefoonnummer' class='form-control' required>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="merk">Merk:</label>
+		<div class="col-sm-10">
+			<input type='text' name='merk'  placeholder='Merk' class='form-control' required>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="model">Model:</label>
+		<div class="col-sm-10">
+			<input type='text' name='model'  placeholder='Model' class='form-control' required>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="serial">Serialnummer:</label>
+		<div class="col-sm-10">
+			<input type='text' name='serial'  placeholder='Serialnummer' class='form-control' required>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="imei-req">IMEI-nummer:</label>
+		<div class="col-sm-10">
+			<input type='text' name='imei-req'  placeholder='IMEI-nummer' class='form-control' required>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="imei-opt">IMEI-nummer:</label>
+		<div class="col-sm-10">
+			<input type='text' name='imei-opt'  placeholder='IMEI-nummer' class='form-control' required>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="datum">Aanschaf datum:</label>
+		<div class="col-sm-10">
+			<input type='date' name='datum' id="picker"  placeholder='Aaschaf datum' class='form-control' required>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="prijs">Aaschaf waarde:</label>
+		<div class="col-sm-10">
+			<input type='text' name='prijs'  placeholder='Aanschaf waarde' class='form-control' required>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="file">Foto telefoon:</label>
+		<div class="col-sm-10">
+			<input type="file" name="file">
+		</div>
+	</div>
+		<input type="submit" name="submit" value="Voeg toe" class='btn btn-success'>
 	</form>
 	</div>
+</div>
 </body>
 </html>
 <?php

@@ -35,32 +35,36 @@ $(function(){
 		</ul>
 	</div>
 </nav>
-<div class='form'>
+<div class="container">
+	<div class="main-login main-center">
 	<H4> Voeg Monitor toe</H4>
+	<hr>
 	<form method='post' action='insertMonForm.php'>
 		<?php $sql = $conn->query("SELECT Com_ID, Barcode FROM IA_Computer"); ?>
-		<label>Computer barcode</label>
+		<label>Computer barcode: </label>
 			<select  name="com_id">'; 
 				<option style="display:none" value="">Kies barcode van computer</option>
 			<?php	while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
 					   echo '<option value="'.$row['Com_ID'].'">'.$row['Barcode'].'</option>';
 					} ?>
 			</select>
-			    <input type="button" value="Voeg extra monitor toe" onclick="addRow('dataTable')" />
-				<input type="button" value="Verwijder rij" onclick="deleteRow('dataTable')" />
+		
+			    <input type="button" value="Voeg extra monitor toe" class='btn btn-warning' onclick="addRow('dataTable')" />
+				<input type="button" value="Verwijder rij" class='btn btn-danger' onclick="deleteRow('dataTable')" />
 			<table id='dataTable'>
 				<tr>
 				<td><input type='checkbox' name='chk'></td>
-				<td><input type='text' name='mon_barcode[]'  placeholder='Barcode' required></td>
-				<td><input type='text' name='mon_merk[]'  placeholder='Merk' required></td>
-				<td><input type='text' name='mon_type[]' placeholder='Type' required></td>
-				<td><input type='number' name='mon_inch[]' placeholder='Inch' required></td>
-				<td><input type='date' id='picker' min='1899-01-01' max='2000-13-13' name='mon_a_date[]' placeholder='Aanschaf datum' required></td>
-				<td><input type='text' id='money' name='mon_a_prijs[]' min='0' placeholder='Aanschaf Waarde' required></td>
+				<td><input type='text' name='mon_barcode[]'  placeholder='Barcode' class='form-control' required></td>
+				<td><input type='text' name='mon_merk[]'  placeholder='Merk' class='form-control' required></td>
+				<td><input type='text' name='mon_type[]' placeholder='Type' class='form-control' required></td>
+				<td><input type='number' name='mon_inch[]' placeholder='Inch' class='form-control' required></td>
+				<td><input type='date' id='picker' min='1899-01-01' max='2000-13-13' class='form-control' name='mon_a_date[]' placeholder='Aanschaf datum' required></td>
+				<td><input type='text' id='money' name='mon_a_prijs[]' min='0' class='form-control' placeholder='Aanschaf Waarde' required></td>
 				</tr>
 			</table>
-		<input type='submit' name='submit2' value='voeg toe'>
+		<input type='submit' name='submit2' value='Voeg toe' class='btn btn-success'>
 	</form>
+</div>
 </div>
 </body>
 </html>

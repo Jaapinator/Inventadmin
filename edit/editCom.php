@@ -101,7 +101,7 @@ if(isset($_POST['update']))
     $datum = trim($_POST['date']);    
     $waarde = trim($_POST['waarde']);    
 	
-    if(empty($barcode) || empty($merk) || empty($naam) || empty($ip) || empty($cpu) || empty($mem) || empty($moed) || empty($serial) || empty($datum) || empty($waarde)) {    
+    if(empty($barcode) || empty($merk) || empty($naam) || empty($ip) || empty($cpu) || empty($mem) || empty($moed) ||/* empty($serial) || */empty($datum) || empty($waarde)) {    
             
         if(empty($barcode)) {
             echo "<font color='red'>Barcode niet ingevuld.</font><br/>";
@@ -124,9 +124,9 @@ if(isset($_POST['update']))
 		if(empty($moed)) {
             echo "<font color='red'>Moederbord niet ingevuld.</font><br/>";
         } 
-		if(empty($serial)) {
+		/*if(empty($serial)) {
             echo "<font color='red'>Serialnummer niet ingevuld.</font><br/>";
-        } 
+        } */
 		if(empty($datum)) {
             echo "<font color='red'>Aanschaf datum niet ingevuld.</font><br/>";
         } 

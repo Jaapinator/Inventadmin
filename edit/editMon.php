@@ -19,6 +19,13 @@ $(function(){
     $('#picker').attr('max', maxDate);
 });
 </script>
+<style>
+input, select{
+	max-width: 275px;
+}
+</style>
+</head>
+<body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
 	<a class="navbar-brand" href="https://portal.basrt.eu/">Inventadmin</a>
 	<div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -50,11 +57,15 @@ $(function(){
 	}
 	
 ?> 
-<body>
-	<div class="form">
+
+<div class="container">
+	<div class="main-login main-center">
 		<H4>Monitor</H4>
-		<label>Computer barcode</label>
+		<hr>
 			<form name="form1" method="post" action="editMon.php?edit=<?php $id; ?>">
+		<div class="form-group">
+		<label class="control-label col-sm-2" for="com_id">Computer barcode:</label>
+			<div class="col-sm-10">
 			<?php $sql = $conn->query("SELECT Com_ID, Barcode FROM IA_Computer"); ?>
 			
 					<select  name="com_id">
@@ -64,22 +75,49 @@ $(function(){
 					   echo '<option value="'.$row['Com_ID'].'">'.$row['Barcode'].'</option>';
 					} ?>
 					</select>
-		<label>Monitor barcode</label>
-			<input type="text" name="barcode"  value="<?php echo $barcode;?>">
-		<label>Merk</label>
-			<input type="text" name="merk" value="<?php echo $merk;?>">
-		<label>Type</label>
-			<input type="text" name="type"  value="<?php echo $type;?>">
-		<label>Inch</label>
-			<input type="text" name="inch" value="<?php echo $inch;?>">
-		<label>Aanschaf datum</label>
-			<input type="date" id="picker" name="date" value="<?php echo $newDate;?>">
-		<label>Aanschaf waarde</label>
-			<input type="text" name="waarde" value="<?php echo $waarde;?>">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-2" for="barcode">Monitor barcode:</label>
+			<div class="col-sm-10">
+				<input type='text' name='barcode' value='<?php echo $barcode;?>' class='form-control' required>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-2" for="merk">Merk:</label>
+			<div class="col-sm-10">
+				<input type='text' name='merk' value='<?php echo $merk;?>' class='form-control' required>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-2" for="type">Type:</label>
+			<div class="col-sm-10">
+				<input type='text' name='type' value='<?php echo $type;?>' class='form-control' required>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-2" for="inch">Inch:</label>
+			<div class="col-sm-10">
+				<input type='text' name='inch' value='<?php echo $inch;?>' class='form-control' required>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-2" for="date">Aanschaf datum:</label>
+			<div class="col-sm-10">
+				<input type='date' id="picker" name='date' value='<?php echo $newDate;?>' class='form-control' required>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-2" for="waarde">Aanschaf waarde:</label>
+			<div class="col-sm-10">
+				<input type='text' name='waarde' value='<?php echo number_format((float)$waarde, 2, '.', '');;?>' class='form-control' required>
+			</div>
+		</div>
 			<input type="hidden" name="id" value="<?php echo $_GET['edit'];?>">
-			<input type="submit" name="update" value="Update">
+			<input type="submit" name="update" value="Update" class='btn btn-success'>
 		</form>
 	</div>
+</div>
 </body>
 <?php
 if(isset($_POST['update']))
