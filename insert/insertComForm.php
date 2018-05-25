@@ -103,12 +103,18 @@ input, select, textarea{
 		</div>
 	</div>
 	<div class="form-group">
+		<label class="control-label col-sm-2" for="file">Foto device:</label>
+		<div class="col-sm-10">
+			<input type="file" name="file">
+		</div>
+	</div>
+	<div class="form-group">
 		<label class="control-label col-sm-2" for="comment">Opmerkingen:</label>
 		<div class="col-sm-10">
 			<textarea class="form-control" rows="5" name='comment' placeholder='Opmerkingen'></textarea>
 		</div>
 	</div>
-		<input type='submit' name='submit2' class='btn btn-success' value='voeg toe'>
+		<input type='submit' name='submit2' class='btn btn-success' value='Voeg toe'>
 </form>
 </div>
 </div>
@@ -134,11 +140,13 @@ $result->bindParam(':ip', $com_ip, PDO::PARAM_STR);
 $result->execute();
 $rowCount = $result->fetchColumn(0);
 
+/*if($_FILES['file']['error'] == 4){
+	
 if($rowCount == 0){
 try{
-	$stmt = $conn->prepare("INSERT INTO IA_Computer (Barcode, Com_naam, Ip_adres, Com_merk, CPU_naam, Memory, Moederbord, Serialnummer, Aanschaf_dat, Aanschaf_waarde, Opmerkingen)
-							VALUES (?,?,?,?,?,?,?,?,?,?,?)");
-	$stmt->execute([$com_barcode, $com_naam, $com_ip, $com_merk, $com_cpu, $com_ram, $com_moed, $com_serial, $com_a_date, $com_a_prijs, $comment]);
+	$stmt = $conn->prepare("INSERT INTO IA_Computer (Barcode, Com_naam, Ip_adres, Com_merk, CPU_naam, Memory, Moederbord, Serialnummer, Aanschaf_dat, Aanschaf_waarde, Opmerkingen, Picture_com)
+							VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
+	$stmt->execute([$com_barcode, $com_naam, $com_ip, $com_merk, $com_cpu, $com_ram, $com_moed, $com_serial, $com_a_date, $com_a_prijs, $comment, NULL]);
 	echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
 }
 catch(PDOException $e){
@@ -151,6 +159,58 @@ else{
 	echo "<script> alert('Ip-adres bestaat al');</script>";
 	echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/insert/insertComForm.php" />';
 }
+}else{ */
+if($rowCount == 0){
+
+		$file = $_FILES['file'];
+		
+		$fileName = $_FILES['file']['name'];
+		$fileTmpName = $_FILES['file']['tmp_name'];
+		$fileSize = $_FILES['file']['size'];
+		$fileError = $_FILES['file']['error'];
+		$fileType = $_FILES['file']['type'];
+		
+		$fileExt = explode('.', $fileName);
+		$fileActualExt = strtolower(end($fileExt));
+		
+		$allowed = array('jpg', 'jpeg', 'png');
+		
+		if(in_array($fileActualExt, $allowed)){
+			if($fileError === 0){
+				if($fileSize < 1000000){
+					$fileNameNew = uniqid('', true).".".$fileActualExt;
+					$fileDestination = '//WEBSERVER03/Portal$/inventadmin/includes/images/laptop/'.$fileNameNew;
+					move_uploaded_file($fileTmpName, $fileDestination);
+						try{
+							$dir = 'includes/images/laptop/';
+							$img = $dir.$fileNameNew;
+							$stmt = $conn->prepare("INSERT INTO IA_Computer (Barcode, Com_naam, Ip_adres, Com_merk, CPU_naam, Memory, Moederbord, Serialnummer, Aanschaf_dat, Aanschaf_waarde, Opmerkingen, Picture_com)
+													VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
+							$stmt->execute([$com_barcode, $com_naam, $com_ip, $com_merk, $com_cpu, $com_ram, $com_moed, $com_serial, $com_a_date, $com_a_prijs, $comment]);
+							echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
+						}
+						catch(PDOException $e){
+							echo $stmt . "<br>" . $e->getMessage();
+							echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/insert/insertComForm.php" />';
+
+						}
+				}else{
+					echo "Your file is too big!";
+				}
+			}else{
+				echo "There was an error uploading your file!";
+			}
+		}else{
+			echo "You can't upload files of this type!";
+		}
+	}
+else{
+	echo "<script> alert('Ip-adres bestaat al');</script>";
+	echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/insert/insertComForm.php" />';
+}
+
 }
 $conn = null;
+
+
 ?>

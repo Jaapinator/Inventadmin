@@ -62,6 +62,12 @@ input, select, textarea{
 		</div>
 	</div>
 	<div class="form-group">
+		<label class="control-label col-sm-2" for="name">Naam:</label>
+		<div class="col-sm-10">
+			<input type='text' name='name'  placeholder='Naam' class='form-control' required>
+		</div>
+	</div>
+	<div class="form-group">
 		<label class="control-label col-sm-2" for="merk">Merk:</label>
 		<div class="col-sm-10">
 			<input type='text' name='merk'  placeholder='Merk' class='form-control' required>
@@ -98,7 +104,7 @@ input, select, textarea{
 		</div>
 	</div>
 	<div class="form-group">
-		<label class="control-label col-sm-2" for="file">Foto telefoon:</label>
+		<label class="control-label col-sm-2" for="file">Foto laptop:</label>
 		<div class="col-sm-10">
 			<input type="file" name="file">
 		</div>
@@ -122,6 +128,7 @@ if (isset($_POST['submit'])){
 	$userid = $_POST['user'];
 	$inch = $_POST['inch'];
 	$barcode = $_POST['barcode'];
+	$name = $_POST['name'];
 	$merk = $_POST['merk'];
 	$cpu = $_POST['cpu'];
 	$ram = $_POST['memory'];
@@ -130,9 +137,9 @@ if (isset($_POST['submit'])){
 	$opmerkingen = $_POST['comment'];
 	
 	if($_FILES['file']['error'] == 4){
-		$stmt = $conn->prepare("INSERT INTO IA_Laptop (U_ID, Barcode, Merk, CPU, Memory, Inch, Aanschaf_dat, Aanschaf_waarde, Opmerkingen, Picture_lap)
-												VALUES (?,?,?,?,?,?,?,?,?,?)");
-		$stmt->execute([$userid, $barcode, $merk, $cpu, $ram, $inch, $date, $waarde, $opmerkingen, NULL]);
+		$stmt = $conn->prepare("INSERT INTO IA_Laptop (U_ID, Barcode, Lap_naam, Merk, CPU, Memory, Inch, Aanschaf_dat, Aanschaf_waarde, Opmerkingen, Picture_lap)
+												VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+		$stmt->execute([$userid, $barcode, $name, $merk, $cpu, $ram, $inch, $date, $waarde, $opmerkingen, NULL]);
 		echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
 	}else{
 		$file = $_FILES['file'];
@@ -157,9 +164,9 @@ if (isset($_POST['submit'])){
 					try{
 						$dir = 'includes/images/laptop/';
 						$img = $dir.$fileNameNew;
-						$stmt = $conn->prepare("INSERT INTO IA_Laptop (U_ID, Barcode, Merk, CPU, Memory, Inch, Aanschaf_dat, Aanschaf_waarde, Opmerkingen, Picture_lap)
-												VALUES (?,?,?,?,?,?,?,?,?,?)");
-						$stmt->execute([$userid, $barcode, $merk, $cpu, $ram, $inch, $date, $waarde, $opmerkingen, $img]);
+						$stmt = $conn->prepare("INSERT INTO IA_Laptop (U_ID, Barcode, Lap_naam, Merk, CPU, Memory, Inch, Aanschaf_dat, Aanschaf_waarde, Opmerkingen, Picture_lap)
+												VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+						$stmt->execute([$userid, $barcode, $name, $merk, $cpu, $ram, $inch, $date, $waarde, $opmerkingen, $img]);
 						echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
 					}
 					catch(PDOException $e){

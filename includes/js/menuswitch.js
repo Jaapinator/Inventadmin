@@ -6,9 +6,6 @@ $(function () {
 	$('#table4').wrap('<div id="hidetable4"  class="hide" style="display:none"/>');
 	$('#table5').wrap('<div id="hidetable5"  class="hide" style="display:none"/>');
 	$('#table6').wrap('<div id="hidetable6"  class="hide" style="display:none"/>');
-	$('#table7').wrap('<div id="hidetable7"  class="hide" style="display:none"/>');
-	$('#table8').wrap('<div id="hidetable8"  class="hide" style="display:none"/>');
-	
 	
 	$('#table1').DataTable( {
 	  "searching": true,
@@ -47,23 +44,13 @@ $(function () {
 	  "columnDefs": [{  "bSortable": false, "aTargets": [-1] }, { "bSearchable":false, "aTargets": [-1] }],
 	  "stateSave": true
 	} );
-	$('#table7').DataTable( {
-	  "searching": true,
-	  "lengthMenu": [[12, -1], [12, "All"]],
-	  "columnDefs": [{  "bSortable": false, "aTargets": [-1] }, { "bSearchable":false, "aTargets": [-1] }],
-	  "stateSave": true
-	} );
-	$('#table8').DataTable( {
-	  "searching": true,
-	  "lengthMenu": [[12, -1], [12, "All"]],
-	  "columnDefs": [{  "bSortable": false, "aTargets": [-1] }, { "bSearchable":false, "aTargets": [-1] }],
-	  "stateSave": true
-	} );
-		console.log($("#drop"))
-		$("#hide"+ $("#drop")[0].value).show(); 
-		   $("#drop").change(function () {
-				var end = this.value;
-				$('.hide').hide();
-			   $("#hide"+end).show(); 
-			}); 
+	
+var selec = localStorage.getItem('drop') || $("#drop").val();
+$("#hide" + selec).show();
+$('#drop').val(selec).change(function() {
+  var val = $(this).val();
+  $('.hide').hide();
+  $("#hide" + val).show();
+  localStorage.setItem('drop', val);
+});
 });	

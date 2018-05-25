@@ -17,7 +17,7 @@ td.knoppen{
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-	 <a class="navbar-brand" href="https://portal.basrt.eu/">Inventadmin</a>
+	 <a class="navbar-brand" href="https://portal.basrt.eu/">Portal</a>
 		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		  </button>
@@ -28,13 +28,13 @@ td.knoppen{
 				Item toevoegen
 				</a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-					<a class="dropdown-item" href='insert/insertComForm.php'>Computer</a>
+					<a class="dropdown-item" href='insert/insertComForm.php'>Apparaat</a>
 					<a class="dropdown-item" href='insert/insertMonForm.php'>Monitor</a>
 					<a class="dropdown-item" href='insert/insertSoftForm.php'>Software</a>
 					<a class="dropdown-item" href='insert/insertRandForm.php'>Randapparatuur</a>
 					<a class="dropdown-item" href='insert/insertGsmForm.php'>Telefoon</a>
-					<a class="dropdown-item" href='insert/insertTabForm.php'>Tablet</a>
-					<a class="dropdown-item" href='insert/insertLapForm.php'>Laptop</a>
+					<!--<a class="dropdown-item" href='insert/insertTabForm.php'>Tablet</a>
+					<a class="dropdown-item" href='insert/insertLapForm.php'>Laptop</a>-->
 				</div>
 			  </li>
 			  <li class="nav-item">
@@ -45,15 +45,13 @@ td.knoppen{
 			  </li>
 			 
 	
-		<select id='drop' class='keuze' style="float:right;">
-		<option class='keuze' value='table1' selected>Computer</option>
-		<option class='keuze' value='table2'>Monitor</option>
-		<option class='keuze' value='table3'>Software</option>
-		<option class='keuze' value='table4'>Gebruiker</option>
-		<option class='keuze' value='table5'>Randapparatuur</option>
-		<option class='keuze' value='table6'>Telefoon</option>
-		<option class='keuze' value='table7'>Tablet</option>
-		<option class='keuze' value='table8'>Laptop</option>
+		<select id='drop' class='selectpicker' data-style="btn-dark" >
+			<option class='keuze' value='table1' selected>Computer</option>
+			<option class='keuze' value='table2'>Monitor</option>
+			<option class='keuze' value='table3'>Software</option>
+			<option class='keuze' value='table4'>Gebruiker</option>
+			<option class='keuze' value='table5'>Randapparatuur</option>
+			<option class='keuze' value='table6'>Telefoon</option>
 		</select>
 		
 		</ul>
@@ -63,7 +61,8 @@ td.knoppen{
 <div id='divtable1' class='table' >
 	<table id='table1' class='table table-striped table-bordered' cellspacing='0' width='100%'> 
 		<thead><tr><th>Barcode</th><th>Computernaam</th><th>Ip-adres</th><th>CPU</th><th>RAM</th><th>Moederbord</th><th>Aanschaf datum</th><th></th></tr></thead><tbody>
-		<?php $stmt = $conn->query('SELECT * FROM IA_Computer ORDER BY Barcode');
+		<?php 
+		$stmt = $conn->query('SELECT * FROM IA_Computer ORDER BY Barcode');
 		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 			$newDate = date("d-m-Y", strtotime($row['Aanschaf_dat']));
 			echo "<tr><td>";
@@ -224,64 +223,6 @@ td.knoppen{
 </tbody></table>
 </div>
 
-<div id='divtable7' class='table' >
-	<table id='table7' class='table table-striped table-bordered' cellspacing='0' width='100%'>
-		<thead><tr><th>Gebruiker</th><th>Merk</th><th>Model</th><th>Inch</th><th>Opslagcapaciteit</th><th>Aanschaf datum</th><th>Aanschaf waarde</th><th></th></tr></thead><tbody> 	
-	<?php	$stmt = $conn->query('SELECT * FROM IA_Gebruiker, IA_Tablet WHERE IA_Gebruiker.U_ID=IA_Tablet.U_ID');
-		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-			$newDate = date("d-m-Y", strtotime($row['Aanschaf_dat']));
-			echo "<tr><td>";
-			echo strip_tags($row['Gebruiker']);
-			echo "</td><td>";
-			echo strip_tags($row['Merk']);
-			echo "</td><td>";
-			echo strip_tags($row['Model']);
-			echo "</td><td>";
-			echo strip_tags($row['Inch']);
-			echo "</td><td>";
-			echo strip_tags($row['Opslagcapaciteit']);
-			echo "</td><td>";
-			echo $newDate;
-			echo "</td><td>";
-			echo "&euro;"; echo number_format((float)$row['Aanschaf_waarde'], 2, '.', ''); ?>
-			</td><td class='knoppen'> <?php
-			echo "<a class='btn btn-outline-success btn-sm' style='margin-right:5px;' href='edit/editTab.php?edit=$row[Tab_ID]' ><i class='far fa-edit fa-xs'></i> Edit</a>";
-			
-			echo "<a class='btn btn-outline-danger btn-sm' href='delete/delTab.php?edit=$row[Tab_ID]' onClick=\"return confirm('Weet je zeker dat je dit item wilt verwijderen?')\"><i class='far fa-trash-alt fa-xs'></i> Delete</a>";
-			echo "</td></tr>";
-		} ?>
-</tbody></table>
-</div>
-<div id='divtable8' class='table' >
-	<table id='table8' class='table table-striped table-bordered' cellspacing='0' width='100%'>
-		<thead><tr><th>Gebruiker</th><th>Barcode</th><th>Merk</th><th>CPU</th><th>Memory</th><th>Inch</th><th>Aanschaf datum</th><th>Aanschaf waarde</th><th></th></tr></thead><tbody> 	
-	<?php	$stmt = $conn->query('SELECT * FROM IA_Gebruiker, IA_Laptop WHERE IA_Gebruiker.U_ID=IA_Laptop.U_ID');
-		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-			$newDate = date("d-m-Y", strtotime($row['Aanschaf_dat']));
-			echo "<tr><td>";
-			echo strip_tags($row['Gebruiker']);
-			echo "</td><td>";
-			echo strip_tags($row['Barcode']);
-			echo "</td><td>";
-			echo strip_tags($row['Merk']);
-			echo "</td><td>";
-			echo strip_tags($row['CPU']);
-			echo "</td><td>";
-			echo strip_tags($row['Memory']);
-			echo "</td><td>";
-			echo strip_tags($row['Inch']);
-			echo "</td><td>";
-			echo $newDate;
-			echo "</td><td>";
-			echo "&euro;"; echo number_format((float)$row['Aanschaf_waarde'], 2, '.', ''); ?>
-			</td><td class='knoppen'> <?php
-			echo "<a class='btn btn-outline-success btn-sm' style='margin-right:5px;' href='edit/editLap.php?edit=$row[Lap_ID]' ><i class='far fa-edit fa-xs'></i> Edit</a>";
-			
-			echo "<a class='btn btn-outline-danger btn-sm' href='delete/delLap.php?edit=$row[Lap_ID]' onClick=\"return confirm('Weet je zeker dat je dit item wilt verwijderen?')\"><i class='far fa-trash-alt fa-xs'></i> Delete</a>";
-			echo "</td></tr>";
-		} ?>
-</tbody></table>
-</div>	
 <footer>&copy; <b>B | A | S </b> -  <?php
 $dt = new DateTime();
 echo $dt->format('d-m-Y');

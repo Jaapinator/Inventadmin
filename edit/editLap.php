@@ -41,6 +41,7 @@ $(function(){
 	{
     $merk = $row['Merk'];
     $barcode = $row['Barcode'];
+    $name = $row['Lap_naam'];
     $cpu = $row['CPU'];
     $memory = $row['Memory'];
     $inch = $row['Inch'];
@@ -70,6 +71,8 @@ $(function(){
 				</select>
 		<label>Barcode</label>
 			<input type="text" name="barcode" value="<?php echo $barcode;?>">
+		<label>Naam</label>
+			<input type="text" name="name" value="<?php echo $name;?>">
 		<label>Merk</label>
 			<input type="text" name="merk" value="<?php echo $merk;?>">
 		<label>CPU</label>
@@ -101,6 +104,7 @@ if(isset($_POST['update']))
     $id = $_POST['id'];
     $userid = trim($_POST['userid']);
     $barcode = trim($_POST['barcode']);
+    $name = trim($_POST['name']);
     $merk = trim($_POST['merk']);
     $cpu = trim($_POST['cpu']);
     $memory = trim($_POST['memory']);    
@@ -118,13 +122,16 @@ if(isset($_POST['update']))
     $deleteimg = $row['Picture_lap'];
 	}
 	
-    if(empty($userid) || empty($barcode) || empty($merk) || empty($cpu) || empty($memory) || empty($inch) || empty($datum) || empty($waarde)) {    
+    if(empty($userid) || empty($barcode) || empty($name) || empty($merk) || empty($cpu) || empty($memory) || empty($inch) || empty($datum) || empty($waarde)) {    
             
         if(empty($userid)) {
             echo "<font color='red'>Gebruiker niet gekozen.</font><br/>";
         }
         if(empty($barcode)) {
             echo "<font color='red'>Barcode niet ingevuld.</font><br/>";
+        }
+        if(empty($name)) {
+            echo "<font color='red'>Naam niet ingevuld.</font><br/>";
         }
         if(empty($merk)) {
             echo "<font color='red'>Merk niet ingevuld.</font><br/>";
@@ -149,6 +156,7 @@ if(isset($_POST['update']))
 			$sql = "UPDATE IA_Laptop
 						SET U_ID = :userid,
 							Barcode = :barcode, 
+							Lap_naam = :name, 
 							Merk = :merk, 
 							CPU = :cpu, 
 							Memory = :memory, 
@@ -162,6 +170,7 @@ if(isset($_POST['update']))
 			$query = $conn->prepare($sql);
 			$query->bindparam(":userid", $userid);
 			$query->bindparam(':barcode', $barcode);
+			$query->bindparam(':name', $name);
 			$query->bindparam(':merk', $merk);
 			$query->bindparam(':cpu', $cpu);
 			$query->bindparam(':memory', $memory);
@@ -203,6 +212,7 @@ if(isset($_POST['update']))
 							$sql = "UPDATE IA_Laptop
 										SET U_ID = :userid,
 											Barcode = :barcode, 
+											Lap_naam = :name, 
 											Merk = :merk, 
 											CPU = :cpu, 
 											Memory = :memory, 
@@ -216,6 +226,7 @@ if(isset($_POST['update']))
 							$query = $conn->prepare($sql);
 							$query->bindparam(":userid", $userid);
 							$query->bindparam(':barcode', $barcode);
+							$query->bindparam(':name', $name);
 							$query->bindparam(':merk', $merk);
 							$query->bindparam(':cpu', $cpu);
 							$query->bindparam(':memory', $memory);

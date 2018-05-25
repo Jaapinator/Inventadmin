@@ -52,7 +52,7 @@ input, select{
 		<label class="control-label col-sm-2" for="com_id">Computer barcode:</label>
 		<div class="col-sm-10">
 			<?php	$sql = $conn->query("SELECT Com_ID, Barcode FROM IA_Computer"); ?>
-			<select  name="com_id" required>
+			<select  name="com_id">
 				<option style="display:none" value="">Kies barcode van computer</option>
 			<?php	while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
 						echo '<option value="'.$row['Com_ID'].'">'.$row['Barcode'].'</option>';
@@ -71,19 +71,20 @@ input, select{
 						echo '<option value="'.$row['Soft_ID'].'">'.$row['Soft_naam'].' '.$row['Versie'].'</option>';
 					} ?>
 			</select>
+			<input type='submit' name='submit3' value='Delete' class='btn btn-danger'>
 		</div>
 	</div>
 	<a href="insertNewSoftForm.php">Software bestaat nog niet? Voeg hem hier toe</a><br><br>
 	<div class="form-group">
 		<label class="control-label col-sm-2" for="soft_a_date">Aanschaf datum:</label>
 		<div class="col-sm-10">
-			<input type='date' id='picker' name='soft_a_date' placeholder='Aanschaf datum' class='form-control' required>
+			<input type='date' id='picker' name='soft_a_date' placeholder='Aanschaf datum' class='form-control' >
 		</div>
 	</div>
 	<div class="form-group">
 		<label class="control-label col-sm-2" for="soft_a_prijs">Aanschaf datum:</label>
 		<div class="col-sm-10">
-			<input type='text' name='soft_a_prijs' id='money' placeholder='Aanschaf waarde' class='form-control' required>
+			<input type='text' name='soft_a_prijs' id='money' placeholder='Aanschaf waarde' class='form-control' >
 		</div>
 	</div>
 		<input type='submit' name='submit4' value='Voeg toe' class='btn btn-success'>
@@ -109,6 +110,18 @@ try {
 	echo "<script>alert('Vul de velden goed in!');</script>";
 	echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/insert/insertSoftForm.php" />';
 }
+}
+if(isset($_POST['submit3'])){
+		
+		$soft_id = $_POST['soft_id'];
+		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$sql = "DELETE FROM IA_Software WHERE Soft_ID = $soft_id";
+			if ($conn->query($sql)) {
+				echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
+			}
+			else{
+				echo "Iets gaat er fout";
+			}
 }
 $conn = null;
 ?>

@@ -2,7 +2,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge;" /><?php
 	include "includes/connection.php";
 	include "includes/scripts.php";
-?></head><body>
+?><style>
+.card:first-of-type{
+	border-bottom: 25px;
+}
+</style></head><body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
 	<a class="navbar-brand" href="https://portal.basrt.eu/">Inventadmin</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -187,7 +191,7 @@ foreach($rows as $row){
   <div class="comm">
     <label>Voeg opmerkingen toe</label><br>
 	<form id="comment" action="edit/updateOpmerk.php" method="post">
-	<textarea name="comment"><?php echo $comm;?></textarea><br>
+	<textarea name="comment" style="resize:none; width: 100%; height: 20%;"><?php echo $comm;?></textarea><br>
 	<input type="hidden" name="view" value="<?php echo $id;?>"/>
 	<input type="submit" value="Edit" name="submit" class='btn btn-success' />
 	</form>
@@ -205,7 +209,8 @@ foreach($rows as $row){
       </h5>
     </div>
     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-      <div class="card-body">     
+
+        <div class="card-group">     
 <?php
 $sql = "SELECT * FROM IA_Monitor WHERE Com_ID = :id";
 $query = $conn->prepare($sql);
@@ -217,8 +222,10 @@ if ($value != 0)
 foreach($rows as $row){
     $monnewDate = date("d-m-Y", strtotime($row['Aanschaf_dat']));
     ?>
+	<div class="card">
+    <div class="card-body">
 	
-	<table style="display:inline-block;float:left;">
+	<table>
         <tr><td>Monitorbarcode: </td><td><?php echo $row['Barcode'];?></td></tr>
         <tr><td>Merk: </td><td><?php echo $row['Merk'];?></td></tr>
         <tr><td>Type: </td><td><?php echo $row['Type'];?></td></tr>
@@ -226,19 +233,16 @@ foreach($rows as $row){
         <tr><td>Aanschaf datum: </td><td><?php echo $monnewDate; ?></td></tr>
         <tr><td>Aanschaf waarde: </td><td><?php echo "&euro; ".number_format((float)$row['Aanschaf_waarde'], 2, '.', '')."";?></td></tr>
 	</table>
-	
+	</div>
+  </div>
 <?php
 } else{
     echo "<i>Geen monitoren gevonden</i>";
 }
 ?>
-
     </div>
   </div>
 </div>
-<br>
-
-
   <div class="card">
     <div class="card-header" id="headingTwo">
       <h5 class="mb-0">
