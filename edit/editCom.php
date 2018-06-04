@@ -33,17 +33,18 @@ $(function(){
 <?php
 	$id = $_GET['edit'];
 	
-	$sql = "SELECT * FROM IA_Computer WHERE Com_ID=:id";
+	$sql = "SELECT * FROM IA_Devices WHERE Dev_ID=:id";
 	$query = $conn->prepare($sql);
 	$query->execute(array(':id' => $id));
 
 	while($row = $query->fetch(PDO::FETCH_ASSOC))
 	{
     $barcode = $row['Barcode'];
-	$naam = $row['Com_naam'];
+	$naam = $row['Naam'];
     $ip = $row['Ip_adres'];
-    $merk = $row['Com_merk'];
-    $cpu = $row['CPU_naam'];
+    $merk = $row['Merk'];
+    $model = $row['Model'];
+    $cpu = $row['CPU'];
     $mem = $row['Memory'];
     $moed = $row['Moederbord'];
     $serial = $row['Serialnummer'];
@@ -67,6 +68,8 @@ $(function(){
 			<input type="text" name="ip"  value="<?php echo $ip;?>">
 		<label>Merk</label>
 			<input type="text" name="merk" value="<?php echo $merk;?>">
+		<label>Model</label>
+			<input type="text" name="model" value="<?php echo $model;?>">
 		<label>Processor</label>
 			<input type="text" name="cpu" value="<?php echo $cpu;?>">
 		<label>RAM-Memory</label>	
@@ -93,6 +96,7 @@ if(isset($_POST['update']))
     $barcode = trim($_POST['barcode']);
 	$naam = trim($_POST['naam']);
     $merk = trim($_POST['merk']);
+    $model = trim($_POST['model']);
     $ip = trim($_POST['ip']);    
     $cpu = trim($_POST['cpu']);    
     $mem = trim($_POST['mem']);    
@@ -101,7 +105,7 @@ if(isset($_POST['update']))
     $datum = trim($_POST['date']);    
     $waarde = trim($_POST['waarde']);    
 	
-    if(empty($barcode) || empty($merk) || empty($naam) || empty($ip) || empty($cpu) || empty($mem) || empty($moed) ||/* empty($serial) || */empty($datum) || empty($waarde)) {    
+    if(empty($barcode) || empty($merk) || /*empty($model) ||*/ empty($naam) || empty($ip) || empty($cpu) || empty($mem) || empty($moed) ||/* empty($serial) || */empty($datum) || empty($waarde)) {    
             
         if(empty($barcode)) {
             echo "<font color='red'>Barcode niet ingevuld.</font><br/>";
@@ -112,6 +116,9 @@ if(isset($_POST['update']))
         if(empty($merk)) {
             echo "<font color='red'>Computer merk niet ingevuld.</font><br/>";
         }
+        /*if(empty($model)) {
+            echo "<font color='red'>Model niet ingevuld.</font><br/>";
+        }*/
         if(empty($ip)) {
             echo "<font color='red'>Ip-adres niet ingevuld.</font><br/>";
         }      
@@ -135,24 +142,26 @@ if(isset($_POST['update']))
         } 
     } else {    
         //updating the table
-        $sql = "UPDATE IA_Computer
+        $sql = "UPDATE IA_Devices
 					SET Barcode = :barcode,
-						Com_naam = :naam,
+						Naam = :naam,
 						Ip_adres = :ip, 
-						Com_merk = :merk, 
-						CPU_naam = :cpu, 
+						Merk = :merk, 
+						Model = :model, 
+						CPU = :cpu, 
 						Memory = :mem,  
 						Moederbord = :moed, 
 						Serialnummer = :serial, 
 						Aanschaf_dat = :datum, 
 						Aanschaf_waarde = :waarde 
-				  WHERE Com_ID = :id";
+				  WHERE Dev_ID = :id";
 				 
 		$query = $conn->prepare($sql);
 		$query->bindparam(":barcode", $barcode);
 		$query->bindparam(':naam', $naam);
 		$query->bindparam(':ip', $ip);
 		$query->bindparam(':merk', $merk);
+		$query->bindparam(':model', $model);
 		$query->bindparam(':cpu', $cpu);
 		$query->bindparam(':mem', $mem);
 		$query->bindparam(':moed', $moed);

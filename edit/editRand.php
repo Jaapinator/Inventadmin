@@ -33,14 +33,14 @@ $(function(){
 <?php
 	$id = $_GET['edit'];
 	
-	$sql = "SELECT IA_Computer.Barcode, IA_Randapparatuur.Com_ID, Merk, Type, IA_Randapparatuur.Aanschaf_dat, IA_Randapparatuur.Aanschaf_waarde FROM IA_Randapparatuur, IA_Computer WHERE Rand_ID=:id AND IA_Computer.Com_ID=IA_Randapparatuur.Com_ID";
+	$sql = "SELECT IA_Devices.Barcode, IA_Randapparatuur.Dev_ID, Merk, Type, IA_Randapparatuur.Aanschaf_dat, IA_Randapparatuur.Aanschaf_waarde FROM IA_Randapparatuur, IA_Devices WHERE Rand_ID=:id AND IA_Devices.Dev_ID=IA_Randapparatuur.Dev_ID";
 	$query = $conn->prepare($sql);
 	$query->execute(array(':id' => $id));
 
 	while($row = $query->fetch(PDO::FETCH_ASSOC))
 	{
 	$barcode = $row['Barcode'];
-	$com_id = $row['Com_ID'];
+	$Dev_ID = $row['Dev_ID'];
     $merk = $row['Merk'];
     $type = $row['Type'];
     $datum = $row['Aanschaf_dat'];
@@ -54,12 +54,12 @@ $(function(){
 		<H4>Randapparatuur</H4>
 		<form name="form1" method="post" action="editRand.php?edit=<?php $id; ?>">
 			<label>Computer barcode</label>
-			<?php $sql = $conn->query("SELECT Barcode, Com_ID FROM IA_Computer WHERE Barcode<>$barcode"); ?>
+			<?php $sql = $conn->query("SELECT Barcode, Dev_ID FROM IA_Devices WHERE Barcode<>$barcode"); ?>
 			
-					<select  name="com_id" required>
-					<option value="<?php echo $com_id; ?>" selected><?php echo $barcode ?></option><?php
+					<select  name="Dev_ID" required>
+					<option value="<?php echo $Dev_ID; ?>" selected><?php echo $barcode ?></option><?php
 					while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
-					   echo '<option value="'.$row['Com_ID'].'">'.$row['Barcode'].'</option>';
+					   echo '<option value="'.$row['Dev_ID'].'">'.$row['Barcode'].'</option>';
 					}?>
 					</select>
 			<label>Merk</label>
@@ -81,15 +81,15 @@ if(isset($_POST['update']))
 {    
     $id = $_POST['id'];
     
-	$com_id = trim($_POST['com_id']);
+	$Dev_ID = trim($_POST['Dev_ID']);
 	$merk = trim($_POST['merk']);
 	$type = trim($_POST['type']);
 	$date = trim($_POST['date']);
 	$waarde = trim($_POST['waarde']);
 
-if(empty($com_id) || empty($merk) || empty($type) || empty($date) || empty($waarde)){
+if(empty($Dev_ID) || empty($merk) || empty($type) || empty($date) || empty($waarde)){
 	
-	if(empty($com_id)){
+	if(empty($Dev_ID)){
 		echo "<font color='red'>Computerbarcode niet ingevuld.</font>";
 	}
 	if(empty($merk)){
@@ -107,7 +107,7 @@ if(empty($com_id) || empty($merk) || empty($type) || empty($date) || empty($waar
 	
 }else{
 	$sql = "UPDATE IA_Randapparatuur
-			   SET Com_ID = :comid,
+			   SET Dev_ID = :comid,
 				   Merk = :merk,
 				   Type = :type,
 				   Aanschaf_dat = :date,
@@ -115,7 +115,7 @@ if(empty($com_id) || empty($merk) || empty($type) || empty($date) || empty($waar
 			 WHERE Rand_ID = :id";
 	
 	$query = $conn->prepare($sql);
-	$query->bindparam(":comid", $com_id);
+	$query->bindparam(":comid", $Dev_ID);
 	$query->bindparam(":merk", $merk);
 	$query->bindparam(":type", $type);
 	$query->bindparam(":date", $date);

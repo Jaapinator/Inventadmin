@@ -42,14 +42,14 @@ input, select{
 	<H4>Randapparatuur</H4>
 	<hr>
 	<form method="post" action="insertRandForm.php" id="rand_form">
-	<label class="control-label col-sm-2" for="com_id">Barcode:</label>
+	<label class="control-label col-sm-2" for="Dev_ID">Barcode:</label>
 		<div class="col-sm-10">
 	<?php
-	$sql = $conn->query("SELECT Com_ID, Barcode FROM IA_Computer"); 
-					echo '<select  name="com_id" required>'; 
+	$sql = $conn->query("SELECT Dev_ID, Barcode FROM IA_Devices"); 
+					echo '<select  name="Dev_ID" required>'; 
 					echo '<option style="display:none" value="">Kies barcode van computer</option>';
 					while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
-					   echo '<option value="'.$row['Com_ID'].'">'.$row['Barcode'].'</option>';
+					   echo '<option value="'.$row['Dev_ID'].'">'.$row['Barcode'].'</option>';
 					}
 					echo '</select>';
 					?>
@@ -87,7 +87,7 @@ input, select{
 </html>
 <?php
 if(isset($_POST['submit'])){
-$comid = $_POST['com_id'];
+$comid = $_POST['Dev_ID'];
 $rand_merk = $_POST['rand_merk'];
 $rand_type = $_POST['rand_type'];
 $date = $_POST['datum'];
@@ -95,7 +95,7 @@ $waarde = $_POST['prijs'];
 
 
 try{
-	$stmt = $conn->prepare("INSERT INTO IA_Randapparatuur (Com_ID, Merk, Type, Aanschaf_dat, Aanschaf_waarde)
+	$stmt = $conn->prepare("INSERT INTO IA_Randapparatuur (Dev_ID, Merk, Type, Aanschaf_dat, Aanschaf_waarde)
 							VALUES (?,?,?,?,?)");
 	$stmt->execute([$comid, $rand_merk, $rand_type, $date, $waarde]);
 	echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';

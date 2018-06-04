@@ -39,7 +39,7 @@ input, select{
 
 <?php
 	$id = $_GET['edit'];
-	$sql = "SELECT *, (SELECT Barcode FROM IA_Computer WHERE IA_Computer.Com_ID=IA_Monitor.Com_ID) as combar FROM IA_Monitor WHERE Mon_ID=:id";
+	$sql = "SELECT *, (SELECT Barcode FROM IA_Devices WHERE IA_Devices.Dev_ID=IA_Monitor.Dev_ID) as combar FROM IA_Monitor WHERE Mon_ID=:id";
 	$query = $conn->prepare($sql);
 	$query->execute(array(':id' => $id));
 
@@ -52,7 +52,7 @@ input, select{
     $datum = $row['Aanschaf_dat'];
     $waarde = $row['Aanschaf_waarde'];
 	$combarcode = $row['combar'];
-	$comid = $row['Com_ID'];
+	$comid = $row['Dev_ID'];
 	$newDate = date("Y-m-d", strtotime($datum));
 	}
 	
@@ -64,15 +64,15 @@ input, select{
 		<hr>
 			<form name="form1" method="post" action="editMon.php?edit=<?php $id; ?>">
 		<div class="form-group">
-		<label class="control-label col-sm-2" for="com_id">Computer barcode:</label>
+		<label class="control-label col-sm-2" for="Dev_ID">Computer barcode:</label>
 			<div class="col-sm-10">
-			<?php $sql = $conn->query("SELECT Com_ID, Barcode FROM IA_Computer"); ?>
+			<?php $sql = $conn->query("SELECT Dev_ID, Barcode FROM IA_Devices"); ?>
 			
-					<select  name="com_id">
+					<select  name="Dev_ID">
 					<option value="<?php echo $comid; ?>" selected><?php echo $combarcode ?></option>
 					<option value=""> Geen computer</option>
 			<?php	while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
-					   echo '<option value="'.$row['Com_ID'].'">'.$row['Barcode'].'</option>';
+					   echo '<option value="'.$row['Dev_ID'].'">'.$row['Barcode'].'</option>';
 					} ?>
 					</select>
 			</div>
@@ -124,7 +124,7 @@ if(isset($_POST['update']))
 {    
     $id = $_POST['id'];
 	
-    $com_id = trim($_POST['com_id']);
+    $Dev_ID = trim($_POST['Dev_ID']);
     $barcode = trim($_POST['barcode']);
     $merk = trim($_POST['merk']);
     $type = trim($_POST['type']);    
@@ -153,9 +153,9 @@ if(isset($_POST['update']))
             echo "<font color='red'>Aanschaf waarde niet ingevuld.</font><br/>";
         } 
     } else {    
-		if($com_id == 0){
+		if($Dev_ID == 0){
 		$sql = "UPDATE IA_Monitor
-					SET Com_ID = NULL,
+					SET Dev_ID = NULL,
 						Barcode = :barcode, 
 						Merk = :merk, 
 						Type = :type, 
@@ -178,7 +178,7 @@ if(isset($_POST['update']))
 		}else{
         //updating the table
         $sql = "UPDATE IA_Monitor
-					SET Com_ID = :com_id,
+					SET Dev_ID = :Dev_ID,
 						Barcode = :barcode, 
 						Merk = :merk, 
 						Type = :type, 
@@ -188,7 +188,7 @@ if(isset($_POST['update']))
 				  WHERE Mon_ID = :id";
 				 
 		$query = $conn->prepare($sql);
-		$query->bindparam(":com_id", $com_id);
+		$query->bindparam(":Dev_ID", $Dev_ID);
 		$query->bindparam(':barcode', $barcode);
 		$query->bindparam(':merk', $merk);
 		$query->bindparam(':type', $type);

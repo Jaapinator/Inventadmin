@@ -23,15 +23,16 @@
 </nav>
 	<?php
 	$id = $_GET['view'];
-	$sql = "SELECT * FROM IA_Computer WHERE Com_ID = :id";
+	$sql = "SELECT * FROM IA_Devices WHERE Dev_ID = :id";
 	$query = $conn->prepare($sql);
 	$query->execute(array(':id' => $id));
 	while($row = $query->fetch(PDO::FETCH_ASSOC)){
 		$com_barcode = $row['Barcode'];
-		$com_naam = $row['Com_naam'];
+		$com_naam = $row['Naam'];
 		$ip = $row['Ip_adres'];
-		$com_merk = $row['Com_merk'];
-		$com_cpu = $row['CPU_naam'];
+		$com_merk = $row['Merk'];
+		$model = $row['Model'];
+		$com_cpu = $row['CPU'];
 		$com_mem = $row['Memory'];
 		$com_moed = $row['Moederbord'];
 		$com_serial = $row['Serialnummer'];
@@ -54,6 +55,7 @@
 		<tr><td>Computernaam: </td><td><?php echo $com_naam;?></td></tr>
 		<tr><td>Ip-adres: </td><td><?php echo $ip;?></td></tr>
 		<tr><td>Computermerk: </td><td><?php echo $com_merk;?></td></tr>
+		<tr><td>Model: </td><td><?php echo $model;?></td></tr>
 		<tr><td>Processor: </td><td><?php echo $com_cpu;?></td></tr>
 		<tr><td>Ram geheugen: </td><td><?php echo $com_mem;?></td></tr>
 		<tr><td>Moederbord: </td><td><?php echo $com_moed;?></td></tr>
@@ -70,7 +72,7 @@
   <div class="card-body">
     <h5 class="card-title">Gebruiker</h5>
   <?php
-  $sql = "SELECT * FROM IA_Gebruiker, IA_Locatie, IA_Locatie_RG WHERE Com_ID = :id AND IA_Locatie_RG.U_ID=IA_Gebruiker.U_ID AND IA_Locatie.Ruimte_ID=IA_Locatie_RG.Ruimte_ID";
+  $sql = "SELECT * FROM IA_Gebruiker, IA_Locatie, IA_Locatie_RG WHERE Dev_ID = :id AND IA_Locatie_RG.U_ID=IA_Gebruiker.U_ID AND IA_Locatie.Ruimte_ID=IA_Locatie_RG.Ruimte_ID";
   $query = $conn->prepare($sql);
   $query->execute(array(':id' => $id));
   $rows = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -96,7 +98,7 @@ foreach($rows as $row){
   <div class="card-body">
     <h5 class="card-title">Telefoon</h5>
   <?php
-  $sql = "SELECT * FROM IA_Gebruiker, IA_Telefoon, IA_Locatie_RG WHERE Com_ID = :id AND IA_Locatie_RG.U_ID=IA_Gebruiker.U_ID AND IA_Gebruiker.U_ID=IA_Telefoon.U_ID";
+  $sql = "SELECT * FROM IA_Gebruiker, IA_Telefoon, IA_Locatie_RG WHERE Dev_ID = :id AND IA_Locatie_RG.U_ID=IA_Gebruiker.U_ID AND IA_Gebruiker.U_ID=IA_Telefoon.U_ID";
   $query = $conn->prepare($sql);
   $query->execute(array(':id' => $id));
   $rows = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -118,67 +120,6 @@ foreach($rows as $row){
 	<?php
 }}else{
 	echo "<i>Geen telefoon gevonden</i>";
-}
-?>
-  </div>
-</div>
-<div class="card bg-light mb-3" style="max-width: 18rem;">
-  <div class="card-header">asdf</div>
-  <div class="card-body">
-    <h5 class="card-title">Laptop</h5>
-  <?php
-  $sql = "SELECT * FROM IA_Gebruiker, IA_Laptop, IA_Locatie_RG WHERE Com_ID = :id AND IA_Locatie_RG.U_ID=IA_Gebruiker.U_ID AND IA_Gebruiker.U_ID=IA_Laptop.U_ID";
-  $query = $conn->prepare($sql);
-  $query->execute(array(':id' => $id));
-  $rows = $query->fetchAll(PDO::FETCH_ASSOC);
-  
-$value = count($rows);
-if ($value !=0){
-foreach($rows as $row){
-	?>
-	<p class="card-text"><table>
-	<tr><td>Barcode: </td><td><?php echo $row['Barcode'];?></td></tr>
-	<tr><td>Merk: </td><td><?php echo $row['Merk'];?></td></tr>
-	<tr><td>CPU: </td><td><?php echo $row['CPU'];?></td></tr>
-	<tr><td>Memory: </td><td><?php echo $row['Memory'];?></td></tr>
-	<tr><td>Inch: </td><td><?php echo $row['Inch'];?></td></tr>
-	<tr><td>Aanschaf datum: </td><td><?php echo $row['Aanschaf_dat'];?></td></tr>
-	<tr><td>Aanschaf waarde: </td><td><?php echo "&euro; ".number_format((float)$row['Aanschaf_waarde'], 2, '.', '')."";?></td></tr>
-	<tr><td>Opmerkingen: </td><td><?php echo $row['Opmerkingen'];?></td></tr>
-	</table></p>
-	<?php
-}}else{
-	echo "<i>Geen laptop gevonden</i>";
-}
-?>
-  </div>
-</div>
-<div class="card bg-light mb-3" style="max-width: 18rem;">
-  <div class="card-header">asdf</div>
-  <div class="card-body">
-    <h5 class="card-title">Tablet</h5>
-  <?php
-  $sql = "SELECT * FROM IA_Gebruiker, IA_Tablet, IA_Locatie_RG WHERE Com_ID = :id AND IA_Locatie_RG.U_ID=IA_Gebruiker.U_ID AND IA_Gebruiker.U_ID=IA_Tablet.U_ID";
-  $query = $conn->prepare($sql);
-  $query->execute(array(':id' => $id));
-  $rows = $query->fetchAll(PDO::FETCH_ASSOC);
-  
-$value = count($rows);
-if ($value !=0){
-foreach($rows as $row){
-	?>
-	<p class="card-text"><table>
-	<tr><td>Barcode: </td><td><?php echo $row['Barcode'];?></td></tr>
-	<tr><td>Merk: </td><td><?php echo $row['Merk'];?></td></tr>
-	<tr><td>Model: </td><td><?php echo $row['Model'];?></td></tr>
-	<tr><td>Opslagcapaciteit: </td><td><?php echo $row['Opslagcapaciteit'];?></td></tr>
-	<tr><td>Inch: </td><td><?php echo $row['Inch'];?></td></tr>
-	<tr><td>Aanschaf datum: </td><td><?php echo $row['Aanschaf_dat'];?></td></tr>
-	<tr><td>Aanschaf waarde: </td><td><?php echo "&euro; ".number_format((float)$row['Aanschaf_waarde'], 2, '.', '')."";?></td></tr>
-	</table></p>
-	<?php
-}}else{
-	echo "<i>Geen tablet gevonden</i>";
 }
 ?>
   </div>
@@ -212,7 +153,7 @@ foreach($rows as $row){
 
         <div class="card-group">     
 <?php
-$sql = "SELECT * FROM IA_Monitor WHERE Com_ID = :id";
+$sql = "SELECT * FROM IA_Monitor WHERE Dev_ID = :id";
 $query = $conn->prepare($sql);
 $query->execute(array(':id' => $id));
 $rows = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -255,7 +196,7 @@ foreach($rows as $row){
     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
       <div class="card-body">
 <?php
-$sql = "SELECT * FROM IA_Software, IA_Software_RG WHERE Com_ID = :id AND IA_Software.Soft_ID=IA_Software_RG.Soft_ID";
+$sql = "SELECT * FROM IA_Software, IA_Software_RG WHERE Dev_ID = :id AND IA_Software.Soft_ID=IA_Software_RG.Soft_ID";
 $query = $conn->prepare($sql);
 $query->execute(array(':id' => $id));
 $rows = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -290,7 +231,7 @@ foreach($rows as $row){
     <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
       <div class="card-body">
 	  <?php
-  $sql = "SELECT * FROM IA_Randapparatuur WHERE Com_ID = :id";
+  $sql = "SELECT * FROM IA_Randapparatuur WHERE Dev_ID = :id";
   $query = $conn->prepare($sql);
   $query->execute(array(':id' => $id));
   $rows = $query->fetchAll(PDO::FETCH_ASSOC);

@@ -34,7 +34,7 @@ $(function(){
 <?php
 	$id = $_GET['edit'];
 	
-	$sql = "SELECT IA_Software.Soft_naam, IA_Computer.Barcode, IA_Software.Versie, IA_Software_RG.Aanschaf_dat, IA_Software_RG.Aanschaf_waarde, IA_Software_RG.Soft_ID, IA_Software_RG.Com_ID FROM IA_Computer, IA_Software, IA_Software_RG WHERE IA_Software_RG.Soft_ID=:id AND IA_Software.Soft_ID=IA_Software_RG.Soft_ID AND IA_Computer.Com_ID=IA_Software_RG.Com_ID";
+	$sql = "SELECT IA_Software.Soft_naam, IA_Devices.Barcode, IA_Software.Versie, IA_Software_RG.Aanschaf_dat, IA_Software_RG.Aanschaf_waarde, IA_Software_RG.Soft_ID, IA_Software_RG.Dev_ID FROM IA_Devices, IA_Software, IA_Software_RG WHERE IA_Software_RG.Soft_ID=:id AND IA_Software.Soft_ID=IA_Software_RG.Soft_ID AND IA_Devices.Dev_ID=IA_Software_RG.Dev_ID";
 	$query = $conn->prepare($sql);
 	$query->execute(array(':id' => $id));
 
@@ -42,7 +42,7 @@ $(function(){
 	{
 	$barcode = $row['Barcode'];
 	$soft_id = $row['Soft_ID'];
-	$com_id = $row['Com_ID'];
+	$Dev_ID = $row['Dev_ID'];
     $soft_naam = $row['Soft_naam'];
     $versie = $row['Versie'];
     $datum = $row['Aanschaf_dat'];
@@ -58,12 +58,12 @@ $(function(){
 		<H4>Software</H4>
 		<form name="form1" method="post" action="editSoft.php?edit=<?php $id; ?>">
 			<label>Computer barcode</label>
-			<?php $sql = $conn->query("SELECT Barcode, Com_ID FROM IA_Computer WHERE Barcode<>$barcode"); ?>
+			<?php $sql = $conn->query("SELECT Barcode, Dev_ID FROM IA_Devices WHERE Barcode<>$barcode"); ?>
 			
-					<select  name="com_id" required>
-					<option value="<?php echo $com_id; ?>" selected><?php echo $barcode ?></option><?php
+					<select  name="Dev_ID" required>
+					<option value="<?php echo $Dev_ID; ?>" selected><?php echo $barcode ?></option><?php
 					while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
-					   echo '<option value="'.$row['Com_ID'].'">'.$row['Barcode'].'</option>';
+					   echo '<option value="'.$row['Dev_ID'].'">'.$row['Barcode'].'</option>';
 					}?>
 					</select>
 			<label>Software & Versie</label>
@@ -90,7 +90,7 @@ if(isset($_POST['update']))
 {    
     $id = $_POST['id'];
     
-    $comid = trim($_POST['com_id']);
+    $comid = trim($_POST['Dev_ID']);
     $softid = trim($_POST['soft_id']);      
     $datum = trim($_POST['date']);    
     $waarde = trim($_POST['waarde']);    
@@ -113,7 +113,7 @@ if(isset($_POST['update']))
     } else {    
         //updating the table
         $sql = "UPDATE IA_Software_RG
-					SET Com_ID = :comid,
+					SET Dev_ID = :comid,
 						Soft_ID = :softid, 
 						Aanschaf_dat = :datum, 
 						Aanschaf_waarde = :waarde 

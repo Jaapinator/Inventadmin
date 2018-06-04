@@ -40,12 +40,12 @@ $(function(){
 	<H4> Voeg Monitor toe</H4>
 	<hr>
 	<form method='post' action='insertMonForm.php'>
-		<?php $sql = $conn->query("SELECT Com_ID, Barcode FROM IA_Computer"); ?>
+		<?php $sql = $conn->query("SELECT Dev_ID, Barcode FROM IA_Devices"); ?>
 		<label>Computer barcode: </label>
-			<select  name="com_id">'; 
+			<select  name="Dev_ID">'; 
 				<option style="display:none" value="">Kies barcode van computer</option>
 			<?php	while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
-					   echo '<option value="'.$row['Com_ID'].'">'.$row['Barcode'].'</option>';
+					   echo '<option value="'.$row['Dev_ID'].'">'.$row['Barcode'].'</option>';
 					} ?>
 			</select>
 		
@@ -71,7 +71,7 @@ $(function(){
 <?php
 if(isset($_POST['submit2'])){
     //id
-    $com_id = $_POST['com_id'];
+    $Dev_ID = $_POST['Dev_ID'];
     //array
     $mon_barcode = $_POST['mon_barcode'];
     $mon_merk = $_POST['mon_merk'];
@@ -80,8 +80,8 @@ if(isset($_POST['submit2'])){
     $mon_a_date = $_POST['mon_a_date'];
     $mon_a_prijs = $_POST['mon_a_prijs'];
 	
-	if($com_id == 0){
-		$sql = "INSERT INTO IA_Monitor (Com_ID, Barcode, Merk, Type, Inch, Aanschaf_dat, Aanschaf_waarde) VALUES (?,?,?,?,?,?,?)";
+	if($Dev_ID == 0){
+		$sql = "INSERT INTO IA_Monitor (Dev_ID, Barcode, Merk, Type, Inch, Aanschaf_dat, Aanschaf_waarde) VALUES (?,?,?,?,?,?,?)";
 		try {
 			$stmt = $conn->prepare($sql);
 			foreach ($mon_barcode as $i => $barcode) {
@@ -94,11 +94,11 @@ if(isset($_POST['submit2'])){
 		echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/insert/insertMonForm.php" />';
 		}
 	}else{
-		$sql = "INSERT INTO IA_Monitor (Com_ID, Barcode, Merk, Type, Inch, Aanschaf_dat, Aanschaf_waarde) VALUES (?,?,?,?,?,?,?)";
+		$sql = "INSERT INTO IA_Monitor (Dev_ID, Barcode, Merk, Type, Inch, Aanschaf_dat, Aanschaf_waarde) VALUES (?,?,?,?,?,?,?)";
 		try {
 			$stmt = $conn->prepare($sql);
 			foreach ($mon_barcode as $i => $barcode) {
-				$stmt->execute([$com_id, $barcode, $mon_merk[$i], $mon_type[$i], $mon_inch[$i], $mon_a_date[$i], $mon_a_prijs[$i]]);
+				$stmt->execute([$Dev_ID, $barcode, $mon_merk[$i], $mon_type[$i], $mon_inch[$i], $mon_a_date[$i], $mon_a_prijs[$i]]);
 				echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
 			}
 		} catch (\PDOException $e) {

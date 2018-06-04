@@ -24,18 +24,18 @@ input, select{
 <?php
 	$id = $_GET['edit'];
 	
-	$sql = "SELECT IA_Locatie_RG.Com_ID, IA_Locatie_RG.Ruimte_ID, IA_Gebruiker.Gebruiker, IA_Gebruiker.Mailadres, IA_Computer.Barcode, Ruimte_naam FROM IA_Gebruiker, IA_Computer, IA_Locatie, IA_Locatie_RG WHERE IA_Gebruiker.U_ID=:id AND IA_Computer.Com_ID=IA_Locatie_RG.Com_ID AND IA_Locatie_RG.Ruimte_ID=IA_Locatie.Ruimte_ID AND IA_Gebruiker.U_ID=IA_Locatie_RG.U_ID";
+	$sql = "SELECT Dev_ID  as ID, Ruimte_ID as RuID, (SELECT Barcode FROM IA_Devices WHERE IA_Locatie_RG.Dev_ID=IA_Devices.Dev_ID) as Bar, (SELECT Ruimte_naam FROM IA_Locatie WHERE IA_Locatie_RG.Ruimte_ID=IA_Locatie.Ruimte_ID) as RID, (SELECT Gebruiker FROM IA_Gebruiker WHERE IA_Locatie_RG.U_ID=IA_Gebruiker.U_ID) as Geb, (SELECT Mailadres FROM IA_Gebruiker WHERE IA_Locatie_RG.U_ID=IA_Gebruiker.U_ID) as Mail FROM IA_Locatie_RG WHERE U_ID = :id ";
 	$query = $conn->prepare($sql);
 	$query->execute(array(':id' => $id));
 
 	while($row = $query->fetch(PDO::FETCH_ASSOC))
 	{
-	$barcode = $row['Barcode'];
-	$com_id = $row['Com_ID'];
-	$ruimte_id = $row['Ruimte_ID'];
-    $user = $row['Gebruiker'];
-    $mail = $row['Mailadres'];
-	$rnaam = $row['Ruimte_naam'];
+	$barcode = $row['Bar'];
+	$Dev_ID = $row['ID'];
+	$ruimte_id = $row['RuID'];
+    $user = $row['Geb'];
+    $mail = $row['Mail'];
+	$rnaam = $row['RID'];
 	}
 	
 	
@@ -47,15 +47,15 @@ input, select{
 		<hr>
 		<form name="form1" method="post" action="editUser.php?edit=<?php $id; ?>">
 		<div class="form-group">
-		<label class="control-label col-sm-2" for="com_id">Computer barcode:</label>
+		<label class="control-label col-sm-2" for="Dev_ID">Computer barcode:</label>
 			<div class="col-sm-10">
-			<?php $sql = $conn->query("SELECT Com_ID, Barcode FROM IA_Computer"); ?>
+			<?php $sql = $conn->query("SELECT Dev_ID, Barcode FROM IA_Devices"); ?>
 			
-					<select  name="com_id">
-					<option value="<?php echo $com_id; ?>" selected><?php echo $barcode ?></option>
+					<select  name="Dev_ID">
+					<option value="<?php echo $Dev_ID; ?>" selected><?php echo $barcode ?></option>
 					<option value=""> Geen computer</option>
 			<?php	while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
-					   echo '<option value="'.$row['Com_ID'].'">'.$row['Barcode'].'</option>';
+					   echo '<option value="'.$row['Dev_ID'].'">'.$row['Barcode'].'</option>';
 					}?>
 					</select>
 			</div>
@@ -97,7 +97,7 @@ if(isset($_POST['update']))
 {    
     $id = $_POST['id'];
     
-    $com_id = $_POST['com_id'];
+    $Dev_ID = $_POST['Dev_ID'];
     $ruimte_id = $_POST['ruimte_id'];
     $user = trim($_POST['user']);    
     $mail = trim($_POST['mail']);     
@@ -114,11 +114,11 @@ if(isset($_POST['update']))
             echo "<font color='red'>E-mail niet ingevuld.</font><br/>";
         } 
     } else {    
-		if($com_id == 0){
+		if($Dev_ID == 0){
 			//updating the table
 			
 			$sql = "UPDATE IA_Locatie_RG
-					SET Com_ID = NULL,
+					SET Dev_ID = NULL,
 					Ruimte_ID = :ruimte_id
 					WHERE U_ID = :id";
 					 
@@ -141,12 +141,12 @@ if(isset($_POST['update']))
 			echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
 		}else{
 			$sql = "UPDATE IA_Locatie_RG
-					SET Com_ID = :com_id,
+					SET Dev_ID = :Dev_ID,
 					Ruimte_ID = :ruimte_id
 					WHERE U_ID = :id";
 					 
 			$query = $conn->prepare($sql);
-			$query->bindparam(':com_id', $com_id);
+			$query->bindparam(':Dev_ID', $Dev_ID);
 			$query->bindparam(':ruimte_id', $ruimte_id);
 			$query->bindparam(':id', $id);
 			$query->execute();

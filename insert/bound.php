@@ -21,13 +21,13 @@
 	<hr>
 	<form method="post" action="bound.php" id="bound_form">
 	<div class="form-group">
-		<label class="control-label col-sm-2" for="com_id">Computer barcode:</label>
+		<label class="control-label col-sm-2" for="Dev_ID">Computer barcode:</label>
 	<div class="col-sm-10">
-	<?php $sql = $conn->query("SELECT Com_ID, Barcode FROM IA_Computer"); ?>
-			<select  name="comid" required>
+	<?php $sql = $conn->query("SELECT Dev_ID, Barcode FROM IA_Devices"); ?>
+			<select  name="comid">
 				<option style="display:none" value="">Kies computerbarcode</option>
 			<?php 	while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
-					   echo '<option value="'.$row['Com_ID'].'">'.$row['Barcode'].'</option>';
+					   echo '<option value="'.$row['Dev_ID'].'">'.$row['Barcode'].'</option>';
 					} ?>
 			</select>
 		</div>
@@ -71,7 +71,7 @@ $userid = $_POST['userid'];
 $ruimteid = $_POST['ruimteid'];
 
 	try{
-		$stmt = $conn->prepare("INSERT INTO IA_Locatie_RG (Com_ID, U_ID, Ruimte_ID)
+		$stmt = $conn->prepare("INSERT INTO IA_Locatie_RG (Dev_ID, U_ID, Ruimte_ID)
 								VALUES (?,?,?)");
 		$stmt->execute([$comid, $userid, $ruimteid]);
 		echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';

@@ -49,13 +49,13 @@ input, select{
 	<hr>
 	<form id='soft_form' action='insertSoftForm.php' method='post'>
 	<div class="form-group">
-		<label class="control-label col-sm-2" for="com_id">Computer barcode:</label>
+		<label class="control-label col-sm-2" for="Dev_ID">Computer barcode:</label>
 		<div class="col-sm-10">
-			<?php	$sql = $conn->query("SELECT Com_ID, Barcode FROM IA_Computer"); ?>
-			<select  name="com_id">
+			<?php	$sql = $conn->query("SELECT Dev_ID, Barcode FROM IA_Devices"); ?>
+			<select  name="Dev_ID">
 				<option style="display:none" value="">Kies barcode van computer</option>
 			<?php	while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
-						echo '<option value="'.$row['Com_ID'].'">'.$row['Barcode'].'</option>';
+						echo '<option value="'.$row['Dev_ID'].'">'.$row['Barcode'].'</option>';
 					} ?>
 			</select>
 		</div>
@@ -96,14 +96,14 @@ input, select{
 <?php
 if(isset($_POST['submit4'])){
 	$soft_id = trim($_POST['soft_id']);
-	$com_id = trim($_POST['com_id']);
+	$Dev_ID = trim($_POST['Dev_ID']);
 	$soft_a_date = trim($_POST['soft_a_date']);
 	$soft_a_prijs = trim($_POST['soft_a_prijs']);
 
 try {
-	$stmt = $conn->prepare("INSERT INTO IA_Software_RG (Soft_ID, Com_ID, Aanschaf_dat, Aanschaf_waarde)
+	$stmt = $conn->prepare("INSERT INTO IA_Software_RG (Soft_ID, Dev_ID, Aanschaf_dat, Aanschaf_waarde)
 							VALUES (?,?,?,?)");
-	$stmt->execute([$soft_id, $com_id, $soft_a_date, $soft_a_prijs]);	
+	$stmt->execute([$soft_id, $Dev_ID, $soft_a_date, $soft_a_prijs]);	
 	echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
 }catch(PDOException $e){
 	//echo $stmt . "<br>" . $e->getMessage();

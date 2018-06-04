@@ -5,9 +5,9 @@
 	include "../includes/style.css";
 ?></style><?php	
 		
-		$com_id = $_REQUEST['edit'];
+		$Dev_ID = $_REQUEST['edit'];
 		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$sql = "DELETE FROM IA_Computer WHERE Com_ID = $com_id";
+		$sql = "DELETE FROM IA_Devices WHERE Dev_ID = $Dev_ID";
 			if ($conn->query($sql)) {
 				echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
 			}
