@@ -57,7 +57,7 @@ input, select, textarea{
 	<div class="form-group">
 		<label class="control-label col-sm-2" for="com_ip">Ip-adres:</label>
 		<div class="col-sm-10">
-			<input type='text' name='com_ip' placeholder='Ip-adres' class='form-control' required>
+			<input type='text' name='com_ip' placeholder='Ip-adres' class='form-control'>
 		</div>
 	</div>
 	<div class="form-group">
@@ -148,7 +148,73 @@ if (isset($_POST['submit']))
 	$fileSize = $_FILES['file']['size'];
 	$fileError = $_FILES['file']['error'];
 	$fileType = $_FILES['file']['type'];
-			
+	if($com_ip == NULL){
+		if ($_FILES['file']['error'] == 4)
+			{
+			try
+				{
+				$stmt = $conn->prepare("INSERT INTO IA_Devices (Barcode, Naam, Ip_adres, Merk, Model, CPU, Memory, Moederbord, Serialnummer, Aanschaf_dat, Aanschaf_waarde, Opmerkingen, Picture_dev)
+													VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+				$stmt->execute([$com_barcode, $com_naam, $com_ip, $com_merk, $com_model, $com_cpu, $com_ram, $com_moed, $com_serial, $com_a_date, $com_a_prijs, $comment, NULL]);
+				echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
+				}
+
+			catch(PDOException $e)
+				{
+				echo $stmt . "<br />" . $e->getMessage();
+				echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/insert/insertComForm.php" />';
+				}
+			}
+		  else
+			{
+			$fileExt = explode('.', $fileName);
+			$fileActualExt = strtolower(end($fileExt));
+			$allowed = array(
+				'jpg',
+				'jpeg',
+				'png'
+			);
+			if (in_array($fileActualExt, $allowed))
+				{
+				if ($fileError === 0)
+					{
+					if ($fileSize < 1000000)
+						{
+						$fileNameNew = uniqid('', true) . "." . $fileActualExt;
+						$fileDestination = '//WEBSERVER03/Portal$/inventadmin/includes/images/devices/' . $fileNameNew;
+						move_uploaded_file($fileTmpName, $fileDestination);
+						try
+							{
+							$dir = 'includes/images/devices/';
+							$img = $dir . $fileNameNew;
+							$stmt = $conn->prepare("INSERT INTO IA_Devices (Barcode, Naam, Ip_adres, Merk, Model, CPU, Memory, Moederbord, Serialnummer, Aanschaf_dat, Aanschaf_waarde, Opmerkingen, Picture_dev)
+														VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+							$stmt->execute([$com_barcode, $com_naam, $com_ip, $com_merk, $com_model, $com_cpu, $com_ram, $com_moed, $com_serial, $com_a_date, $com_a_prijs, $comment, $img]);
+							echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
+							}
+
+						catch(PDOException $e)
+							{
+							echo $stmt . "<br />" . $e->getMessage();
+							echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/insert/insertComForm.php" />';
+							}
+						}
+					  else
+						{
+						echo "Your file is too big!";
+						}
+					}
+				  else
+					{
+					echo "There was an error uploading your file!";
+					}
+				}
+			  else
+				{
+				echo "You can't upload files of this type!";
+				}
+			}
+	}else{	
 	$result = $conn->prepare("SELECT count(*) FROM IA_Devices WHERE Ip_adres=:ip");
 	$result->bindParam(':ip', $com_ip, PDO::PARAM_STR);
 	$result->execute();
@@ -228,6 +294,6 @@ if (isset($_POST['submit']))
 		echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/insert/insertComForm.php" />';
 		}
 	}
-
+	}
 $conn = null;
 ?>

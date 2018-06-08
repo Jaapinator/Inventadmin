@@ -7,6 +7,7 @@ include ("../includes/connection.php");
 if(isset($_POST['submit']))
 {
 $id = $_POST['view'];
+$uid = $_POST['user'];
 $opmerk = $_POST['comment'];	
 
 if(empty($opmerk)){
@@ -18,7 +19,7 @@ $query->bindparam(":id", $id);
 $query->execute();
 
 $conn = null;
-echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/view.php?view='.$id.'" />';
+echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/view.php?view='.$uid.'" />';
 }
 else{
 $sql = "UPDATE IA_Devices
@@ -30,7 +31,7 @@ $query->bindparam(":id", $id);
 $query->execute();
 
 $conn = null;
-echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/view.php?view='.$id.'" />';
+echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/view.php?view='.$uid.'" />';
 }	
 
 }

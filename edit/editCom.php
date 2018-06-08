@@ -19,6 +19,11 @@ $(function(){
     $('#picker').attr('max', maxDate);
 });
 </script>
+<style>
+input, select, textarea{
+	max-width: 275px;
+}
+</style>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
 	<a class="navbar-brand" href="https://portal.basrt.eu/">Inventadmin</a>
 	<div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -50,6 +55,7 @@ $(function(){
     $serial = $row['Serialnummer'];
     $datum = $row['Aanschaf_dat'];
     $waarde = $row['Aanschaf_waarde'];
+    $comment = $row['Opmerkingen'];
 	
 	$newDate = date("Y-m-d", strtotime($datum));
 	}
@@ -57,35 +63,83 @@ $(function(){
 	
 ?> 
 <body>
-	<div class="form">
-		<H4>Computer</H4>
-		<form name="form1" method="post" action="editCom.php?edit= <?php $id; ?>">
-		<label>Barcode</label>
-			<input type="text" name="barcode"   value="<?php echo $barcode;?>">
-		<label>Computernaam</label>
-			<input type="text" name="naam" value="<?php echo $naam;?>">
-		<label>Ip-adres</label>
-			<input type="text" name="ip"  value="<?php echo $ip;?>">
-		<label>Merk</label>
-			<input type="text" name="merk" value="<?php echo $merk;?>">
-		<label>Model</label>
-			<input type="text" name="model" value="<?php echo $model;?>">
-		<label>Processor</label>
-			<input type="text" name="cpu" value="<?php echo $cpu;?>">
-		<label>RAM-Memory</label>	
-			<input type="text" name="mem" value="<?php echo $mem;?>">
-		<label>Moederbord</label>
-			<input type="text" name="moed" value="<?php echo $moed;?>">
-		<label>Serialnummer</label>
-			<input type="text" name="serial" value="<?php echo $serial;?>">
-		<label>Aanschaf datum</label>
-			<input type="date" id="picker" name="date" value="<?php echo $newDate;?>">
-		<label>Aanschaf waarde</label>
-			<input type="text" name="waarde" value="<?php echo $waarde;?>">
-			<input type="hidden" name="id" value="<?php echo $_GET['edit'];?>">
-			<input type="submit" name="update" value="Update">
-		</form>
+<H4>Computer</H4>
+<form name="form1" method="post" class="form-group" action="editCom.php?edit= <?php $id; ?>">
+		<div class="form-group">
+		<label class="control-label col-sm-2" for="barcode">Computer barcode:</label>
+		<div class="col-sm-10">
+			<input type='text' name='barcode' value="<?php echo $barcode; ?>"  placeholder='Barcode' class='form-control' required>
+		</div>
 	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="naam">Computernaam:</label>
+		<div class="col-sm-10">
+			<input type='text' name='naam' value="<?php echo $naam; ?>" placeholder='Computernaam' class='form-control' required>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="ip">Ip-adres:</label>
+		<div class="col-sm-10">
+			<input type='text' name='ip' value="<?php echo $ip; ?>" placeholder='Ip-adres' class='form-control'>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="merk">Merk:</label>
+		<div class="col-sm-10">
+			<input type='text' name='merk' value="<?php echo $merk; ?>" placeholder='Merk' class='form-control'>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="model">Model:</label>
+		<div class="col-sm-10">
+			<input type='text' name='model' value="<?php echo $model; ?>" placeholder='Model' class='form-control'>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="cpu">Processor:</label>
+		<div class="col-sm-10">
+			<input type='text' name='cpu' value="<?php echo $cpu; ?>" placeholder='CPU' class='form-control'>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="mem">Ram geheugen:</label>
+		<div class="col-sm-10">
+			<input type='text' name='mem' value="<?php echo $mem; ?>" placeholder='RAM' class='form-control'>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="moed">Moederbord:</label>
+		<div class="col-sm-10">
+			<input type='text' name='moed' value="<?php echo $moed; ?>" placeholder='Moederbord' class='form-control'>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="erial">Serialnummer:</label>
+		<div class="col-sm-10">
+			<input type='text' name='serial' value="<?php echo $serial; ?>" placeholder='Serialnummer' class='form-control'>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="date">Aanschaf datum:</label>
+		<div class="col-sm-10">
+			<input type='date' id='picker' value="<?php echo $newDate; ?>" name='date' class='form-control'>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="waarde">Aanschaf waarde:</label>
+		<div class="col-sm-10">
+			<input type='text' name='waarde' value="<?php echo $waarde; ?>" placeholder='Aanschaf waarde' class='form-control'>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="comment">Opmerkingen:</label>
+		<div class="col-sm-10">
+			<textarea  rows="5" name='comment' placeholder='Opmerkingen' class="form-control"><?php echo $comment; ?></textarea>
+		</div>
+	</div>
+		<input type="hidden" name="id" value="<?php echo $_GET['edit'];?>">
+		<input type='submit' name='update' class='btn btn-success' value='Update'>
+</form>
 </body>
 </html>
 <?php
@@ -104,8 +158,9 @@ if(isset($_POST['update']))
     $serial = trim($_POST['serial']);    
     $datum = trim($_POST['date']);    
     $waarde = trim($_POST['waarde']);    
+    $opmerkingen = trim($_POST['comment']);    
 	
-    if(empty($barcode) || empty($merk) || /*empty($model) ||*/ empty($naam) || empty($ip) || empty($cpu) || empty($mem) || empty($moed) ||/* empty($serial) || */empty($datum) || empty($waarde)) {    
+    if(empty($barcode) || empty($merk)) {    
             
         if(empty($barcode)) {
             echo "<font color='red'>Barcode niet ingevuld.</font><br/>";
@@ -113,33 +168,6 @@ if(isset($_POST['update']))
 		if(empty($naam)) {
             echo "<font color='red'>Computer naam niet ingevuld.</font><br/>";
         }
-        if(empty($merk)) {
-            echo "<font color='red'>Computer merk niet ingevuld.</font><br/>";
-        }
-        /*if(empty($model)) {
-            echo "<font color='red'>Model niet ingevuld.</font><br/>";
-        }*/
-        if(empty($ip)) {
-            echo "<font color='red'>Ip-adres niet ingevuld.</font><br/>";
-        }      
-		if(empty($cpu)) {
-            echo "<font color='red'>CPU niet ingevuld.</font><br/>";
-        } 
-		if(empty($mem)) {
-            echo "<font color='red'>Ram niet ingevuld.</font><br/>";
-        } 
-		if(empty($moed)) {
-            echo "<font color='red'>Moederbord niet ingevuld.</font><br/>";
-        } 
-		/*if(empty($serial)) {
-            echo "<font color='red'>Serialnummer niet ingevuld.</font><br/>";
-        } */
-		if(empty($datum)) {
-            echo "<font color='red'>Aanschaf datum niet ingevuld.</font><br/>";
-        } 
-		if(empty($waarde)) {
-            echo "<font color='red'>Aanschaf waarde niet ingevuld.</font><br/>";
-        } 
     } else {    
         //updating the table
         $sql = "UPDATE IA_Devices
@@ -153,7 +181,8 @@ if(isset($_POST['update']))
 						Moederbord = :moed, 
 						Serialnummer = :serial, 
 						Aanschaf_dat = :datum, 
-						Aanschaf_waarde = :waarde 
+						Aanschaf_waarde = :waarde, 
+						Opmerkingen = :comment 
 				  WHERE Dev_ID = :id";
 				 
 		$query = $conn->prepare($sql);
@@ -168,6 +197,7 @@ if(isset($_POST['update']))
 		$query->bindparam(':serial', $serial);
 		$query->bindparam(':datum', $datum);
 		$query->bindparam(':waarde', $waarde);
+		$query->bindparam(':comment', $opmerkingen);
 		$query->bindparam(':id', $id);
 		$query->execute();
 		

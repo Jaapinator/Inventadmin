@@ -19,6 +19,11 @@ $(function(){
     $('#picker').attr('max', maxDate);
 });
 </script>
+<style>
+input, select, textarea{
+	max-width: 275px;
+}
+</style>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
 	<a class="navbar-brand" href="https://portal.basrt.eu/">Inventadmin</a>
 	<div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -56,41 +61,80 @@ $(function(){
 	
 ?> 
 <body>
-	<div class="form">
-		<H4>Telefoon</H4>
-		<label>Gebruiker</label>
-			<form name="form1" method="post" action="editGsm.php?edit=<?php $id; ?>" enctype="multipart/form-data">
+
+<H4>Telefoon</H4>
+<form name="form1" method="post" class="form-group" action="editCom.php?edit= <?php $id; ?>">
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="userid">Gebruiker:</label>
+			<div class="col-sm-10">
 			<?php $sql = $conn->query("SELECT U_ID, Gebruiker FROM IA_Gebruiker"); ?>
 			
-					<select  name="userid" required> 
+					<select  name="userid">
 					<option value="<?php echo $user_id; ?>" selected><?php echo $gebruiker ?></option>
+					<option value=""> Geen computer</option>
 			<?php	while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
 					   echo '<option value="'.$row['U_ID'].'">'.$row['Gebruiker'].'</option>';
 					} ?>
 					</select>
-		<label>Telefoonnummer</label>
-			<input type="text" name="nummer"  value="<?php echo $nummer;?>">
-		<label>Merk</label>
-			<input type="text" name="merk" value="<?php echo $merk;?>">
-		<label>Model</label>
-			<input type="text" name="model"  value="<?php echo $model;?>">
-		<label>Serialnummer</label>
-			<input type="text" name="serial"  value="<?php echo $serial;?>">
-		<label>IMEI-nummer</label>
-			<input type="text" name="imeireq"  value="<?php echo $imeireq;?>">
-		<label>IMEI-nummer <i>(Niet verplicht!)</i></label>
-			<input type="text" name="imeiopt"  value="<?php echo $imeiopt;?>">
-		<label>Aanschaf datum</label>
-			<input type="date" id="picker" name="date" value="<?php echo $newDate;?>">
-		<label>Aanschaf waarde</label>
-			<input type="text" name="waarde" value="<?php echo $waarde;?>">
-		<label>Foto telefoon</label>
-		<br>
-			<input type="file" name="file">
-			<input type="hidden" name="id" value="<?php echo $_GET['edit'];?>">
-			<input type="submit" name="update" value="Update">
-		</form>
+			</div>
+		</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="nummer">Telefoonnummer:</label>
+		<div class="col-sm-10">
+			<input type='text' name='nummer' value="<?php echo $nummer; ?>"  placeholder='Telefoonnummer' class='form-control' required>
+		</div>
 	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="merk">Merk:</label>
+		<div class="col-sm-10">
+			<input type='text' name='merk' value="<?php echo $merk; ?>" placeholder='Merk' class='form-control'>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="model">Model:</label>
+		<div class="col-sm-10">
+			<input type='text' name='model' value="<?php echo $model; ?>" placeholder='Model' class='form-control'>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="serial">Serialnummer:</label>
+		<div class="col-sm-10">
+			<input type='text' name='serial' value="<?php echo $serial; ?>" placeholder='Serialnummer' class='form-control'>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="imeireq">IMEI-nummer:</label>
+		<div class="col-sm-10">
+			<input type='text' name='imeireq' value="<?php echo $imeireq; ?>" placeholder='IMEI-nummer' class='form-control'>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="imeiopt">IMEI-nummer: <i>(Niet verplicht!)</i></label>
+		<div class="col-sm-10">
+			<input type='text' name='imeiopt' value="<?php echo $imeiopt; ?>" placeholder='IMEI-nummer' class='form-control'>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="date">Aanschaf datum:</label>
+		<div class="col-sm-10">
+			<input type='date' id='picker' value="<?php echo $newDate; ?>" name='date' class='form-control'>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="waarde">Aanschaf waarde:</label>
+		<div class="col-sm-10">
+			<input type='text' name='waarde' value="<?php echo $waarde; ?>" placeholder='Aanschaf waarde' class='form-control'>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="file">Afbeelding apparaat:</label>
+		<div class="col-sm-10">
+			<input type="file" name="file">
+		</div>
+	</div>
+		<input type="hidden" name="id" value="<?php echo $_GET['edit'];?>">
+		<input type='submit' name='update' class='btn btn-success' value='Update'>
+</form>
 </body>
 </html>
 <?php

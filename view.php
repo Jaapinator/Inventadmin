@@ -2,11 +2,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge;" /><?php
 	include "includes/connection.php";
 	include "includes/scripts.php";
-?><style>
-.card:first-of-type{
-	border-bottom: 25px;
-}
-</style></head><body>
+?></head><body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
 	<a class="navbar-brand" href="https://portal.basrt.eu/">Inventadmin</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,10 +19,11 @@
 </nav>
 	<?php
 	$id = $_GET['view'];
-	$sql = "SELECT * FROM IA_Devices WHERE Dev_ID = :id";
+	$sql = "SELECT * FROM IA_Devices d JOIN IA_Locatie_RG i ON i.Dev_ID=d.Dev_ID WHERE i.U_ID = :id";
 	$query = $conn->prepare($sql);
 	$query->execute(array(':id' => $id));
 	while($row = $query->fetch(PDO::FETCH_ASSOC)){
+		$dev_id = $row['Dev_ID'];
 		$com_barcode = $row['Barcode'];
 		$com_naam = $row['Naam'];
 		$ip = $row['Ip_adres'];
@@ -68,13 +65,13 @@
   </div>
 </div>
 <div class="card bg-light mb-3" style="max-width: 18rem;">
-  <div class="card-header">asdf</div>
+  <div class="card-header">*</div>
   <div class="card-body">
     <h5 class="card-title">Gebruiker</h5>
   <?php
   $sql = "SELECT * FROM IA_Gebruiker, IA_Locatie, IA_Locatie_RG WHERE Dev_ID = :id AND IA_Locatie_RG.U_ID=IA_Gebruiker.U_ID AND IA_Locatie.Ruimte_ID=IA_Locatie_RG.Ruimte_ID";
   $query = $conn->prepare($sql);
-  $query->execute(array(':id' => $id));
+  $query->execute(array(':id' => $dev_id));
   $rows = $query->fetchAll(PDO::FETCH_ASSOC);
   
 $value = count($rows);
@@ -94,13 +91,13 @@ foreach($rows as $row){
   </div>
 </div>
 <div class="card bg-light mb-3" style="max-width: 18rem;">
-  <div class="card-header">asdf</div>
+  <div class="card-header">*</div>
   <div class="card-body">
     <h5 class="card-title">Telefoon</h5>
   <?php
   $sql = "SELECT * FROM IA_Gebruiker, IA_Telefoon, IA_Locatie_RG WHERE Dev_ID = :id AND IA_Locatie_RG.U_ID=IA_Gebruiker.U_ID AND IA_Gebruiker.U_ID=IA_Telefoon.U_ID";
   $query = $conn->prepare($sql);
-  $query->execute(array(':id' => $id));
+  $query->execute(array(':id' => $dev_id));
   $rows = $query->fetchAll(PDO::FETCH_ASSOC);
   
 $value = count($rows);
@@ -126,14 +123,15 @@ foreach($rows as $row){
 </div>
 
 <div class="card bg-light mb-3" style="max-width: 18rem;">
-  <div class="card-header">asdf</div>
+  <div class="card-header">*</div>
   <div class="card-body">
     <h5 class="card-title">Opmerkingen</h5>
   <div class="comm">
     <label>Voeg opmerkingen toe</label><br>
 	<form id="comment" action="edit/updateOpmerk.php" method="post">
 	<textarea name="comment" style="resize:none; width: 100%; height: 20%;"><?php echo $comm;?></textarea><br>
-	<input type="hidden" name="view" value="<?php echo $id;?>"/>
+	<input type="hidden" name="view" value="<?php echo $dev_id;?>"/>
+	<input type="hidden" name="user" value="<?php echo $id;?>"/>
 	<input type="submit" value="Edit" name="submit" class='btn btn-success' />
 	</form>
   </div>
@@ -155,7 +153,7 @@ foreach($rows as $row){
 <?php
 $sql = "SELECT * FROM IA_Monitor WHERE Dev_ID = :id";
 $query = $conn->prepare($sql);
-$query->execute(array(':id' => $id));
+$query->execute(array(':id' => $dev_id));
 $rows = $query->fetchAll(PDO::FETCH_ASSOC);
 
 $value = count($rows);
@@ -198,7 +196,7 @@ foreach($rows as $row){
 <?php
 $sql = "SELECT * FROM IA_Software, IA_Software_RG WHERE Dev_ID = :id AND IA_Software.Soft_ID=IA_Software_RG.Soft_ID";
 $query = $conn->prepare($sql);
-$query->execute(array(':id' => $id));
+$query->execute(array(':id' => $dev_id));
 $rows = $query->fetchAll(PDO::FETCH_ASSOC);
 
 $value = count($rows);
@@ -233,7 +231,7 @@ foreach($rows as $row){
 	  <?php
   $sql = "SELECT * FROM IA_Randapparatuur WHERE Dev_ID = :id";
   $query = $conn->prepare($sql);
-  $query->execute(array(':id' => $id));
+  $query->execute(array(':id' => $dev_id));
   $rows = $query->fetchAll(PDO::FETCH_ASSOC);
   
 $value = count($rows);
