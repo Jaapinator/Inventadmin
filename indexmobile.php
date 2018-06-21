@@ -8,6 +8,7 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 		  <script> <?php include "includes/js/my_js.js"; ?> </script>	
 		 <script><?php include "includes/js/menuswitch.js"; ?>	</script>
 		 <script><?php include "includes/js/scanner.js"; ?> </script> 
+		 <script><?php include "../includes/js/maxtime.js" ?> </script> 
   <script type="text/javascript" src="includes/js/quagga.min.js"></script>
 		 </head>
 <body>
@@ -23,17 +24,15 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 				  Item toevoegen
 				</a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-				    <a class="dropdown-item" href='insert/insertComForm.php'>Computer</a>
+				    <a class="dropdown-item" href='insert/insertComForm.php'>Apparaat</a>
 					<a class="dropdown-item" href='insert/insertMonForm.php'>Monitor</a>
 					<a class="dropdown-item" href='insert/insertSoftForm.php'>Software</a>
 					<a class="dropdown-item" href='insert/insertRandForm.php'>Randapparatuur</a>
 					<a class="dropdown-item" href='insert/insertGsmForm.php'>Telefoon</a>
-					<a class="dropdown-item" href='insert/insertTabForm.php'>Tablet</a>
-					<a class="dropdown-item" href='insert/insertLapForm.php'>Laptop</a>
 				</div>
 			  </li>
 			  <li class="nav-item">
-				<a class="nav-link" href='insert/bound.php'>Computer koppelen</a>
+				<a class="nav-link" href='insert/bound.php'>Apparaat koppelen</a>
 			  </li>
 			  <li class="nav-item">
 				<a class="nav-link" href='insert/insertUserForm.php'>Gebruiker toevoegen</a>
@@ -42,16 +41,13 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 				<a class="nav-link" href="#" data-toggle="modal" data-target="#myModal">Barcode scanner</a>
 			  </li>
 		<select id='drop' class='keuze' style="float:right;">
-		<option class='keuze' value='table1' selected>Computer</option>
+		<option class='keuze' value='table1' selected>Apparaat</option>
 		<option class='keuze' value='table2'>Monitor</option>
 		<option class='keuze' value='table3'>Software</option>
 		<option class='keuze' value='table4'>Gebruiker</option>
 		<option class='keuze' value='table5'>Randapparatuur</option>
 		<option class='keuze' value='table6'>Telefoon</option>
-		<option class='keuze' value='table7'>Tablet</option>
-		<option class='keuze' value='table8'>Laptop</option>
 		</select>
-		
 		</ul>
 	</div>
 </nav>
@@ -65,21 +61,21 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 	</div>
 </div>	
 
-	
-<div id='divtable1' class='table' >
-	<table id='table1' class='table table-striped table-bordered' cellspacing='0' width='100%'> 
+<div id='divtable1' class='table' style="margin-top:17px;">
+	<table id='table1' class='table table-striped table-bordered' cellspacing='0' width='100%' > 
 		<thead><tr><th>Barcode</th><th>Computernaam</th><th>Ip-adres</th><th>CPU</th><th>RAM</th><th>Moederbord</th><th>Aanschaf datum</th><th></th></tr></thead><tbody>
-		<?php $stmt = $conn->query('SELECT * FROM IA_Computer ORDER BY Barcode');
+		<?php 
+		$stmt = $conn->query('SELECT *, (SELECT U_ID FROM IA_Locatie_RG WHERE IA_Locatie_RG.Dev_ID=IA_Devices.Dev_ID) as usr FROM IA_Devices ORDER BY Barcode');
 		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 			$newDate = date("d-m-Y", strtotime($row['Aanschaf_dat']));
 			echo "<tr><td>";
 			echo $row['Barcode'];
 			echo "</td><td>";
-			echo strip_tags($row['Com_naam']);
+			echo strip_tags($row['Naam']);
 			echo "</td><td>";
-			echo strip_tags($row['Ip_adres']);
+			if($row['Ip_adres'] == NULL) { echo "DHCP"; } else { echo $row['Ip_adres']; }
 			echo "</td><td>";
-			echo strip_tags($row['CPU_naam']);
+			echo strip_tags($row['CPU']);
 			echo "</td><td>";
 			echo strip_tags($row['Memory']);
 			echo "</td><td>";
@@ -87,9 +83,9 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 			echo "</td><td >";
 			echo $row['Aanschaf_dat']; ?>
 			</td><td class='knoppen'><?php
-			echo "<a class='btn btn-outline-info btn-sm' style='margin-right:5px;' href='view.php?view=$row[Com_ID]' ><i class='fas fa-eye fa-s'></i> View</a>";
-			echo "<a class='btn btn-outline-success btn-sm' style='margin-right:5px;' href='edit/editCom.php?edit=$row[Com_ID]' ><i class='far fa-edit fa-s'></i> Edit</a>";
-			echo "<a class='btn btn-outline-danger btn-sm' href='delete/delCom.php?edit=$row[Com_ID]' onClick=\"return confirm('Weet je zeker dat je dit item wilt verwijderen?')\"><i class='far fa-trash-alt fa-s'></i> Delete</a>
+			if($row['usr'] == NULL) {  } else { echo "<a class='btn btn-outline-info btn-sm' style='margin-right:5px;' href='view.php?view=$row[usr]' ><i class='fas fa-eye fa-s'></i> View</a>"; }
+			echo "<a class='btn btn-outline-success btn-sm' style='margin-right:5px;' href='edit/editCom.php?edit=$row[Dev_ID]' ><i class='far fa-edit fa-s'></i> Edit</a>";
+			echo "<a class='btn btn-outline-danger btn-sm' href='delete/delCom.php?edit=$row[Dev_ID]' onClick=\"return confirm('Weet je zeker dat je dit item wilt verwijderen?')\"><i class='far fa-trash-alt fa-s'></i> Delete</a>
 			</td></tr>";
 	 	} ?>
 	</tbody></table>
@@ -98,13 +94,13 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 <div id='divtable2' class='table' >
 	<table id='table2' class='table table-striped table-bordered' cellspacing='0' width='100%'>
 		<thead><tr><th>Computerbarcode</th><th>Monitorbarcode</th><th>Merk</th><th>Type</th><th>Inch</th><th>Aanschaf datum</th><th>Aanschaf Waarde</th><th></th></tr></thead><tbody>	
-	<?php $stmt = $conn->query('SELECT *, (SELECT Barcode FROM IA_Computer WHERE IA_Computer.Com_ID=IA_Monitor.Com_ID) as bar FROM IA_Monitor');
+	<?php $stmt = $conn->query('SELECT *, (SELECT Barcode FROM IA_Devices WHERE IA_Devices.Dev_ID=IA_Monitor.Dev_ID) as bar FROM IA_Monitor');
 		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 			$waarde = $row['Aanschaf_waarde'];
 			$originalDate = $row['Aanschaf_dat'];
 			$newDate = date("d-m-Y", strtotime($originalDate));
 			echo "<tr><td>";
-			if($row['Com_ID'] == NULL) { echo "Geen computer"; } else { echo $row['bar']; }
+			if($row['Dev_ID'] == NULL) { echo "Geen computer"; } else { echo $row['bar']; }
 			echo "</td><td>";
 			echo $row['Barcode'];
 			echo "</td><td>";
@@ -118,7 +114,7 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 			echo "</td><td>";
 			echo "&euro;"; echo number_format((float)$waarde, 2, '.', ''); ?>
 			</td><td class='knoppen'> <?php
-			if($row['Com_ID'] == NULL) {  } else { echo "<a class='btn btn-outline-info btn-sm' style='margin-right:5px;' href='view.php?view=$row[Com_ID]' ><i class='fas fa-eye fa-s'></i> View</a>"; }
+			if($row['Dev_ID'] == NULL) {  } else { echo "<a class='btn btn-outline-info btn-sm' style='margin-right:5px;' href='view.php?view=$row[Dev_ID]' ><i class='fas fa-eye fa-s'></i> View</a>"; }
 			echo "<a class='btn btn-outline-success btn-sm' style='margin-right:5px;' href='edit/editMon.php?edit=$row[Mon_ID]' ><i class='far fa-edit fa-s'></i> Edit</a>";			
 			echo "<a class='btn btn-outline-danger btn-sm' href='delete/delMon.php?edit=$row[Mon_ID]' onClick=\"return confirm('Weet je zeker dat je dit item wilt verwijderen?')\"><i class='far fa-trash-alt fa-s'></i> Delete</a>";
 			echo "</td></tr>";
@@ -129,7 +125,7 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 	<div id='divtable3' class='table' >
 	<table id='table3' class='table table-striped table-bordered' cellspacing='0' width='100%'> 
 		<thead><tr><th>Computerbarcode</th><th>Softnaam</th><th>Versie</th><th>Aanschaf datum</th><th>Aanschaf Waarde</th><th></th></tr></thead><tbody>	
-	<?php $stmt = $conn->query('SELECT *, IA_Software_RG.Soft_ID as rid, IA_Computer.Com_ID AS comid FROM IA_Software, IA_Computer, IA_Software_RG WHERE IA_Computer.Com_ID=IA_Software_RG.Com_ID AND IA_Software.Soft_ID=IA_Software_RG.Soft_ID');
+	<?php $stmt = $conn->query('SELECT *, IA_Software_RG.Soft_ID as rid, IA_Locatie_RG.U_ID as usr FROM IA_Software, IA_Devices, IA_Software_RG, IA_Locatie_RG WHERE IA_Devices.Dev_ID=IA_Software_RG.Dev_ID AND IA_Software.Soft_ID=IA_Software_RG.Soft_ID AND IA_Devices.Dev_ID=IA_Locatie_RG.Dev_ID');
 		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 			$waarde = $row['Aanschaf_waarde'];
 			$originalDate = $row['Aanschaf_dat'];
@@ -145,7 +141,7 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 			echo "</td><td>";
 			echo "&euro;"; echo number_format((float)$waarde, 2, '.', ''); ?>
 			</td><td class='knoppen'> <?php
-			echo "<a class='btn btn-outline-info btn-sm' style='margin-right:5px;' href='view.php?view=$row[comid]' ><i class='fas fa-eye fa-s'></i> View</a>";
+			echo "<a class='btn btn-outline-info btn-sm' style='margin-right:5px;' href='view.php?view=$row[usr]' ><i class='fas fa-eye fa-s'></i> View</a>";
 			echo "<a class='btn btn-outline-success btn-sm' style='margin-right:5px;' href='edit/editSoft.php?edit=$row[rid]' ><i class='far fa-edit fa-xs'></i> Edit</a>";
 			echo "<a class='btn btn-outline-danger btn-sm' href='delete/delSoft.php?edit=$row[rid]' onClick=\"return confirm('Weet je zeker dat je dit item wilt verwijderen?')\"><i class='far fa-trash-alt fa-xs'></i> Delete</a>";
 			echo "</td></tr>";
@@ -157,8 +153,9 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 	<div id='divtable4' class='table' >
 	<table id='table4' class='table table-striped table-bordered' cellspacing='0' width='100%'>
 		<thead><tr><th>Computerbarcode</th><th>Ip-adres</th><th>Locatie</th><th>Gebruikersnaam</th><th>E-mail</th><th></th></tr></thead><tbody>
-		<?php $stmt = $conn->query('SELECT Com_ID as comid, (SELECT Barcode FROM IA_Computer WHERE IA_Locatie_RG.Com_ID=IA_Computer.Com_ID) as bar, (SELECT Ip_adres FROM IA_Computer WHERE IA_Locatie_RG.Com_ID=IA_Computer.Com_ID) as Ip_adres, (SELECT Ruimte_naam FROM IA_Locatie WHERE IA_Locatie_RG.Ruimte_ID=IA_Locatie.Ruimte_ID) as Ruimte_naam, (SELECT Gebruiker FROM IA_Gebruiker WHERE IA_Gebruiker.U_ID=IA_Locatie_RG.U_ID) as Gebruiker, (SELECT Mailadres FROM IA_Gebruiker WHERE IA_Gebruiker.U_ID=IA_Locatie_RG.U_ID) as Mailadres, (SELECT U_ID FROM IA_Gebruiker WHERE IA_Gebruiker.U_ID=IA_Locatie_RG.U_ID) as usr FROM IA_Locatie_RG;');
+		<?php $stmt = $conn->query('SELECT Dev_ID as comid, (SELECT Barcode FROM IA_Devices WHERE IA_Locatie_RG.Dev_ID=IA_Devices.Dev_ID) as bar, (SELECT Ip_adres FROM IA_Devices WHERE IA_Locatie_RG.Dev_ID=IA_Devices.Dev_ID) as Ip_adres, (SELECT Ruimte_naam FROM IA_Locatie WHERE IA_Locatie_RG.Ruimte_ID=IA_Locatie.Ruimte_ID) as Ruimte_naam, (SELECT Gebruiker FROM IA_Gebruiker WHERE IA_Gebruiker.U_ID=IA_Locatie_RG.U_ID) as Gebruiker, (SELECT Mailadres FROM IA_Gebruiker WHERE IA_Gebruiker.U_ID=IA_Locatie_RG.U_ID) as Mailadres, (SELECT U_ID FROM IA_Gebruiker WHERE IA_Gebruiker.U_ID=IA_Locatie_RG.U_ID) as usr FROM IA_Locatie_RG;');
 		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$gebruiker = $row['Gebruiker'];
 			echo "<tr><td>";
 			if($row['comid'] == NULL) { echo "Geen computer"; } else { echo $row['bar']; }
 			echo "</td><td>";
@@ -166,22 +163,27 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 			echo "</td><td>";
 			echo strip_tags($row['Ruimte_naam']);
 			echo "</td><td>";
-			echo strip_tags($row['Gebruiker']);
+			echo $gebruiker;
 			echo "</td><td>";
 			echo strip_tags($row['Mailadres']); ?>
 			</td><td class='knoppen'> <?php
-			if($row['comid'] == NULL) {  } else { echo "<a class='btn btn-outline-info btn-sm' style='margin-right:5px;' href='view.php?view=$row[comid]' ><i class='fas fa-eye fa-s'></i> View</a>"; }
-			echo "<a class='btn btn-outline-success btn-sm' style='margin-right:5px;' href='edit/editUser.php?edit=$row[usr]' ><i class='far fa-edit fa-s'></i> Edit</a>";
-			echo "<a class='btn btn-outline-danger btn-sm' href='delete/delUser.php?edit=$row[usr]' onClick=\"return confirm('Weet je zeker dat je dit item wilt verwijderen?')\"><i class='far fa-trash-alt fa-s'></i> Delete</a>";
+			if($row['comid'] == NULL) {  } else { echo "<a class='btn btn-outline-info btn-sm' style='margin-right:5px;' href='view.php?view=$row[usr]' ><i class='fas fa-eye fa-s'></i> View</a>"; }
+			echo "<a class='btn btn-outline-success btn-sm' style='margin-right:5px;' href='edit/editUser.php?edit=$row[usr]' ><i class='far fa-edit fa-s'></i> Edit</a>"; 
+			echo "<a class='btn btn-outline-danger btn-sm' href='delete/delUser.php?edit=$row[usr]' onClick=\"return theFunction();\"><i class='far fa-trash-alt fa-s'></i> Delete</a>";
 			echo "</td></tr>";
 		} ?>
 </tbody></table>
 </div>
-
+<script type="text/javascript">
+   function theFunction () {
+   var php_var = "<?php echo $gebruiker; ?>";
+   confirm("Weet je zeker dat je "+ php_var +" wilt verwijderen?");
+   }
+</script>
 	<div id='divtable5' class='table' >
 	<table id='table5' class='table table-striped table-bordered' cellspacing='0' width='100%'>
 		<thead><tr><th>Computerbarcode</th><th>Merk</th><th>Type</th><th>Aanschaf datum</th><th>Aanschaf waarde</th><th></th></tr></thead><tbody> 	
-	<?php	$stmt = $conn->query('SELECT IA_Computer.Barcode, IA_Randapparatuur.Merk, IA_Randapparatuur.Type, IA_Randapparatuur.Aanschaf_waarde, IA_Randapparatuur.Aanschaf_dat, Rand_ID FROM IA_Randapparatuur, IA_Computer WHERE IA_Randapparatuur.Com_ID=IA_Computer.Com_ID');
+	<?php	$stmt = $conn->query('SELECT IA_Devices.Barcode, IA_Randapparatuur.Merk, IA_Randapparatuur.Type, IA_Randapparatuur.Aanschaf_waarde, IA_Randapparatuur.Aanschaf_dat, Rand_ID FROM IA_Randapparatuur, IA_Devices WHERE IA_Randapparatuur.Dev_ID=IA_Devices.Dev_ID');
 		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 			$newDate = date("d-m-Y", strtotime($row['Aanschaf_dat']));
 			echo "<tr><td>";
@@ -206,7 +208,7 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 	<div id='divtable6' class='table' >
 	<table id='table6' class='table table-striped table-bordered' cellspacing='0' width='100%'>
 		<thead><tr><th>Gebruiker</th><th>Telefoonnummer</th><th>Merk</th><th>Model</th><th>Aanschaf datum</th><th>Aanschaf waarde</th><th></th></tr></thead><tbody> 	
-	<?php	$stmt = $conn->query('SELECT Gsm_ID, Gebruiker, Telefoonnummer, Merk, Model, Aanschaf_dat, Aanschaf_waarde FROM IA_Gebruiker, IA_Telefoon WHERE IA_Gebruiker.U_ID=IA_Telefoon.U_ID');
+	<?php	$stmt = $conn->query('SELECT IA_Gebruiker.U_ID as usr, Gsm_ID, Gebruiker, Telefoonnummer, Merk, Model, Aanschaf_dat, Aanschaf_waarde FROM IA_Gebruiker, IA_Telefoon WHERE IA_Gebruiker.U_ID=IA_Telefoon.U_ID');
 		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 			$newDate = date("d-m-Y", strtotime($row['Aanschaf_dat']));
 			echo "<tr><td>";
@@ -222,72 +224,14 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 			echo "</td><td>";
 			echo "&euro;"; echo number_format((float)$row['Aanschaf_waarde'], 2, '.', ''); ?>
 			</td><td class='knoppen'> <?php
+			echo "<a class='btn btn-outline-info btn-sm' style='margin-right:5px;' href='view.php?view=$row[usr]' ><i class='fas fa-eye fa-s'></i> View</a>";
 			echo "<a class='btn btn-outline-success btn-sm' style='margin-right:5px;' href='edit/editGsm.php?edit=$row[Gsm_ID]' ><i class='far fa-edit fa-xs'></i> Edit</a>";
-			
 			echo "<a class='btn btn-outline-danger btn-sm' href='delete/delGsm.php?edit=$row[Gsm_ID]' onClick=\"return confirm('Weet je zeker dat je dit item wilt verwijderen?')\"><i class='far fa-trash-alt fa-xs'></i> Delete</a>";
 			echo "</td></tr>";
 		} ?>
 </tbody></table>
 </div>
-
-<div id='divtable7' class='table' >
-	<table id='table7' class='table table-striped table-bordered' cellspacing='0' width='100%'>
-		<thead><tr><th>Gebruiker</th><th>Merk</th><th>Model</th><th>Inch</th><th>Opslagcapaciteit</th><th>Aanschaf datum</th><th>Aanschaf waarde</th><th></th></tr></thead><tbody> 	
-	<?php	$stmt = $conn->query('SELECT * FROM IA_Gebruiker, IA_Tablet WHERE IA_Gebruiker.U_ID=IA_Tablet.U_ID');
-		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-			$newDate = date("d-m-Y", strtotime($row['Aanschaf_dat']));
-			echo "<tr><td>";
-			echo strip_tags($row['Gebruiker']);
-			echo "</td><td>";
-			echo strip_tags($row['Merk']);
-			echo "</td><td>";
-			echo strip_tags($row['Model']);
-			echo "</td><td>";
-			echo strip_tags($row['Inch']);
-			echo "</td><td>";
-			echo strip_tags($row['Opslagcapaciteit']);
-			echo "</td><td>";
-			echo $newDate;
-			echo "</td><td>";
-			echo "&euro;"; echo number_format((float)$row['Aanschaf_waarde'], 2, '.', ''); ?>
-			</td><td class='knoppen'> <?php
-			echo "<a class='btn btn-outline-success btn-sm' style='margin-right:5px;' href='edit/editTab.php?edit=$row[Tab_ID]' ><i class='far fa-edit fa-xs'></i> Edit</a>";
-			
-			echo "<a class='btn btn-outline-danger btn-sm' href='delete/delTab.php?edit=$row[Tab_ID]' onClick=\"return confirm('Weet je zeker dat je dit item wilt verwijderen?')\"><i class='far fa-trash-alt fa-xs'></i> Delete</a>";
-			echo "</td></tr>";
-		} ?>
-</tbody></table>
-</div>
-<div id='divtable8' class='table' >
-	<table id='table8' class='table table-striped table-bordered' cellspacing='0' width='100%'>
-		<thead><tr><th>Gebruiker</th><th>Barcode</th><th>Merk</th><th>CPU</th><th>Memory</th><th>Inch</th><th>Aanschaf datum</th><th>Aanschaf waarde</th><th></th></tr></thead><tbody> 	
-	<?php	$stmt = $conn->query('SELECT * FROM IA_Gebruiker, IA_Laptop WHERE IA_Gebruiker.U_ID=IA_Laptop.U_ID');
-		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-			$newDate = date("d-m-Y", strtotime($row['Aanschaf_dat']));
-			echo "<tr><td>";
-			echo strip_tags($row['Gebruiker']);
-			echo "</td><td>";
-			echo strip_tags($row['Barcode']);
-			echo "</td><td>";
-			echo strip_tags($row['Merk']);
-			echo "</td><td>";
-			echo strip_tags($row['CPU']);
-			echo "</td><td>";
-			echo strip_tags($row['Memory']);
-			echo "</td><td>";
-			echo strip_tags($row['Inch']);
-			echo "</td><td>";
-			echo $newDate;
-			echo "</td><td>";
-			echo "&euro;"; echo number_format((float)$row['Aanschaf_waarde'], 2, '.', ''); ?>
-			</td><td class='knoppen'> <?php
-			echo "<a class='btn btn-outline-success btn-sm' style='margin-right:5px;' href='edit/editLap.php?edit=$row[Lap_ID]' ><i class='far fa-edit fa-xs'></i> Edit</a>";
-			
-			echo "<a class='btn btn-outline-danger btn-sm' href='delete/delLap.php?edit=$row[Lap_ID]' onClick=\"return confirm('Weet je zeker dat je dit item wilt verwijderen?')\"><i class='far fa-trash-alt fa-xs'></i> Delete</a>";
-			echo "</td></tr>";
-		} ?>
-</tbody></table>
-</div>	
+	
 <footer>&copy; <b>B | A | S </b> -  <?php
 $dt = new DateTime();
 echo $dt->format('d-m-Y');

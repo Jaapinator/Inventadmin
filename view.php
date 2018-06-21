@@ -132,7 +132,7 @@ foreach($rows as $row){
 	<textarea name="comment" style="resize:none; width: 100%; height: 20%;"><?php echo $comm;?></textarea><br>
 	<input type="hidden" name="view" value="<?php echo $dev_id;?>"/>
 	<input type="hidden" name="user" value="<?php echo $id;?>"/>
-	<input type="submit" value="Edit" name="submit" class='btn btn-success' />
+	<input type="submit" value="Update" name="submit" class='btn btn-success' />
 	</form>
   </div>
 </div>

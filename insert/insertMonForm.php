@@ -7,21 +7,7 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 <?php include "../includes/js/addMon.js";
 	  include "../includes/js/datetime.js";?>
 </script>
-<script>
-$(function(){
-    var dtToday = new Date();
-    
-    var month = dtToday.getMonth() + 1;
-    var day = dtToday.getDate();
-    var year = dtToday.getFullYear();
-    if(month < 10)
-        month = '0' + month.toString();
-    if(day < 10)
-        day = '0' + day.toString();
-    
-    var maxDate = year + '-' + month + '-' + day;
-    $('#picker').attr('max', maxDate);
-});
+<script><?php include "../includes/js/maxtime.js" ?>
 </script>
 </head>
 <body>

@@ -19,6 +19,7 @@ $query->bindparam(":id", $id);
 $query->execute();
 
 $conn = null;
+echo '<script>alert("Opmerkingen aangepast!")</script>';
 echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/view.php?view='.$uid.'" />';
 }
 else{
@@ -31,6 +32,7 @@ $query->bindparam(":id", $id);
 $query->execute();
 
 $conn = null;
+echo '<script>alert("Opmerkingen aangepast!")</script>';
 echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/view.php?view='.$uid.'" />';
 }	
 

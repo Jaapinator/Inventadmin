@@ -3,21 +3,7 @@
 error_reporting(E_ALL); ini_set('display_errors', 1);
 	include "../includes/connection.php";
 	include "../includes/scripts.php";?>
-<script>
-$(function(){
-    var dtToday = new Date();
-    
-    var month = dtToday.getMonth() + 1;
-    var day = dtToday.getDate();
-    var year = dtToday.getFullYear();
-    if(month < 10)
-        month = '0' + month.toString();
-    if(day < 10)
-        day = '0' + day.toString();
-    
-    var maxDate = year + '-' + month + '-' + day;
-    $('#picker').attr('max', maxDate);
-});
+<script><?php include "../includes/js/maxtime.js" ?>
 </script>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
 	<a class="navbar-brand" href="https://portal.basrt.eu/">Inventadmin</a>
@@ -50,10 +36,14 @@ $(function(){
 	}
 ?> 
 <body>
-	<div class="form">
+<div class="container">
+	<div class="main-login main-center">
 		<H4>Randapparatuur</H4>
-		<form name="form1" method="post" action="editRand.php?edit=<?php $id; ?>">
-			<label>Computer barcode</label>
+		<hr>
+			<form name="form1" method="post" action="editRand.php?edit=<?php $id; ?>">
+		<div class="form-group">
+		<label class="control-label col-sm-2" for="Dev_ID">Computer barcode:</label>
+			<div class="col-sm-10">
 			<?php $sql = $conn->query("SELECT Barcode, Dev_ID FROM IA_Devices WHERE Barcode<>$barcode"); ?>
 			
 					<select  name="Dev_ID" required>
@@ -62,18 +52,37 @@ $(function(){
 					   echo '<option value="'.$row['Dev_ID'].'">'.$row['Barcode'].'</option>';
 					}?>
 					</select>
-			<label>Merk</label>
-			<input type="text" name="merk" value="<?php echo $merk;?>">
-			<label>Type</label>
-			<input type="text" name="type" value="<?php echo $type;?>">
-			<label>Aanschaf datum</label>
-			<input type="date" id="picker" name="date" value="<?php echo $newDate;?>">
-			<label>Aanschaf waarde</label>
-			<input type="number" name="waarde" value="<?php echo $waarde;?>">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-2" for="merk">Merk:</label>
+			<div class="col-sm-10">
+				<input type="text" name="merk" value="<?php echo $merk;?>">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-2" for="type">Type:</label>
+			<div class="col-sm-10">
+				<input type="text" name="type" value="<?php echo $type;?>">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-2" for="date">Aanschaf datum:</label>
+			<div class="col-sm-10">
+				<input type='date' id="picker" name='date' value='<?php echo $newDate;?>' class='form-control' required>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-2" for="waarde">Aanschaf waarde:</label>
+			<div class="col-sm-10">
+				<input type='text' name='waarde' value='<?php echo number_format((float)$waarde, 2, '.', '');;?>' class='form-control' required>
+			</div>
+		</div>
 			<input type="hidden" name="id" value="<?php echo $_GET['edit'];?>">
-			<input type="submit" name="update" value="Update">
+			<input type="submit" name="update" value="Update" class='btn btn-success'>
 		</form>
 	</div>
+</div>
 </body>
 </html>
 <?php 

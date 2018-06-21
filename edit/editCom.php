@@ -3,21 +3,7 @@
 error_reporting(E_ALL); ini_set('display_errors', 1);
 	include "../includes/connection.php";
 	include "../includes/scripts.php";?>
-<script>
-$(function(){
-    var dtToday = new Date();
-    
-    var month = dtToday.getMonth() + 1;
-    var day = dtToday.getDate();
-    var year = dtToday.getFullYear();
-    if(month < 10)
-        month = '0' + month.toString();
-    if(day < 10)
-        day = '0' + day.toString();
-    
-    var maxDate = year + '-' + month + '-' + day;
-    $('#picker').attr('max', maxDate);
-});
+<script><?php include "../includes/js/maxtime.js" ?>
 </script>
 <style>
 input, select, textarea{
@@ -64,7 +50,7 @@ input, select, textarea{
 ?> 
 <body>
 <H4>Computer</H4>
-<form name="form1" method="post" class="form-group" action="editCom.php?edit= <?php $id; ?>">
+<form name="form1" method="post" class="form-group" action="editCom.php?edit= <?php $id; ?>" enctype="multipart/form-data">
 		<div class="form-group">
 		<label class="control-label col-sm-2" for="barcode">Computer barcode:</label>
 		<div class="col-sm-10">
@@ -137,6 +123,12 @@ input, select, textarea{
 			<textarea  rows="5" name='comment' placeholder='Opmerkingen' class="form-control"><?php echo $comment; ?></textarea>
 		</div>
 	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2" for="file">Afbeelding apparaat:</label>
+		<div class="col-sm-10">
+			<input type="file" name="file">
+		</div>
+	</div>
 		<input type="hidden" name="id" value="<?php echo $_GET['edit'];?>">
 		<input type='submit' name='update' class='btn btn-success' value='Update'>
 </form>
@@ -158,7 +150,16 @@ if(isset($_POST['update']))
     $serial = trim($_POST['serial']);    
     $datum = trim($_POST['date']);    
     $waarde = trim($_POST['waarde']);    
-    $opmerkingen = trim($_POST['comment']);    
+    $opmerkingen = trim($_POST['comment']);  
+	
+	$sql = "SELECT * FROM IA_Devices WHERE Dev_ID=:id";
+	$query = $conn->prepare($sql);
+	$query->execute(array(':id' => $id));
+	
+	while($row = $query->fetch(PDO::FETCH_ASSOC))
+	{
+    $deleteimg = $row['Picture_dev'];
+	}	
 	
     if(empty($barcode) || empty($merk)) {    
             
@@ -169,7 +170,7 @@ if(isset($_POST['update']))
             echo "<font color='red'>Computer naam niet ingevuld.</font><br/>";
         }
     } else {    
-        //updating the table
+    if($_FILES['file']['error'] == 4 ){
         $sql = "UPDATE IA_Devices
 					SET Barcode = :barcode,
 						Naam = :naam,
@@ -182,7 +183,8 @@ if(isset($_POST['update']))
 						Serialnummer = :serial, 
 						Aanschaf_dat = :datum, 
 						Aanschaf_waarde = :waarde, 
-						Opmerkingen = :comment 
+						Opmerkingen = :comment, 
+						Picture_dev = NULL
 				  WHERE Dev_ID = :id";
 				 
 		$query = $conn->prepare($sql);
@@ -201,9 +203,84 @@ if(isset($_POST['update']))
 		$query->bindparam(':id', $id);
 		$query->execute();
 		
-		$conn = null;
-		
-		echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
-		} 
+		if($deleteimg == 0){
+				echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
+			}else{
+				unlink('//WEBSERVER03/Portal$/inventadmin/'.$deleteimg);
+			}
+	}else{
+		$file = $_FILES['file'];
+			
+			$fileName = $_FILES['file']['name'];
+			$fileTmpName = $_FILES['file']['tmp_name'];
+			$fileSize = $_FILES['file']['size'];
+			$fileError = $_FILES['file']['error'];
+			$fileType = $_FILES['file']['type'];
+			
+			$fileExt = explode('.', $fileName);
+			$fileActualExt = strtolower(end($fileExt));
+			
+			$allowed = array('jpg', 'jpeg', 'png');
+			
+			if(in_array($fileActualExt, $allowed)){
+				if($fileError === 0){
+					if($fileSize < 1000000){
+						$fileNameNew = uniqid('', true).".".$fileActualExt;
+						$fileDestination = '//WEBSERVER03/Portal$/inventadmin/includes/images/devices/'.$fileNameNew;
+						move_uploaded_file($fileTmpName, $fileDestination);
+						try{
+							$dir = 'includes/images/telefoon/';
+							$img = $dir.$fileNameNew;
+							$sql = "UPDATE IA_Devices
+										SET Barcode = :barcode,
+											Naam = :naam,
+											Ip_adres = :ip, 
+											Merk = :merk, 
+											Model = :model, 
+											CPU = :cpu, 
+											Memory = :mem,  
+											Moederbord = :moed, 
+											Serialnummer = :serial, 
+											Aanschaf_dat = :datum, 
+											Aanschaf_waarde = :waarde, 
+											Opmerkingen = :comment, 
+											Picture_dev = :img
+									  WHERE Dev_ID = :id";
+									 
+							$query = $conn->prepare($sql);
+							$query->bindparam(":barcode", $barcode);
+							$query->bindparam(':naam', $naam);
+							$query->bindparam(':ip', $ip);
+							$query->bindparam(':merk', $merk);
+							$query->bindparam(':model', $model);
+							$query->bindparam(':cpu', $cpu);
+							$query->bindparam(':mem', $mem);
+							$query->bindparam(':moed', $moed);
+							$query->bindparam(':serial', $serial);
+							$query->bindparam(':datum', $datum);
+							$query->bindparam(':waarde', $waarde);
+							$query->bindparam(':comment', $opmerkingen);
+							$query->bindparam(':img', $img);
+							$query->bindparam(':id', $id);
+							$query->execute();
+							
+							unlink('//WEBSERVER03/Portal$/inventadmin/'.$deleteimg);
+							
+							echo '<meta http-equiv="refresh" content="0;URL=https://portal.basrt.eu/inventadmin/" />';
+						}
+						catch(PDOException $e){
+							echo $stmt . "<br>" . $e->getMEssage();
+						}
+					}else{
+						echo "Your file is too big!";
+					}
+				}else{
+					echo "There was an error uploading your file!";
+				}
+			}else{
+				echo "You can't upload files of this type!";
+			}
+	}
+	} 
 }
 ?>
