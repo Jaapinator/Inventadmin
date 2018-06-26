@@ -57,7 +57,7 @@ input, select, textarea{
 			
 					<select  name="userid">
 					<option value="<?php echo $user_id; ?>" selected><?php echo $gebruiker ?></option>
-					<option value=""> Geen computer</option>
+					<option value=""> Geen gebruiker</option>
 			<?php	while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
 					   echo '<option value="'.$row['U_ID'].'">'.$row['Gebruiker'].'</option>';
 					} ?>

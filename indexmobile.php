@@ -40,7 +40,7 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 			  <li class="nav-item">
 				<a class="nav-link" href="#" data-toggle="modal" data-target="#myModal">Barcode scanner</a>
 			  </li>
-		<select id='drop' class='keuze' style="float:right;">
+		<select id='drop' class='selectpicker' style="float:right;" data-style="btn-dark">
 		<option class='keuze' value='table1' selected>Apparaat</option>
 		<option class='keuze' value='table2'>Monitor</option>
 		<option class='keuze' value='table3'>Software</option>
@@ -65,7 +65,7 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 	<table id='table1' class='table table-striped table-bordered' cellspacing='0' width='100%' > 
 		<thead><tr><th>Barcode</th><th>Computernaam</th><th>Ip-adres</th><th>CPU</th><th>RAM</th><th>Moederbord</th><th>Aanschaf datum</th><th></th></tr></thead><tbody>
 		<?php 
-		$stmt = $conn->query('SELECT *, (SELECT U_ID FROM IA_Locatie_RG WHERE IA_Locatie_RG.Dev_ID=IA_Devices.Dev_ID) as usr FROM IA_Devices ORDER BY Barcode');
+		$stmt = $conn->query('SELECT d.Barcode, d.Naam, d.Dev_ID, d.Ip_adres, d.CPU, d.Memory, d.Moederbord, d.Aanschaf_dat, u.U_ID FROM IA_Devices d LEFT JOIN IA_Locatie_RG u ON d.Dev_ID=u.Dev_ID ORDER BY d.Barcode');
 		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 			$newDate = date("d-m-Y", strtotime($row['Aanschaf_dat']));
 			echo "<tr><td>";
@@ -83,7 +83,7 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 			echo "</td><td >";
 			echo $row['Aanschaf_dat']; ?>
 			</td><td class='knoppen'><?php
-			if($row['usr'] == NULL) {  } else { echo "<a class='btn btn-outline-info btn-sm' style='margin-right:5px;' href='view.php?view=$row[usr]' ><i class='fas fa-eye fa-s'></i> View</a>"; }
+			if($row['U_ID'] == NULL) {  } else { echo "<a class='btn btn-outline-info btn-sm' style='margin-right:5px;' href='view.php?view=$row[U_ID]' ><i class='fas fa-eye fa-s'></i> View</a>"; }
 			echo "<a class='btn btn-outline-success btn-sm' style='margin-right:5px;' href='edit/editCom.php?edit=$row[Dev_ID]' ><i class='far fa-edit fa-s'></i> Edit</a>";
 			echo "<a class='btn btn-outline-danger btn-sm' href='delete/delCom.php?edit=$row[Dev_ID]' onClick=\"return confirm('Weet je zeker dat je dit item wilt verwijderen?')\"><i class='far fa-trash-alt fa-s'></i> Delete</a>
 			</td></tr>";
@@ -94,7 +94,7 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 <div id='divtable2' class='table' >
 	<table id='table2' class='table table-striped table-bordered' cellspacing='0' width='100%'>
 		<thead><tr><th>Computerbarcode</th><th>Monitorbarcode</th><th>Merk</th><th>Type</th><th>Inch</th><th>Aanschaf datum</th><th>Aanschaf Waarde</th><th></th></tr></thead><tbody>	
-	<?php $stmt = $conn->query('SELECT *, (SELECT Barcode FROM IA_Devices WHERE IA_Devices.Dev_ID=IA_Monitor.Dev_ID) as bar FROM IA_Monitor');
+	<?php $stmt = $conn->query('SELECT m.Barcode, m.Mon_ID, m.Dev_ID, m.Merk, m.Type, m.Inch, m.Aanschaf_dat, m.Aanschaf_waarde, d.Barcode as bar, u.U_ID FROM IA_Devices d INNER JOIN IA_Monitor m ON d.Dev_ID=m.Dev_ID INNER JOIN IA_Locatie_RG u ON d.Dev_ID=u.Dev_ID');
 		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 			$waarde = $row['Aanschaf_waarde'];
 			$originalDate = $row['Aanschaf_dat'];
@@ -114,7 +114,7 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 			echo "</td><td>";
 			echo "&euro;"; echo number_format((float)$waarde, 2, '.', ''); ?>
 			</td><td class='knoppen'> <?php
-			if($row['Dev_ID'] == NULL) {  } else { echo "<a class='btn btn-outline-info btn-sm' style='margin-right:5px;' href='view.php?view=$row[Dev_ID]' ><i class='fas fa-eye fa-s'></i> View</a>"; }
+			if($row['Dev_ID'] == NULL) {  } else { echo "<a class='btn btn-outline-info btn-sm' style='margin-right:5px;' href='view.php?view=$row[U_ID]' ><i class='fas fa-eye fa-s'></i> View</a>"; }
 			echo "<a class='btn btn-outline-success btn-sm' style='margin-right:5px;' href='edit/editMon.php?edit=$row[Mon_ID]' ><i class='far fa-edit fa-s'></i> Edit</a>";			
 			echo "<a class='btn btn-outline-danger btn-sm' href='delete/delMon.php?edit=$row[Mon_ID]' onClick=\"return confirm('Weet je zeker dat je dit item wilt verwijderen?')\"><i class='far fa-trash-alt fa-s'></i> Delete</a>";
 			echo "</td></tr>";
@@ -153,13 +153,13 @@ error_reporting(E_ALL); ini_set('display_errors', 1);
 	<div id='divtable4' class='table' >
 	<table id='table4' class='table table-striped table-bordered' cellspacing='0' width='100%'>
 		<thead><tr><th>Computerbarcode</th><th>Ip-adres</th><th>Locatie</th><th>Gebruikersnaam</th><th>E-mail</th><th></th></tr></thead><tbody>
-		<?php $stmt = $conn->query('SELECT Dev_ID as comid, (SELECT Barcode FROM IA_Devices WHERE IA_Locatie_RG.Dev_ID=IA_Devices.Dev_ID) as bar, (SELECT Ip_adres FROM IA_Devices WHERE IA_Locatie_RG.Dev_ID=IA_Devices.Dev_ID) as Ip_adres, (SELECT Ruimte_naam FROM IA_Locatie WHERE IA_Locatie_RG.Ruimte_ID=IA_Locatie.Ruimte_ID) as Ruimte_naam, (SELECT Gebruiker FROM IA_Gebruiker WHERE IA_Gebruiker.U_ID=IA_Locatie_RG.U_ID) as Gebruiker, (SELECT Mailadres FROM IA_Gebruiker WHERE IA_Gebruiker.U_ID=IA_Locatie_RG.U_ID) as Mailadres, (SELECT U_ID FROM IA_Gebruiker WHERE IA_Gebruiker.U_ID=IA_Locatie_RG.U_ID) as usr FROM IA_Locatie_RG;');
+		<?php $stmt = $conn->query('SELECT DISTINCT Dev_ID as comid, (SELECT Barcode FROM IA_Devices WHERE IA_Locatie_RG.Dev_ID=IA_Devices.Dev_ID) as bar, (SELECT Ip_adres FROM IA_Devices WHERE IA_Locatie_RG.Dev_ID=IA_Devices.Dev_ID) as Ip_adres, (SELECT Ruimte_naam FROM IA_Locatie WHERE IA_Locatie_RG.Ruimte_ID=IA_Locatie.Ruimte_ID) as Ruimte_naam, (SELECT Gebruiker FROM IA_Gebruiker WHERE IA_Gebruiker.U_ID=IA_Locatie_RG.U_ID) as Gebruiker, (SELECT Mailadres FROM IA_Gebruiker WHERE IA_Gebruiker.U_ID=IA_Locatie_RG.U_ID) as Mailadres, (SELECT U_ID FROM IA_Gebruiker WHERE IA_Gebruiker.U_ID=IA_Locatie_RG.U_ID) as usr FROM IA_Locatie_RG;');
 		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 			$gebruiker = $row['Gebruiker'];
 			echo "<tr><td>";
 			if($row['comid'] == NULL) { echo "Geen computer"; } else { echo $row['bar']; }
 			echo "</td><td>";
-			echo strip_tags($row['Ip_adres']);
+			if($row['Ip_adres'] == NULL) { echo "DHCP"; } else { echo $row['Ip_adres']; }
 			echo "</td><td>";
 			echo strip_tags($row['Ruimte_naam']);
 			echo "</td><td>";

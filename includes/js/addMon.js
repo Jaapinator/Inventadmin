@@ -18,6 +18,9 @@ function addRow(tableID) {
                     case "number":
                             newcell.childNodes[0].value = "";
                             break;
+                    case "select":
+                            newcell.childNodes[0].value = "";
+                            break;
                     case "date":
                             newcell.childNodes[0].selectedDate = 0;
                             break;

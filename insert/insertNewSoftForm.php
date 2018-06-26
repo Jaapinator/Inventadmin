@@ -18,6 +18,9 @@ input, select{
 			<li class="nav-item">
 				<a class="nav-link" href='../index.php'>Overzicht</a>
 			</li>
+			<li class="nav-item">
+				<a class="nav-link" href='insertSoftForm.php'>Terug</a>
+			</li>
 		</ul>
 	</div>
 </nav>

@@ -1,6 +1,7 @@
 <html><head><link rel="icon" sizes="32x32" type="image/png" href="../favicon.ico"/><title>Inventadmin</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge;" />
-<?php 	include "../includes/connection.php"; 
+<?php error_reporting(E_ALL); ini_set('display_errors', 1);
+	include "../includes/connection.php"; 
 		include "../includes/scripts.php";
 ?>
 </head>
@@ -36,7 +37,7 @@
 		<label class="control-label col-sm-2" for="ruimteid">Ruimtenaam:</label>
 	<div class="col-sm-10">
 	<?php $sql = $conn->query("SELECT Ruimte_ID, Ruimte_naam FROM IA_Locatie"); ?>
-			<select  name="ruimteid" required>
+			<select  name="ruimteid">
 				<option style="display:none" value="">Kies ruimtenaam</option>
 			<?php	while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
 					   echo '<option value="'.$row['Ruimte_ID'].'">'.$row['Ruimte_naam'].'</option>';

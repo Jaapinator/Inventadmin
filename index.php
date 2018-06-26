@@ -106,7 +106,7 @@ td.knoppen{
 	<table id='table1' class='table table-striped table-bordered' cellspacing='0' width='100%' > 
 		<thead><tr><th>Barcode</th><th>Computernaam</th><th>Ip-adres</th><th>CPU</th><th>RAM</th><th>Moederbord</th><th>Aanschaf datum</th><th></th></tr></thead><tbody>
 		<?php 
-		$stmt = $conn->query('SELECT d.Barcode, d.Naam, d.Dev_ID, d.Ip_adres, d.CPU, d.Memory, d.Moederbord, d.Aanschaf_dat, u.U_ID FROM IA_Devices d LEFT JOIN IA_Locatie_RG u ON d.Dev_ID=u.Dev_ID ORDER BY d.Barcode');
+		$stmt = $conn->query('SELECT DISTINCT d.Barcode, d.Naam, d.Dev_ID, d.Ip_adres, d.CPU, d.Memory, d.Moederbord, d.Aanschaf_dat, u.U_ID FROM IA_Devices d LEFT JOIN IA_Locatie_RG u ON d.Dev_ID=u.Dev_ID ORDER BY d.Barcode');
 		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 			$newDate = date("d-m-Y", strtotime($row['Aanschaf_dat']));
 			echo "<tr><td>";
