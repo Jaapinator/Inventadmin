@@ -34,7 +34,7 @@ include "../includes/js/maxtime.js" ?>
 					} ?>
 			</select>
 		<br>
-			    <input type="button" value="Voeg extra monitor toe" class='btn btn-warning' onclick="addRow('dataTable')" />
+			    <input type="button" value="Voeg extra programma toe" class='btn btn-warning' onclick="addRow('dataTable')" />
 				<input type="button" value="Verwijder rij" class='btn btn-danger' onclick="deleteRow('dataTable')" />
 		<a href="insertNewSoftForm.php" class="btn btn-success">Voeg nieuwe software toe</a><br>
 			<table id='dataTable'>

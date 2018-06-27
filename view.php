@@ -19,55 +19,55 @@
 </nav>
 	<?php
 	$id = $_GET['view'];
-	$sql = "SELECT * FROM IA_Devices d JOIN IA_Locatie_RG i ON i.Dev_ID=d.Dev_ID WHERE i.U_ID = :id";
+	$sql = "SELECT * FROM IA_Locatie_RG i JOIN IA_Devices d ON i.Dev_ID=d.Dev_ID WHERE i.U_ID = :id";
 	$query = $conn->prepare($sql);
 	$query->execute(array(':id' => $id));
 	while($row = $query->fetch(PDO::FETCH_ASSOC)){
 		$dev_id = $row['Dev_ID'];
-		$com_barcode = $row['Barcode'];
 		$com_naam = $row['Naam'];
-		$ip = $row['Ip_adres'];
-		$com_merk = $row['Merk'];
-		$model = $row['Model'];
-		$com_cpu = $row['CPU'];
-		$com_mem = $row['Memory'];
-		$com_moed = $row['Moederbord'];
-		$com_serial = $row['Serialnummer'];
-		$com_a_dat = $row['Aanschaf_dat'];
-		$com_a_prijs = $row['Aanschaf_waarde']; 
 		$comm = $row['Opmerkingen'];
 	}
 ?>
 <title><?php echo $com_naam; ?></title>
-<?php
-	$comnewDate = date("d-m-Y", strtotime($com_a_dat));
-?>
 <div class="card-group">
+<?php 
+$sql = "SELECT DISTINCT d.Barcode, d.Naam, d.Ip_adres, d.Merk, d.Model, d.CPU, d.Memory, d.Moederbord, d.Serialnummer, d.Aanschaf_dat, d.Aanschaf_waarde FROM IA_Locatie_RG i JOIN IA_Devices d ON i.Dev_ID=d.Dev_ID WHERE i.U_ID = :id";
+$query = $conn->prepare($sql);
+$query->execute(array(':id' => $id));
+$rows = $query->fetchAll(PDO::FETCH_ASSOC);
+
+$value = count($rows);
+if ($value != 0)
+foreach($rows as $row){
+?>
 <div class="card bg-light mb-3" style="max-width: 18rem;">
-  <div class="card-header">Computer</div>
+  <div class="card-header">Computer <?php 1 + 1; ?></div>
   <div class="card-body">
-    <h5 class="card-title"><?php echo $com_naam; ?></h5>
-    <p class="card-text"><table>
-		<tr><td>Computerbarcode: </td><td><?php echo $com_barcode;?></td></tr>
-		<tr><td>Computernaam: </td><td><?php echo $com_naam;?></td></tr>
-		<tr><td>Ip-adres: </td><td><?php echo $ip;?></td></tr>
-		<tr><td>Computermerk: </td><td><?php echo $com_merk;?></td></tr>
-		<tr><td>Model: </td><td><?php echo $model;?></td></tr>
-		<tr><td>Processor: </td><td><?php echo $com_cpu;?></td></tr>
-		<tr><td>Ram geheugen: </td><td><?php echo $com_mem;?></td></tr>
-		<tr><td>Moederbord: </td><td><?php echo $com_moed;?></td></tr>
-		<tr><td>Serialnummer: </td><td><?php echo $com_serial;?></td></tr>
-		<tr><td>Aanschaf datum: </td><td><?php echo $comnewDate;?></td></tr>
-		<tr><td>Aanschaf waarde: </td><td><?php echo "&euro; ".number_format((float)$com_a_prijs, 2, '.', '')."";?></td></tr>
-		</table>
-		<br>
+    <p class="card-text">
+	<table>
+		<tr><td>Computerbarcode: </td><td><?php echo $row['Barcode'];?></td></tr>
+		<tr><td>Computernaam: </td><td><?php echo $row['Naam'];?></td></tr>
+		<tr><td>Ip-adres: </td><td><?php echo $row['Ip_adres'];?></td></tr>
+		<tr><td>Computermerk: </td><td><?php echo $row['Merk'];?></td></tr>
+		<tr><td>Model: </td><td><?php echo $row['Model'];?></td></tr>
+		<tr><td>Processor: </td><td><?php echo $row['CPU'];?></td></tr>
+		<tr><td>Ram geheugen: </td><td><?php echo $row['Memory'];?></td></tr>
+		<tr><td>Moederbord: </td><td><?php echo $row['Moederbord'];?></td></tr>
+		<tr><td>Serialnummer: </td><td><?php echo $row['Serialnummer'];?></td></tr>
+		<tr><td>Aanschaf datum: </td><td><?php echo $row['Aanschaf_dat'];?></td></tr>
+		<tr><td>Aanschaf waarde: </td><td><?php echo "&euro; ".number_format((float)$row['Aanschaf_waarde'], 2, '.', '')."";?></td></tr>
+	</table>
+		
 	</p>
   </div>
 </div>
+<?php }else{
+	echo "";
+}?>
 <div class="card bg-light mb-3" style="max-width: 18rem;">
-  <div class="card-header">*</div>
+  <div class="card-header">Gebruiker</div>
   <div class="card-body">
-    <h5 class="card-title">Gebruiker</h5>
+    <h5 class="card-title"></h5>
   <?php
   $sql = "SELECT * FROM IA_Gebruiker, IA_Locatie, IA_Locatie_RG WHERE Dev_ID = :id AND IA_Locatie_RG.U_ID=IA_Gebruiker.U_ID AND IA_Locatie.Ruimte_ID=IA_Locatie_RG.Ruimte_ID";
   $query = $conn->prepare($sql);
@@ -91,9 +91,9 @@ foreach($rows as $row){
   </div>
 </div>
 <div class="card bg-light mb-3" style="max-width: 18rem;">
-  <div class="card-header">*</div>
+  <div class="card-header">Telefoon</div>
   <div class="card-body">
-    <h5 class="card-title">Telefoon</h5>
+    <h5 class="card-title"></h5>
   <?php
   $sql = "SELECT * FROM IA_Gebruiker, IA_Telefoon, IA_Locatie_RG WHERE Dev_ID = :id AND IA_Locatie_RG.U_ID=IA_Gebruiker.U_ID AND IA_Gebruiker.U_ID=IA_Telefoon.U_ID";
   $query = $conn->prepare($sql);
@@ -123,9 +123,9 @@ foreach($rows as $row){
 </div>
 
 <div class="card bg-light mb-3" style="max-width: 18rem;">
-  <div class="card-header">*</div>
+  <div class="card-header">Opmerkingen</div>
   <div class="card-body">
-    <h5 class="card-title">Opmerkingen</h5>
+    <h5 class="card-title"></h5>
   <div class="comm">
     <label>Voeg opmerkingen toe</label><br>
 	<form id="comment" action="edit/updateOpmerk.php" method="post">
@@ -151,9 +151,9 @@ foreach($rows as $row){
 
         <div class="card-group">     
 <?php
-$sql = "SELECT * FROM IA_Monitor WHERE Dev_ID = :id";
+$sql = "SELECT DISTINCT m.Barcode,m.Merk,m.Type,m.Inch,m.Aanschaf_dat,m.Aanschaf_waarde FROM IA_Devices d JOIN IA_Monitor m ON m.Dev_ID=d.Dev_ID JOIN IA_Locatie_RG i ON i.Dev_ID=d.Dev_ID WHERE i.U_ID = :id";
 $query = $conn->prepare($sql);
-$query->execute(array(':id' => $dev_id));
+$query->execute(array(':id' => $id));
 $rows = $query->fetchAll(PDO::FETCH_ASSOC);
 
 $value = count($rows);
@@ -192,7 +192,8 @@ foreach($rows as $row){
     </div>
 
     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-      <div class="card-body">
+	<div class="card-group">  
+     
 <?php
 $sql = "SELECT * FROM IA_Software, IA_Software_RG WHERE Dev_ID = :id AND IA_Software.Soft_ID=IA_Software_RG.Soft_ID";
 $query = $conn->prepare($sql);
@@ -204,19 +205,22 @@ if ($value != 0)
 foreach($rows as $row){
     $monnewDate = date("d-m-Y", strtotime($row['Aanschaf_dat']));
     ?>
-    <table style="display:inline-block;float:left;">
-        <tr><td>Programma: </td><td><?php echo $row['Soft_naam'];?></td></tr>
-        <tr><td>Versie: </td><td><?php echo $row['Versie'];?></td></tr>
-        <tr><td>Aanschaf datum: </td><td><?php echo $monnewDate; ?></td></tr>
-        <tr><td>Aanschaf waarde: </td><td><?php echo "&euro; ".number_format((float)$row['Aanschaf_waarde'], 2, '.', '')."";?></td></tr>
-    </table>
-	
+	<div class="card">
+		<div class="card-body">
+			<table style="display:inline-block;float:left;">
+			<tr><td>Programma: </td><td><?php echo $row['Soft_naam'];?></td></tr>
+			<tr><td>Versie: </td><td><?php echo $row['Versie'];?></td></tr>
+			<tr><td>Aanschaf datum: </td><td><?php echo $monnewDate; ?></td></tr>
+			<tr><td>Aanschaf waarde: </td><td><?php echo "&euro; ".number_format((float)$row['Aanschaf_waarde'], 2, '.', '')."";?></td></tr>
+			</table>
+		</div>
+    </div>
     <?php
 }else{
     echo "<i>Geen software gevonden</i>";
 }
-?>      </div>
-    </div>
+?>      
+  </div>
   </div>
   <div class="card">
     <div class="card-header" id="headingThree">
@@ -227,7 +231,7 @@ foreach($rows as $row){
       </h5>
     </div>
     <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-      <div class="card-body">
+    <div class="card-group">   
 	  <?php
   $sql = "SELECT * FROM IA_Randapparatuur WHERE Dev_ID = :id";
   $query = $conn->prepare($sql);
@@ -239,12 +243,16 @@ if ($value !=0)
 foreach($rows as $row){
 	$randnewDate = date("d-m-Y", strtotime($row['Aanschaf_dat']));
 	?>
-	<table style="display:inline-block;float:left;">
-	<tr><td>Merk: </td><td><?php echo $row['Merk'];?></td></tr>
-	<tr><td>Type: </td><td><?php echo $row['Type'];?></td></tr>
-	<tr><td>Aanschaf datum: </td><td><?php echo $randnewDate;?></td></tr>
-	<tr><td>Aanschaf waarde: </td><td><?php echo "&euro; ".number_format((float)$row['Aanschaf_waarde'], 2, '.', '')."";?></td></tr>
-	</table>
+	<div class="card">
+		<div class="card-body">
+			<table style="display:inline-block;float:left;">
+			<tr><td>Merk: </td><td><?php echo $row['Merk'];?></td></tr>
+			<tr><td>Type: </td><td><?php echo $row['Type'];?></td></tr>
+			<tr><td>Aanschaf datum: </td><td><?php echo $randnewDate;?></td></tr>
+			<tr><td>Aanschaf waarde: </td><td><?php echo "&euro; ".number_format((float)$row['Aanschaf_waarde'], 2, '.', '')."";?></td></tr>
+			</table>
+		</div>
+    </div>
 	<?php
 }else{
 	echo "<i>Geen randapparatuur gevonden</i>";

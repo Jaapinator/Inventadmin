@@ -194,7 +194,7 @@ td.knoppen{
 	<div id='divtable4' class='table' >
 	<table id='table4' class='table table-striped table-bordered' cellspacing='0' width='100%'>
 		<thead><tr><th>Computerbarcode</th><th>Ip-adres</th><th>Locatie</th><th>Gebruikersnaam</th><th>E-mail</th><th></th></tr></thead><tbody>
-		<?php $stmt = $conn->query('SELECT DISTINCT Dev_ID as comid, (SELECT Barcode FROM IA_Devices WHERE IA_Locatie_RG.Dev_ID=IA_Devices.Dev_ID) as bar, (SELECT Ip_adres FROM IA_Devices WHERE IA_Locatie_RG.Dev_ID=IA_Devices.Dev_ID) as Ip_adres, (SELECT Ruimte_naam FROM IA_Locatie WHERE IA_Locatie_RG.Ruimte_ID=IA_Locatie.Ruimte_ID) as Ruimte_naam, (SELECT Gebruiker FROM IA_Gebruiker WHERE IA_Gebruiker.U_ID=IA_Locatie_RG.U_ID) as Gebruiker, (SELECT Mailadres FROM IA_Gebruiker WHERE IA_Gebruiker.U_ID=IA_Locatie_RG.U_ID) as Mailadres, (SELECT U_ID FROM IA_Gebruiker WHERE IA_Gebruiker.U_ID=IA_Locatie_RG.U_ID) as usr FROM IA_Locatie_RG;');
+		<?php $stmt = $conn->query('SELECT DISTINCT Dev_ID as comid, (SELECT Barcode FROM IA_Devices WHERE IA_Locatie_RG.Dev_ID=IA_Devices.Dev_ID) as bar, (SELECT Ip_adres FROM IA_Devices WHERE IA_Locatie_RG.Dev_ID=IA_Devices.Dev_ID) as Ip_adres, (SELECT Ruimte_naam FROM IA_Locatie WHERE IA_Locatie_RG.Ruimte_ID=IA_Locatie.Ruimte_ID) as Ruimte_naam, (SELECT Gebruiker FROM IA_Gebruiker WHERE IA_Gebruiker.U_ID=IA_Locatie_RG.U_ID) as Gebruiker, (SELECT Mailadres FROM IA_Gebruiker WHERE IA_Gebruiker.U_ID=IA_Locatie_RG.U_ID) as Mailadres, (SELECT U_ID FROM IA_Gebruiker WHERE IA_Gebruiker.U_ID=IA_Locatie_RG.U_ID) as usr FROM IA_Locatie_RG WHERE NOT U_ID=50;');
 		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 			$gebruiker = $row['Gebruiker'];
 			echo "<tr><td>";
